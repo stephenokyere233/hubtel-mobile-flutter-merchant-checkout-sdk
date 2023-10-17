@@ -208,7 +208,7 @@ class _PaymentStatusScreenState extends State<PaymentStatusScreen> {
       paymentStatus = status.data?.paymentStatus ?? PaymentStatus.pending;
       paymentStatusErrorMessage = paymentStatus == PaymentStatus.failed
           ? status.data?.providerDescription ?? ''
-          : CheckoutStrings.somethigWentWrong;
+          : CheckoutStrings.somethingWentWrong;
       checkoutOrderStatus = status.data ?? CheckoutOrderStatus();
       isLoading = false;
     });

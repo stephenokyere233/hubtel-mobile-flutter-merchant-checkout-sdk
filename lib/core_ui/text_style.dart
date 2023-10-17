@@ -4,10 +4,11 @@ import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 
 const TextStyle _baseTextStyle = TextStyle(
-  fontFamily: "NunitoSans",
+  fontFamily: AppTextStyle.nunitoSans,
 );
 
 class AppTextStyle {
+  static const nunitoSans = 'NunitoSans';
   static TextStyle headline1() {
     return _baseTextStyle.copyWith(
       fontWeight: FontWeight.bold,

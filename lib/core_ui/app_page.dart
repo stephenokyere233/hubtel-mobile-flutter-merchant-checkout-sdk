@@ -133,7 +133,7 @@ class AppPage extends StatelessWidget {
               Navigator.pop(context);
             } //Navigation.openHelp(context: context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.chevron_left,
             size: Dimens.iconMediumLarge,
             color: HubtelColors.black,
@@ -159,7 +159,7 @@ class GetTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(title ?? '',
-        style: TextStyle(
+        style: const TextStyle(
           color: HubtelColors.black,
           fontWeight: FontWeight.normal,
           fontSize: Dimens.h2,

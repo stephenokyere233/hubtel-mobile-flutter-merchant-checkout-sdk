@@ -43,15 +43,15 @@ import '../platform/models/wallet_type.dart';
 import 'check_status_screen.dart';
 
 class CheckoutHomeScreen extends StatefulWidget {
-  PurchaseInfo checkoutPurchase;
+  late final PurchaseInfo checkoutPurchase;
 
-  BusinessInfo businessInfo;
+  late final BusinessInfo businessInfo;
 
-  String accessToken = "";
+  String accessToken = '';
 
-  Setup3dsResponse? threedsResponse;
+  late final Setup3dsResponse? threeDsResponse;
 
-  Function(PaymentStatus) checkoutCompleted;
+  late final Function(PaymentStatus) checkoutCompleted;
 
   CheckoutHomeScreen({Key? key,
     required this.checkoutPurchase,
@@ -225,7 +225,7 @@ class _CheckoutHomeScreenState extends State<CheckoutHomeScreen> {
         onBackPressed: () {},
         bottomNavigation: Container(
           color: Colors.white,
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: CustomButton(
               title:
               '${CheckoutStrings.pay} ${(totalAmountPayable ??
@@ -262,7 +262,7 @@ class _CheckoutHomeScreenState extends State<CheckoutHomeScreen> {
                         checkoutPurchase: widget.checkoutPurchase,
                         checkoutFees: checkoutFees ?? 0.00,
                         businessInfo: widget.businessInfo,
-                        totalAmountPayble: totalAmountPayable,
+                        totalAmountPayable: totalAmountPayable,
                       ),
                     ),
                     const SizedBox(height: Dimens.iconMediumLarge),
@@ -562,7 +562,7 @@ class _CheckoutHomeScreenState extends State<CheckoutHomeScreen> {
 
     if (apiResult.state == UiState.success) {
       widget.accessToken = apiResult.data?.accessToken ?? "";
-      widget.threedsResponse = apiResult.data ?? Setup3dsResponse();
+      widget.threeDsResponse = apiResult.data ?? Setup3dsResponse();
 
       setState(() {
         showWebView = true;
@@ -585,7 +585,7 @@ class _CheckoutHomeScreenState extends State<CheckoutHomeScreen> {
 
   _checkoutInstantServiceWithBankCard() async {
     final result = await viewModel.enroll(
-        transactionId: widget.threedsResponse?.transactionId ?? "");
+        transactionId: widget.threeDsResponse?.transactionId ?? "");
 
     if (!mounted) return;
     if (result.state == UiState.success) {
