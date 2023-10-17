@@ -16,6 +16,7 @@ class AddWalletScreen extends StatelessWidget {
   AddWalletScreen({super.key});
 
   final AddWalletScreenState state = AddWalletScreenState();
+  final _mobileNumberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +64,7 @@ class AddWalletScreen extends StatelessWidget {
             ValueListenableBuilder(
               builder: (context, str, child) {
                 return InputField(
+                  controller: _mobileNumberController,
                   hintText: CheckoutStrings.addNumberHint,
                   onChanged: (value) {
                     state.onNumberChanged(value);
@@ -107,7 +109,8 @@ class AddWalletScreen extends StatelessWidget {
                             onTap: () {
                               state.selectedIndex.value = index;
                               state.onProviderSelected(index);
-                              log('Provider: ${state.provider.value}');
+                              state.mobileNumber.value =
+                                  _mobileNumberController.value.text;
                             },
                           ),
                           const SizedBox(height: Dimens.paddingMicro),
@@ -158,13 +161,18 @@ class AddWalletScreenState {
 
   onNumberChanged(String value) {
     _mobileNumber.value = value;
-    _isButtonEnabled.value =
-        _provider.value.isNotEmpty && _mobileNumber.value.length >= 10;
+    enableButton();
   }
 
   onProviderSelected(int index) {
     assert(index < providers.length);
     _provider.value = providers[index].$1;
+    enableButton();
+  }
+
+  enableButton() {
+    _isButtonEnabled.value =
+        _provider.value.isNotEmpty && _mobileNumber.value.length >= 10;
   }
 
   onLoadingToggled() {
