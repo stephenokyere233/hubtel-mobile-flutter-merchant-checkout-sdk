@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 class Dimens {
   Dimens._();
 
@@ -70,7 +72,10 @@ class Dimens {
 
   static const smFontSize = 10.0;
 
+  static const font16sp = 16.0;
+
   static const font18sp = 18.0;
+  static const font20sp = 20.0;
 
   static const font24sp = 24.0;
 
@@ -171,4 +176,13 @@ class Dimens {
   static const twentyFour = 24.0;
 
   static const extraLargePaddingSpace = 114.0;
+
+  static const frameHeight = 248.0;
+  static const toolBarHeight = 58.0;
+
+  static const BorderRadiusGeometry borderRadius12 = BorderRadius.all(
+    Radius.circular(
+      12.0,
+    ),
+  );
 }
