@@ -660,7 +660,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
     final response = await viewModel.fetchFees(
         channel: selectedProvider?.receiveMoneyPromptValue ??
             selectedProvider?.alias ??
-            "",
+            '',
         amount: widget.checkoutPurchase.amount);
 
     if (!mounted) return;
