@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
@@ -40,7 +42,7 @@ class OtherPaymentExpansionTile extends StatefulWidget {
 
   Function(String) onChannelChanged;
 
-  List<Wallet> wallettypes = [
+  List<Wallet> walletTypes = [
     Wallet(
         externalId: "0011",
         accountNo: "0556236739",
@@ -120,7 +122,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
         horizontal: Dimens.paddingDefault,
         vertical: Dimens.paddingDefault,
       ),
-      trailing: Row(
+      trailing: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           // Text("sd"),
@@ -144,14 +146,13 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
         MobileMoneyTileField(
             showWalletAdditionTile: false,
             fieldController: widget.editingController,
-            wallets: widget.wallettypes,
+            wallets: widget.walletTypes,
             onWalletSelected: (wallet) {
               _onPaymentTypeChanged(selectedAccount: wallet.accountName ?? "");
-              widget.onChannelChanged("hghgf ");
 
             },
             onProviderSelected: (provider) {
-              print(provider);
+              log('$provider', name: '$runtimeType');
             },
             hintText: "Hubtel"),
         
@@ -159,7 +160,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
             visible: widget.showHubtelWalletActions,
             child: Container(
               alignment: Alignment.topLeft,
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.only(top: 8),
                 child: Text(
                   "Your balance Hubtel will be debited immediately you confirm. \n\nNo authorzation prompt will be sent to you",
@@ -171,7 +172,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
             visible: widget.showGmoneyWalletActions ||
                 widget.showZeePayWalletActions,
             child: Padding(
-              padding: EdgeInsets.only(top: 16),
+              padding: const EdgeInsets.only(top: 16),
               child: MobileMoneyTileField(
                   fieldController: widget.anotherEditingController,
                   wallets: widget.wallets,
@@ -226,7 +227,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
 
     //
     if (OtherAccountTypes.Hubtel.rawValue == selectedAccount) {
-
+      widget.onChannelChanged('hubtel-gh');
       setState(() {
         // widget.selectedAccount = "Hubtel";
         widget.showHubtelWalletActions = true;
@@ -239,7 +240,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
     }
 
     if (OtherAccountTypes.GMoney.rawValue == selectedAccount) {
-
+      widget.onChannelChanged('gmoney');
       setState(() {
         // widget.selectedAccount = "GMoney";
         widget.showHubtelWalletActions = false;
@@ -252,7 +253,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
     if (OtherAccountTypes.Zeepay.rawValue == selectedAccount) {
 
       setState(() {
-        // selectedAccount = "Zeepay";
+        widget.onChannelChanged('zeepay');
         widget.showHubtelWalletActions = false;
         widget.showGmoneyWalletActions = false;
         widget.showZeePayWalletActions = true;

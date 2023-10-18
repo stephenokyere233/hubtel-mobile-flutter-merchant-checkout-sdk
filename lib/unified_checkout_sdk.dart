@@ -11,6 +11,7 @@ import 'package:unified_checkout_sdk/platform/models/configuration_obj.dart';
 import 'package:unified_checkout_sdk/platform/models/payment_status.dart';
 import 'package:unified_checkout_sdk/platform/models/purchase_item.dart';
 import 'package:unified_checkout_sdk/ux/checkout_screen.dart';
+import 'package:unified_checkout_sdk/ux/checkout_screen2.dart';
 import 'package:unified_checkout_sdk/ux/viewModel/checkout_view_model.dart';
 // import 'package:webview_flutter/webview_flutter.dart';
 
@@ -125,7 +126,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     BusinessInfo(
                         businessName: "businessName",
                         businessImageUrl: "businessImageUrl");
-                return CheckoutHomeScreen(
+                return CheckoutHomeScreen2(
                     checkoutPurchase: widget.purhaseInfo,
                     businessInfo: businessInfo,
                   checkoutCompleted: widget.onCheckoutComplete,
