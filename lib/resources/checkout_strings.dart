@@ -8,9 +8,11 @@ enum CheckoutHtmlState {
 }
 
 class CheckoutStrings {
+  static const package = 'unified_checkout_sdk';
   static const checkout = 'Checkout';
+  static const String ghanaCardHeading = 'Ghana Card Details';
   static const youWillBeCharged = "You will be charged";
-
+  static const String titleVerification = 'Verification';
   static const selectPaymentMethod = "Select payment method";
 
   static const payWith = "Pay with";
@@ -26,6 +28,7 @@ class CheckoutStrings {
   static const mobileNumber = "Mobile Number";
 
   static const addMobileMoneyWallet = "Add Mobile Money Wallet";
+  static const addWalletScreenTitle = "Add Mobile Wallet";
 
   static const mobileNetwork = "Mobile Network";
 
@@ -47,6 +50,8 @@ class CheckoutStrings {
   static const vodafone = "vodafone";
 
   static const airtelTigo = "airteltigo";
+
+  static const airtelDashTigo = "Airtel-Tigo";
 
   static const airtel = "airtel";
 
@@ -87,6 +92,12 @@ class CheckoutStrings {
   static const collectionSuccessUrl =
       "https://hubtelappproxy.hubtel.com/3ds/collection/Success/redirect/";
 
+  static String mobileMoneyNumber = 'Mobile Money Number';
+  static String selectNetwork = 'Select Mobile Network';
+
+  static var addNumberHint = 'eg 054 025 6631';
+  static var ghanaCardNumberHint = 'ABC-XXXXXXXXXX-X';
+
   static String getPaymentPromptMessage({required String walletNumber}) {
     return "A bill prompt has been sent to you on $walletNumber, please authorise the payment.";
   }
@@ -95,7 +106,7 @@ class CheckoutStrings {
 
   static String loading = "loading";
 
-  static String somethigWentWrong = "Something Went Wrong";
+  static String somethingWentWrong = "Something Went Wrong";
 
   static String hubtelBalanceInfo =
       'Your balance on Hubtel will be debited immediately you confirm payment.\n\n'
@@ -312,6 +323,26 @@ class CheckoutStrings {
         ? CheckoutStrings.cardNotPresentVisa
         : CheckoutStrings.cardnotpresent_mastercard;
   }
+
+  static const String fullName = 'Full Name';
+  static const String cardDetailsTitle = 'Card Details';
+  static const String cardNumber = 'Card Number';
+  static const String scrambledCardSample = '**** **** **** 5809';
+  static const String expires = 'Expires';
+  static const String expiresSample = '06/23';
+  static const String personalId = 'Personal ID Number';
+  static const String birthDate = 'DOB';
+  static const String gender = 'Gender';
+  static const String fullNameSample = 'Frimpong Darkwa Kwame';
+  static const String personalIdSample = 'GHA-000338531-5';
+  static const birthDateSample = '10/06/1995';
+  static const genderSample = 'Male';
+  static const orderMessage = 'Your order has been placed';
+  static const ordersAndDelivery = 'Orders and Delivery';
+  static const confirmationMessage =
+      'Your {walletName} will be debited with {GHS 0.00} after your order is confirmed';
+  static const String verificationSuccess =
+      'Your account has been verified successfully';
 
   static const other = "Others";
 }

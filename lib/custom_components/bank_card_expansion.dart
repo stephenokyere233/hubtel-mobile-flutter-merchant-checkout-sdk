@@ -1,15 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/app_image_widget.dart';
 import 'package:unified_checkout_sdk/custom_components/bank_card_type_tab.dart';
 import 'package:unified_checkout_sdk/custom_components/custom_indicator.dart';
 import 'package:unified_checkout_sdk/custom_components/new_bank_card_form.dart';
 import 'package:unified_checkout_sdk/custom_components/saved_bank_card_form.dart';
+import 'package:unified_checkout_sdk/resources/checkout_drawables.dart';
 import 'package:unified_checkout_sdk/utils/bank_card_helper.dart';
-import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart' as customExpansion;
+import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart'
+    as customExpansion;
 import 'package:flutter/scheduler.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
-import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/platform/models/card_data.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
@@ -65,7 +65,10 @@ class BankCardExpansionTile extends StatefulWidget {
 }
 
 class _BankCardExpansionTileState extends State<BankCardExpansionTile> {
-  List<String> bankCardTypeTabNames = [CheckoutStrings.useNewCard, CheckoutStrings.useSavedCard];
+  List<String> bankCardTypeTabNames = [
+    CheckoutStrings.useNewCard,
+    CheckoutStrings.useSavedCard
+  ];
 
   int selectedTabIndex = 0;
 
@@ -84,7 +87,9 @@ class _BankCardExpansionTileState extends State<BankCardExpansionTile> {
     }
     return customExpansion.ExpansionTile(
       controller: widget.controller,
-      headerBackgroundColor: widget.isSelected ? HubtelColors.teal.shade100 : Colors.transparent,
+      headerBackgroundColor: widget.isSelected
+          ? Theme.of(context).primaryColor.withOpacity(0.3)
+          : Colors.transparent,
       onExpansionChanged: widget.onExpansionChanged,
       maintainState: true,
       title: Text(
@@ -100,7 +105,7 @@ class _BankCardExpansionTileState extends State<BankCardExpansionTile> {
         mainAxisSize: MainAxisSize.min,
         children: [
           AppImageWidget.local(
-            image: const AssetImage(""),
+            image: const AssetImage(CheckoutDrawables.masterCard),
             width: Dimens.iconNormal2,
             height: Dimens.iconSmall,
             boxFit: BoxFit.contain,
@@ -108,7 +113,7 @@ class _BankCardExpansionTileState extends State<BankCardExpansionTile> {
           ),
           const SizedBox(width: Dimens.paddingDefaultSmall),
           AppImageWidget.local(
-            image: const AssetImage(""),
+            image: const AssetImage(CheckoutDrawables.visa),
             width: Dimens.iconMedium,
             height: Dimens.iconSmall,
             boxFit: BoxFit.contain,
@@ -129,40 +134,41 @@ class _BankCardExpansionTileState extends State<BankCardExpansionTile> {
               .entries
               .map(
                 (e) => BankCardTypeTab(
-              tabText: e.value,
-              isSelected: e.key == selectedTabIndex,
-              onTap: () {
-                setState(() {
-                  if (widget.savedCards.length < 1){
-                    return;
-                  }
-                  selectedTabIndex = e.key;
-                  widget.onUseNewCardSelected(e.key == 0);
-                });
-              },
-            ),
-          )
+                  tabText: e.value,
+                  isSelected: e.key == selectedTabIndex,
+                  onTap: () {
+                    setState(() {
+                      if (widget.savedCards.length < 1) {
+                        return;
+                      }
+                      selectedTabIndex = e.key;
+                      widget.onUseNewCardSelected(e.key == 0);
+                    });
+                  },
+                ),
+              )
               .toList(),
         ),
         const SizedBox(height: Dimens.paddingDefault),
         selectedTabIndex == 0
             ? NewBankCardForm(
-          onCardSaveChecked: widget.onCardSaveChecked,
-          onNewCardNumberChanged: widget.onNewCardNumberChanged,
-          onNewCardDateChanged: widget.onNewCardDateChanged,
-          onNewCardCvvChanged: widget.onNewCardCvvChanged,
-          formKey: widget.newCardFormKey,
-          cardNumberInputController: widget.cardNumberInputController,
-          cardDateInputController: widget.cardDateInputController,
-          cardCvvInputController: widget.cardCvvInputController,
-        )
+                onCardSaveChecked: widget.onCardSaveChecked,
+                onNewCardNumberChanged: widget.onNewCardNumberChanged,
+                onNewCardDateChanged: widget.onNewCardDateChanged,
+                onNewCardCvvChanged: widget.onNewCardCvvChanged,
+                formKey: widget.newCardFormKey,
+                cardNumberInputController: widget.cardNumberInputController,
+                cardDateInputController: widget.cardDateInputController,
+                cardCvvInputController: widget.cardCvvInputController,
+              )
             : SavedBankCardForm(
-          cardNumberFieldController: widget.savedCardNumberFieldController,
-          cards: widget.savedCards,
-          onCardSelected: widget.onSavedCardSelected,
-          onCvvChanged: widget.onSavedCardCvvChanged,
-          formKey: widget.savedCardFormKey,
-        ),
+                cardNumberFieldController:
+                    widget.savedCardNumberFieldController,
+                cards: widget.savedCards,
+                onCardSelected: widget.onSavedCardSelected,
+                onCvvChanged: widget.onSavedCardCvvChanged,
+                formKey: widget.savedCardFormKey,
+              ),
       ],
     );
   }

@@ -38,7 +38,7 @@ class CheckoutViewModel extends ChangeNotifier {
     MomoProvider(name: "Airtel Tigo", logoUrl: "", alias: "airtelTigo", receiveMoneyPromptValue: "tigo-gh", preapprovalConfirmValue: "", directDebitValue:"tigo-gh-direct-debit"),
   ];
 
-  late CheckoutApi _checkoutApi = CheckoutApi(requester: requester);
+  late final CheckoutApi _checkoutApi = CheckoutApi(requester: requester);
 
   String getMomoChannelName(String? selectedProviderName) {
     final lowerCasedSelectedProviderName = selectedProviderName?.toLowerCase();

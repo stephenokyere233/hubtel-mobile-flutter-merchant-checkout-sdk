@@ -76,7 +76,7 @@ class _BankTileDropdownState extends State<BankTileDropdown> {
             ),
             child: Container(
               width: double.maxFinite,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 // horizontal: AppDimens.paddingDefault,
                 // vertical: AppDimens.paddingDefault,
               ),
@@ -116,10 +116,10 @@ class _BankTileDropdownState extends State<BankTileDropdown> {
                       //   context: context,
                       // );
                     },
-                    title: Text(
+                    title: const Text(
                       CheckoutStrings.youHaveNoSavedCards,
                       style: TextStyle(
-                        color: HubtelColors.teal,
+                        color: HubtelColors.teal, // TODO: check color
                         fontSize: Dimens.caption,
                         fontWeight: FontWeight.bold,
                       ),

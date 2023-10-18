@@ -2,12 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:unified_checkout_sdk/core_ui/app_image_widget.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/custom_components/custom_indicator.dart';
 import 'package:unified_checkout_sdk/custom_components/mobile_money_tile_field.dart';
 import 'package:unified_checkout_sdk/platform/models/wallet.dart';
+import 'package:unified_checkout_sdk/resources/checkout_drawables.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 import 'package:unified_checkout_sdk/utils/currency_formatter.dart';
 import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart'
@@ -122,18 +124,32 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
         horizontal: Dimens.paddingDefault,
         vertical: Dimens.paddingDefault,
       ),
-      trailing: const Row(
+      trailing:  Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Text("sd"),
-          // SizedBox(
-          //   width: 8,
-          // ),
-          // Text("sd"),
-          // SizedBox(
-          //   width: 8,
-          // ),
-          // Text("sd"),
+          AppImageWidget.local(
+            image: const AssetImage(CheckoutDrawables.hubtel_logo),
+            width: Dimens.iconMedium,
+            height: Dimens.iconSmall,
+            boxFit: BoxFit.contain,
+            borderRadius: 0,
+          ),
+          const SizedBox(width: Dimens.paddingDefaultSmall),
+          AppImageWidget.local(
+            image: const AssetImage(CheckoutDrawables.g_money_logo),
+            width: Dimens.iconSmall,
+            height: Dimens.iconSmall,
+            boxFit: BoxFit.contain,
+            borderRadius: 0,
+          ),
+          const SizedBox(width: Dimens.paddingDefaultSmall),
+          AppImageWidget.local(
+            image: const AssetImage(CheckoutDrawables.zee_pay_logo),
+            width: Dimens.iconSmall,
+            height: Dimens.iconSmall,
+            boxFit: BoxFit.contain,
+            borderRadius: 0,
+          ),
         ],
       ),
       leading: CustomRadioIndicator(
@@ -240,7 +256,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
     }
 
     if (OtherAccountTypes.GMoney.rawValue == selectedAccount) {
-      widget.onChannelChanged('gmoney');
+      widget.onChannelChanged('g-money');
       setState(() {
         // widget.selectedAccount = "GMoney";
         widget.showHubtelWalletActions = false;

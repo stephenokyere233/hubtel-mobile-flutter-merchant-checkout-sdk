@@ -1,6 +1,5 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:unified_checkout_sdk/core_ui/custom_button.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
@@ -13,26 +12,24 @@ import 'package:unified_checkout_sdk/utils/currency_formatter.dart';
 
 import '../core_ui/app_image_widget.dart';
 
-// import 'app_image_asset.dart';
-
 class PaymentInfoCard extends StatelessWidget {
+  final PurchaseInfo checkoutPurchase;
+  final BusinessInfo businessInfo;
+  final double? checkoutFees;
+  final double? totalAmountPayable;
 
-  PurchaseInfo checkoutPurchase;
-  BusinessInfo businessInfo;
-  double? checkoutFees;
-  double? totalAmountPayble;
-
-
-   PaymentInfoCard({
-    Key? key,
-    required this.checkoutPurchase,
-     required this.businessInfo,
-    this.checkoutFees,
-     this.totalAmountPayble
-  }): super(key:key);
+  PaymentInfoCard(
+      {Key? key,
+      required this.checkoutPurchase,
+      required this.businessInfo,
+      this.checkoutFees,
+      this.totalAmountPayable})
+      : super(key: key);
 
   // final CheckoutPurchase checkoutPurchase;
   // final List<CheckoutFee> checkoutFees;
+
+  var state = PaymentInfoCardState();
 
   @override
   Widget build(BuildContext context) {
@@ -91,30 +88,27 @@ class PaymentInfoCard extends StatelessWidget {
                     height: Dimens.paddingNano,
                   ),
 
-                  // school info
                   Row(
+                    // business info
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      //logo
                       AppImageWidget(
-                        imageUrl: businessInfo?.businessImageUrl ?? "",
-                        errorImage: AssetImage(businessInfo?.businessImageUrl ?? ""),
+                        //logo
+                        imageUrl: businessInfo.businessImageUrl,
+                        errorImage: AssetImage(businessInfo.businessImageUrl),
                         placeHolder: AssetImage(
-                        businessInfo?.businessImageUrl ?? "",
+                          businessInfo.businessImageUrl,
                         ),
                         borderRadius: Dimens.normalCircleAvatarRadius,
                         height: 48,
                         width: 48,
                       ),
-
-                      //
                       const SizedBox(
                         width: Dimens.normalSpacing,
                       ),
-
-                      //name
                       Column(
+                        //name
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -129,13 +123,6 @@ class PaymentInfoCard extends StatelessWidget {
                           const SizedBox(
                             height: Dimens.paddingMicro,
                           ),
-
-                          // Text(
-                          //   checkoutPurchase.description,
-                          //   style: AppTextStyle.caption().copyWith(
-                          //     color: HubtelColors.yellow.shade700,
-                          //   ),
-                          // ),
                         ],
                       ),
                     ],
@@ -158,29 +145,47 @@ class PaymentInfoCard extends StatelessWidget {
                     height: Dimens.paddingDefault,
                   ),
 
-                  //
                   PaymentCardHorizontalInfo(
                     detail: CheckoutStrings.amount,
-                    value: checkoutPurchase.amount
-                    // checkoutPurchase.instantServicePurchase?.amount ?? 0.0,
+                    value: checkoutPurchase.amount,
                   ),
 
-                  //
-                  const SizedBox(height: Dimens.paddingNano),
-
-                  PaymentCardHorizontalInfo(
-                    detail: CheckoutStrings.fees,
-                    value: checkoutFees
-
+                  const SizedBox(
+                    height: Dimens.paddingNano,
                   ),
-                  // const SizedBox(height: Dimens.paddingNano),
 
-                  // PaymentCardHorizontalInfo(
-                  //   detail: CheckoutStrings.elevy,
-                  //   value: 0.00,
-                  // ),
+                  ValueListenableBuilder(
+                    valueListenable: state.isLessDetails,
+                    builder: (ctx, boolean, child) {
+                      if (state.isLessDetails.value) {
+                        return Container();
+                      } else {
+                        return PaymentCardHorizontalInfo(
+                          detail: CheckoutStrings.fees,
+                          value: checkoutFees,
+                        );
+                      }
+                    },
+                  ),
 
                   const SizedBox(height: Dimens.paddingDefault),
+
+                  ValueListenableBuilder(
+                    valueListenable: state.isLessDetails,
+                    builder: (ctx, value, child) {
+                      return CustomButton(
+                        width: 100.0,
+                        title: state.isLessDetails.value
+                            ? 'View Fees'
+                            : 'Less Details',
+                        buttonAction: state.toggleIsLess,
+                        style: HubtelButtonStyle.solid,
+                        isDisabledBgColor: Colors.transparent,
+                        isEnabledBgColor: Colors.transparent,
+                        enabledTitleColor: Theme.of(context).primaryColor,
+                      );
+                    },
+                  )
                 ],
               ),
             ),
@@ -194,7 +199,8 @@ class PaymentInfoCard extends StatelessWidget {
                 width: double.maxFinite,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: HubtelColors.yellow.shade200,
+                  // color: HubtelColors.yellow.shade200,
+                  color: Theme.of(context).primaryColor.withOpacity(0.3),
                   border: Border(
                     left: BorderSide(color: HubtelColors.neutral.shade400),
                     right: BorderSide(color: HubtelColors.neutral.shade400),
@@ -209,14 +215,15 @@ class PaymentInfoCard extends StatelessWidget {
                     Text(
                       CheckoutStrings.youWillBeCharged,
                       style: AppTextStyle.caption().copyWith(
-                        color: HubtelColors.yellow.shade800,
+                        // color: Theme.of(context).primaryColor.withOpacity(1),
                       ),
                     ),
 
                     const SizedBox(height: Dimens.paddingNano),
 
                     Text(
-                      (totalAmountPayble ?? checkoutPurchase.amount).formatMoney(),
+                      (totalAmountPayable ?? checkoutPurchase.amount)
+                          .formatMoney(),
                       style: AppTextStyle.headline2().copyWith(
                         color: HubtelColors.neutral.shade900,
                       ),
@@ -231,5 +238,15 @@ class PaymentInfoCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class PaymentInfoCardState {
+  final ValueNotifier<bool> _isLess = ValueNotifier(true);
+
+  ValueNotifier<bool> get isLessDetails => _isLess;
+
+  void toggleIsLess() {
+    _isLess.value = !_isLess.value;
   }
 }

@@ -142,7 +142,7 @@ class MobileNumberInputPrefix extends StatelessWidget {
       child: Center(
           child: Text(
             countryCode,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
           )),

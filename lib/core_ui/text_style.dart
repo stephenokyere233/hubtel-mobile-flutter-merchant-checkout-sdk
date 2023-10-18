@@ -1,13 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
+import 'package:unified_checkout_sdk/core_ui/hubtel_color.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 
 const TextStyle _baseTextStyle = TextStyle(
-  fontFamily: "NunitoSans",
+  fontFamily: AppTextStyle.nunitoSans,
 );
 
 class AppTextStyle {
+  static const nunitoSans = 'NunitoSans';
+
   static TextStyle headline1() {
     return _baseTextStyle.copyWith(
       fontWeight: FontWeight.bold,
@@ -87,4 +89,57 @@ class AppTextStyle {
       color: Colors.black,
     );
   }
+}
+
+class ThemeConfig {
+  late final Color _primaryColor;
+
+  ThemeConfig({required primaryColor}) {
+    _primaryColor = primaryColor;
+  }
+
+  Color get primaryColor => _primaryColor;
+
+  static TextTheme textTheme = TextTheme(
+    /// Largest of the display styles. [headline1]
+    displayLarge: AppTextStyle.headline1(),
+
+    /// Largest of the display styles. [headline2]
+    displayMedium: AppTextStyle.headline2(),
+
+    /// Largest of the display styles. [headline3]
+    displaySmall: AppTextStyle.headline3(),
+
+    /// Largest of the display styles. [headline4]
+    headlineMedium: AppTextStyle.headline4(),
+
+    /// Largest of the display styles. [headline5]
+    headlineSmall: AppTextStyle.headline5(),
+
+    /// Largest of the display styles. [headline6]
+    titleLarge: AppTextStyle.headline6(),
+
+    bodyLarge: AppTextStyle.body1(),
+
+    labelLarge: AppTextStyle.button(),
+    bodySmall: AppTextStyle.body2(), // use for caption
+  );
+
+  ThemeData checkoutTheme() => ThemeData(
+        textTheme: textTheme,
+        // colorScheme: ColorScheme.fromSeed(seedColor: _primaryColor,),
+        primaryColor: _primaryColor,
+        brightness: Brightness.light,
+        checkboxTheme: CheckboxThemeData(
+          fillColor: MaterialStateColor.resolveWith(
+              (states) => _primaryColor),
+        ),
+        appBarTheme: const AppBarTheme(
+          foregroundColor: HubtelColors.neutral,
+          backgroundColor: HubtelColors.white,
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: _primaryColor,
+        ),
+      );
 }

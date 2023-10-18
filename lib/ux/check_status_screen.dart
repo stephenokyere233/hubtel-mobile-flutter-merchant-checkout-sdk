@@ -3,7 +3,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 import 'package:unified_checkout_sdk/core_ui/app_page.dart';
 import 'package:unified_checkout_sdk/core_ui/custom_button.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
@@ -13,12 +12,10 @@ import 'package:unified_checkout_sdk/platform/models/checkout_payment_status_res
 import 'package:unified_checkout_sdk/platform/models/checkout_requirements.dart';
 import 'package:unified_checkout_sdk/platform/models/momo_response.dart';
 import 'package:unified_checkout_sdk/platform/models/payment_status.dart';
-import 'package:unified_checkout_sdk/unified_checkout_sdk.dart';
 import 'package:unified_checkout_sdk/ux/viewModel/checkout_view_model.dart';
 import '../core_ui/loading_indicator.dart';
 import '../resources/checkout_drawables.dart';
 import '../resources/checkout_strings.dart';
-import 'package:async/async.dart';
 
 
 
@@ -209,7 +206,7 @@ class _CheckStatusScreenState extends State<CheckStatusScreen> {
       paymentStatus = status.data?.paymentStatus ?? PaymentStatus.pending;
       paymentStatusErrorMessage = paymentStatus == PaymentStatus.failed
           ? status.data?.providerDescription ?? ''
-          : CheckoutStrings.somethigWentWrong;
+          : CheckoutStrings.somethingWentWrong;
       checkoutOrderStatus = status.data ?? CheckoutOrderStatus();
       isLoading = false;
     });

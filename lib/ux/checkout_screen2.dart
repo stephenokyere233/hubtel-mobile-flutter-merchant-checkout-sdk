@@ -285,7 +285,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
                                         .checkoutFees.value ??
                                     0.00,
                                 businessInfo: widget.businessInfo,
-                                totalAmountPayble: totalAmountPayable,
+                                totalAmountPayable: totalAmountPayable,
                               ),
                               valueListenable:
                                   checkoutHomeScreenState.checkoutFees,
