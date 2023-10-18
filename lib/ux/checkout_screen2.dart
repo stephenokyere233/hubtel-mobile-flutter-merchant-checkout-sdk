@@ -647,12 +647,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
   }
 
   fetchFees2() async {
-
-    // setState(() {
-    //   isLoadingFees = true;
-    //   isButtonEnabled = false;
-    // });
-
     checkoutHomeScreenState.isLoadingFees.value = true;
     checkoutHomeScreenState.isButtonEnabled.value = false;
 
@@ -672,12 +666,10 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
     if (!mounted) return;
 
     if (response.state == UiState.success) {
-      setState(() {
-        checkoutHomeScreenState.isLoadingFees.value = false;
-        checkoutHomeScreenState.checkoutFees.value = response.data?.fees;
-        totalAmountPayable = response.data?.amountPayable;
-        _handleButtonActivation();
-      });
+      checkoutHomeScreenState.isLoadingFees.value = false;
+      checkoutHomeScreenState.checkoutFees.value = response.data?.fees;
+      totalAmountPayable = response.data?.amountPayable;
+      _handleButtonActivation();
     } else {
       checkoutHomeScreenState.isLoadingFees.value = false;
       widget.showErrorDialog(context: context, message: response.message);
