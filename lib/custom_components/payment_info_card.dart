@@ -123,13 +123,6 @@ class PaymentInfoCard extends StatelessWidget {
                           const SizedBox(
                             height: Dimens.paddingMicro,
                           ),
-
-                          // Text(
-                          //   checkoutPurchase.description,
-                          //   style: AppTextStyle.caption().copyWith(
-                          //     color: HubtelColors.yellow.shade700,
-                          //   ),
-                          // ),
                         ],
                       ),
                     ],
@@ -155,6 +148,10 @@ class PaymentInfoCard extends StatelessWidget {
                   PaymentCardHorizontalInfo(
                     detail: CheckoutStrings.amount,
                     value: checkoutPurchase.amount,
+                  ),
+
+                  const SizedBox(
+                    height: Dimens.paddingNano,
                   ),
 
                   ValueListenableBuilder(
@@ -202,7 +199,8 @@ class PaymentInfoCard extends StatelessWidget {
                 width: double.maxFinite,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: HubtelColors.yellow.shade200,
+                  // color: HubtelColors.yellow.shade200,
+                  color: Theme.of(context).primaryColor.withOpacity(0.3),
                   border: Border(
                     left: BorderSide(color: HubtelColors.neutral.shade400),
                     right: BorderSide(color: HubtelColors.neutral.shade400),
@@ -217,7 +215,7 @@ class PaymentInfoCard extends StatelessWidget {
                     Text(
                       CheckoutStrings.youWillBeCharged,
                       style: AppTextStyle.caption().copyWith(
-                        color: HubtelColors.yellow.shade800,
+                        // color: Theme.of(context).primaryColor.withOpacity(1),
                       ),
                     ),
 

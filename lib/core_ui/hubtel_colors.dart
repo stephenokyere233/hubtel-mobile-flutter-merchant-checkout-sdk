@@ -25,7 +25,7 @@ final class HubtelColors {
 
   static const Color greyColor = Color(0xFFAAAAAA);
 
-  static const Color lighterGrey = const Color(0xFFEEEEF0);
+  static const Color lighterGrey = Color(0xFFEEEEF0);
 
   static Color tiffanyBlue = const Color(0xFF01C7B1);
 

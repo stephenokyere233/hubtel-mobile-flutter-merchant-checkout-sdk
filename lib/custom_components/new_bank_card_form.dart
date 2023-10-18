@@ -151,14 +151,15 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                     LengthLimitingTextInputFormatter(3),
                     FilteringTextInputFormatter.digitsOnly,
                   ],
-                  inputType: TextInputType.numberWithOptions(
+                  inputType: const TextInputType.numberWithOptions(
                     signed: false,
                     decimal: false,
                   ),
                   onChanged: widget.onNewCardCvvChanged,
                   validator: (value) {
-                    if (value == null || value.isEmpty || value.length < 3)
+                    if (value == null || value.isEmpty || value.length < 3) {
                       return CheckoutStrings.invalidCardCvv;
+                    }
                     return null;
                   },
                   focusedBorder: OutlineInputBorder(
@@ -199,13 +200,13 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                     Dimens.defaultBorderRadiusLarge,
                   ),
                   width: Dimens.radioButtonSize,
-                  color: saveCardForFuture ? HubtelColors.teal : HubtelColors.neutral.shade400,
+                  color: saveCardForFuture ? Theme.of(context).primaryColor : HubtelColors.neutral.shade400,
                   child: AnimatedToggleSwitch<bool>.dual(
                       current: saveCardForFuture,
                       first: false,
                       second: true,
                       height: Dimens.defaultIconNormal,
-                      indicatorSize: Size(
+                      indicatorSize: const Size(
                         Dimens.defaultIconNormal,
                         Dimens.defaultIconNormal,
                       ),

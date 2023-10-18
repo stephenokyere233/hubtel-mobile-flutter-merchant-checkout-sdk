@@ -7,8 +7,10 @@ final class CheckoutDrawables {
   static const String visa = "$_baseUrl/visa-logo.png";
   static const String masterCard = "$_baseUrl/master-card-logo.png";
   static const String mtnMomoLogo = "$_baseUrl/mtn-momo.png";
-  static const String vodafoneCashLogo = "$_baseUrl/voda-cash.png";
+  static const String mtnMomo = '$_baseUrl/mtn_momo.png';
+  static const String vodafoneCashLogo = "$_baseUrl/vodafone_cash.png";
   static const String airtelTigoLogo = "$_baseUrl/tigo-cash.png";
+  static const String airtelTigo = "$_baseUrl/airtel_tigo.png";
   static const String processingPayment = '$_baseUrl/ic_processing_payment.svg';
   static const String transactionSuccessful = '$_baseUrl/ic_success.svg';
   static const String transactionPending = '$_baseUrl/ic_payment_pending.svg';

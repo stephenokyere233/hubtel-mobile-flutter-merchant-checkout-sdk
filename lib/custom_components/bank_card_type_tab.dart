@@ -20,7 +20,7 @@ class BankCardTypeTab extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(
+        margin: const EdgeInsets.symmetric(
           horizontal: Dimens.paddingDefaultSmall,
         ),
         padding: EdgeInsets.symmetric(
@@ -28,7 +28,7 @@ class BankCardTypeTab extends StatelessWidget {
           horizontal: Dimens.paddingDefault,
         ),
         decoration: BoxDecoration(
-            color: isSelected ? HubtelColors.teal : HubtelColors.neutral,
+            color: isSelected ? Theme.of(context).primaryColor : HubtelColors.neutral,
             borderRadius: BorderRadius.circular(Dimens.paddingDefault)),
         child: Text(
           tabText,

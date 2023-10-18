@@ -2,6 +2,7 @@ library unified_checkout_sdk;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/platform/models/business_info.dart';
 
@@ -26,17 +27,23 @@ class CheckoutScreen extends StatefulWidget {
 
   late final HubtelCheckoutConfiguration configuration;
 
+  late final ThemeConfig? themeConfig;
+
   late final viewModel = CheckoutViewModel();
 
   late final Function(PaymentStatus) onCheckoutComplete;
 
-  CheckoutScreen(
-      {Key? key,
-      required this.purchaseInfo,
-      required this.configuration,
-      this.checkoutCompleted,
-      required this.onCheckoutComplete})
-      : super(key: key) {
+  Color? _primaryColor;
+
+
+  CheckoutScreen({
+    Key? key,
+    required this.purchaseInfo,
+    required this.configuration,
+    this.checkoutCompleted,
+    required this.onCheckoutComplete,
+    this.themeConfig,
+  }) : super(key: key) {
     CheckoutRequirements.customerMsisdn = purchaseInfo.customerMsisdn;
     CheckoutRequirements.apiKey = configuration.merchantApiKey;
     CheckoutRequirements.merchantId = configuration.merchantID;
@@ -59,40 +66,40 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => CheckoutViewModel())],
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: AppTextStyle.nunitoSans),
-        home: Container(
-          color: Colors.white,
-          child: FutureBuilder<UiResult<ChannelFetchResponse>>(
-            future: widget.viewModel.fetchChannels(),
-            builder: (context,
-                AsyncSnapshot<UiResult<ChannelFetchResponse>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else {
-                if (snapshot.hasData) {
-                  final businessInfo = snapshot.data?.data?.getBusinessInfo() ??
-                      BusinessInfo(
-                        businessName: 'businessName',
-                        businessImageUrl: 'businessImageUrl',
-                      );
-                  return CheckoutHomeScreen(
-                    checkoutPurchase: widget.purchaseInfo,
-                    businessInfo: businessInfo,
-                    checkoutCompleted: widget.onCheckoutComplete,
-                  );
-                }
+      child: Container(
+        color: Colors.white,
+        child: FutureBuilder<UiResult<ChannelFetchResponse>>(
+          future: widget.viewModel.fetchChannels(),
+          builder: (context,
+              AsyncSnapshot<UiResult<ChannelFetchResponse>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator(color: widget.themeConfig?.primaryColor ?? HubtelColors.teal,));
+            } else {
+              if (snapshot.hasData) {
+                final businessInfo = snapshot.data?.data?.getBusinessInfo() ??
+                    BusinessInfo(
+                      businessName: 'businessName',
+                      businessImageUrl: 'businessImageUrl',
+                    );
+                return CheckoutHomeScreen(
+                  checkoutPurchase: widget.purchaseInfo,
+                  businessInfo: businessInfo,
+                  checkoutCompleted: widget.onCheckoutComplete,
+                  themeConfig: widget.themeConfig ?? ThemeConfig(primaryColor: HubtelColors.teal),
+                );
               }
-              return const Center(child: CircularProgressIndicator());
-            },
-          ),
+            }
+            return Center(
+              child: CircularProgressIndicator(color: Colors.teal[500], backgroundColor: Colors.teal[500]),
+            );
+          },
         ),
       ),
     );
   }
 
   Future<String> fetchData() async {
-    // Simulate an API request (Replace with your actual API call)
+// Simulate an API request (Replace with your actual API call)
     await Future.delayed(const Duration(seconds: 2));
     return "Hello, FutureBuilder!";
   }

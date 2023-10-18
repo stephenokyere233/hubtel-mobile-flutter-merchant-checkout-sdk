@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/custom_components/mobile_money_tile_field.dart';
 import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart' as customExpansion;
@@ -50,7 +52,7 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
     // if (widget.isSelected) {
     //   autoSelectFirstWallet();
     // }
-    print("hereeeeee ${widget.wallets.length}");
+    log("hereeeeee ${widget.wallets.length}", time: DateTime.now(), name: runtimeType.toString());
     return Column(
       children: [
         if (widget.isSelected) const SizedBox(height: Dimens.paddingDefault),
@@ -60,7 +62,8 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
           // tilePadding: EdgeInsets.symmetric(vertical: -10, horizontal: 16)
           controller: widget.controller,
           headerBackgroundColor: widget.isSelected
-              ? HubtelColors.teal.shade100
+              // ? HubtelColors.teal.shade100
+              ? Theme.of(context).primaryColor.withOpacity(0.3)
               : Colors.transparent,
           onExpansionChanged: widget.onExpansionChanged,
           title: Text(

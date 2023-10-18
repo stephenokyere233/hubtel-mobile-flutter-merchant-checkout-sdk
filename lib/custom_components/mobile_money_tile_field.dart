@@ -126,9 +126,9 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                               ),
                             );
                           },
-                          leading: const Icon(
+                          leading: Icon(
                             Icons.add_circle_outline_rounded,
-                            color: HubtelColors.teal,
+                            color: Theme.of(context).primaryColor,
                             size: Dimens.defaultIconNormal,
                           ),
                           title: Text(

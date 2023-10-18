@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
@@ -7,14 +6,16 @@ import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/custom_components/custom_indicator.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 import 'package:unified_checkout_sdk/utils/currency_formatter.dart';
-import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart' as customExpansion;
+import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart'
+    as customExpansion;
+
 class HubtelWalletExpansionTile extends StatefulWidget {
   HubtelWalletExpansionTile(
       {Key? key,
-        required this.controller,
-        required this.onExpansionChanged,
-        required this.isSelected,
-        required this.value})
+      required this.controller,
+      required this.onExpansionChanged,
+      required this.isSelected,
+      required this.value})
       : super(key: key);
 
   final customExpansion.ExpansionTileController controller;
@@ -43,8 +44,9 @@ class _HubtelWalletExpansionTileState extends State<HubtelWalletExpansionTile> {
   Widget build(BuildContext context) {
     return customExpansion.ExpansionTile(
       controller: widget.controller,
-      headerBackgroundColor:
-      widget.isSelected ? HubtelColors.teal.shade100 : Colors.transparent,
+      headerBackgroundColor: widget.isSelected
+          ? Theme.of(context).primaryColor.withOpacity(0.3)
+          : Colors.transparent,
       onExpansionChanged: widget.onExpansionChanged,
       maintainState: true,
       title: Text(

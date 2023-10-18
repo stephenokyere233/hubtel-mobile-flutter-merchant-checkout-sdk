@@ -38,7 +38,7 @@ class AddWalletScreen extends StatelessWidget {
               isDisabledBgColor: HubtelColors.lighterGrey,
               disabledTitleColor: HubtelColors.grey,
               style: HubtelButtonStyle.solid,
-              isEnabledBgColor: HubtelColors.teal[500],
+              isEnabledBgColor: Theme.of(context).primaryColor,
             );
           },
         ),
@@ -68,10 +68,10 @@ class AddWalletScreen extends StatelessWidget {
                   hintText: CheckoutStrings.addNumberHint,
                   onChanged: (value) {
                     state.onNumberChanged(value);
-                    log('$runtimeType ${state.mobileNumber.value}');
+                    // log('$runtimeType ${state.mobileNumber.value}');
                   },
                   inputType: TextInputType.number,
-                  autofocus: true,
+                  // autofocus: true,
                   hasFill: true,
                   focusBorderColor: Colors.transparent,
                 );
@@ -144,9 +144,9 @@ class AddWalletScreenState {
   final ValueNotifier<bool> _isButtonEnabled = ValueNotifier(false);
 
   final List<(String, String)> providers = [
-    (CheckoutStrings.mtn.toUpperCase(), CheckoutDrawables.mtnMomoLogo),
+    (CheckoutStrings.mtn.toUpperCase(), CheckoutDrawables.mtnMomo),
     (CheckoutStrings.vodafone.capitalize(), CheckoutDrawables.vodafoneCashLogo),
-    (CheckoutStrings.airtelDashTigo, CheckoutDrawables.airtelTigoLogo),
+    (CheckoutStrings.airtelDashTigo, CheckoutDrawables.airtelTigo),
   ];
 
   ValueNotifier<String> get mobileNumber => _mobileNumber;

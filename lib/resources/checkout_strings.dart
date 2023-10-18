@@ -18,7 +18,7 @@ class CheckoutStrings {
   static const checkout = 'Checkout';
   static const String ghanaCardHeading = 'Ghana Card Details';
   static const youWillBeCharged = "You will be charged";
-
+  static const String titleVerification = 'Verification';
   static const selectPaymentMethod = "Select payment method";
 
   static const payWith = "Pay with";
@@ -100,6 +100,7 @@ class CheckoutStrings {
   static String selectNetwork = 'Select Mobile Network';
 
   static var addNumberHint = 'eg 054 025 6631';
+  static var ghanaCardNumberHint = 'ABC-XXXXXXXXXX-X';
 
   static String getPaymentPromptMessage({required String walletNumber}) {
     return "A bill prompt has been sent to you on $walletNumber, please authorise the payment.";
