@@ -837,6 +837,34 @@ class _CheckoutHomeScreenState extends State<CheckoutHomeScreen> {
   }
 }
 
-class CheckoutHomeScreenState {
+class CheckoutHomeState {
+  ValueNotifier<bool?> _isMobileMoneyExpanded = ValueNotifier(null);
+  ValueNotifier<bool?> _shouldSaveCardForFuture = ValueNotifier(null);
+  ValueNotifier<MomoProvider?> _selectedProvider = ValueNotifier(null);
+  ValueNotifier<String?> _savedCardCvv = ValueNotifier(null);
+  ValueNotifier<String?> _newCardNumber = ValueNotifier(null);
+  ValueNotifier<String?> _newCardExpiry = ValueNotifier(null);
+  ValueNotifier<String?> _newCardCvv = ValueNotifier(null);
+  ValueNotifier<WalletType?> _walletType = ValueNotifier(null);
+  ValueNotifier<Wallet?> _selectedWallet = ValueNotifier(null);
 
+  final ValueNotifier<double?> _checkoutFees = ValueNotifier(null);
+  final ValueNotifier<bool> _isButtonEnabled = ValueNotifier(false);
+  final ValueNotifier<bool> _isLoadingFees = ValueNotifier(false);
+  final ValueNotifier<String> _selectedChannel = ValueNotifier('Hubtel');
+
+  ValueNotifier<bool?> get isMobileMoneyExpanded => _isMobileMoneyExpanded;
+  ValueNotifier<bool?> get shouldSaveCardForFuture => _shouldSaveCardForFuture;
+  ValueNotifier<MomoProvider?> get selectedProvider => _selectedProvider;
+  ValueNotifier<String?> get savedCardCvv => _savedCardCvv;
+  ValueNotifier<String?> get newCardNumber => _newCardNumber;
+  ValueNotifier<String?> get newCardExpiry => _newCardExpiry;
+  ValueNotifier<String?> get newCardCvv => _newCardCvv;
+  ValueNotifier<WalletType?> get walletType => _walletType;
+  ValueNotifier<Wallet?> get selectedWallet => _selectedWallet;
+
+  ValueNotifier<double?> get checkoutFees => _checkoutFees;
+  ValueNotifier<bool> get isButtonEnabled => _isButtonEnabled;
+  ValueNotifier<bool> get isLoadingFees => _isLoadingFees;
+  ValueNotifier<String> get selectedChannel => _selectedChannel;
 }

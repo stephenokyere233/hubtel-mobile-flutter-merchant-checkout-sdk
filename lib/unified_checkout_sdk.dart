@@ -119,7 +119,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           builder: (context,
               AsyncSnapshot<UiResult<ChannelFetchResponse>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else {
               if (snapshot.hasData) {
                 final businessInfo = snapshot.data?.data?.getBusinessInfo() ??
@@ -133,7 +133,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 );
               }
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },

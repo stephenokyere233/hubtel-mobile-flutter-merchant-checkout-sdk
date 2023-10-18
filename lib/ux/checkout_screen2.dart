@@ -128,7 +128,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
   // double? checkoutFees;
   // bool isButtonEnabled = false;
 
-  final checkoutHomeScreenState = CheckoutHomeScreenState();
+  final checkoutHomeScreenState = _CheckoutHomeScreen2State();
 
   bool preselectOtherMomoWallet = true;
 
@@ -885,7 +885,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
   }
 }
 
-class CheckoutHomeScreenState {
+class _CheckoutHomeScreen2State {
   final ValueNotifier<double?> _checkoutFees = ValueNotifier(null);
   final ValueNotifier<bool> _isButtonEnabled = ValueNotifier(false);
   final ValueNotifier<bool> _isLoadingFees = ValueNotifier(false);
