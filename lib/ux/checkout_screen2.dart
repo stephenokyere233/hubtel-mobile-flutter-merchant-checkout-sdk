@@ -37,7 +37,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../core_ui/app_page.dart';
 import '../core_ui/custom_button.dart';
-import '../custom_components/hubtel_wallet_expansion.dart';
+import '../custom_components/other_payment_types_expansion_tile.dart';
 import '../platform/models/business_info.dart';
 import '../platform/models/checkout_type.dart';
 import '../platform/models/payment_status.dart';
@@ -786,7 +786,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => PaymentStatusScreen(
+                    builder: (context) => CheckStatusScreen(
                           checkoutResponse: checkoutResponse ?? MomoResponse(),
                           checkoutCompleted: widget.checkoutCompleted,
                         )));

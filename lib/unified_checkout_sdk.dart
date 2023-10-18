@@ -126,7 +126,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     BusinessInfo(
                         businessName: "businessName",
                         businessImageUrl: "businessImageUrl");
-                return CheckoutHomeScreen2(
+                return CheckoutHomeScreen(
                     checkoutPurchase: widget.purhaseInfo,
                     businessInfo: businessInfo,
                   checkoutCompleted: widget.onCheckoutComplete,

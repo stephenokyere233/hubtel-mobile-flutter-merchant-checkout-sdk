@@ -45,14 +45,14 @@ class OtherPaymentExpansionTile extends StatefulWidget {
   List<Wallet> walletTypes = [
     Wallet(
         externalId: "0011",
-        accountNo: "0556236739",
+        accountNo: "",
         accountName: "Hubtel",
         providerId: "providerId",
         provider: "provider",
         type: "type"),
     Wallet(
-        externalId: "0011",
-        accountNo: "0556236739",
+        externalId: "",
+        accountNo: "",
         accountName: "GMoney",
         providerId: "providerId",
         provider: "provider",
@@ -106,7 +106,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
 
   @override
   Widget build(BuildContext context) {
-    // onPaymentTypeChanged(selectedAccount: widget.selectedAccount);
+    // _onPaymentTypeChanged(selectedAccount: widget.selectedAccount);
     return customExpansion.ExpansionTile(
       controller: widget.controller,
       headerBackgroundColor:
