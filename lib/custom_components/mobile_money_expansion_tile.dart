@@ -12,6 +12,10 @@ import 'package:unified_checkout_sdk/platform/models/wallet.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 
 class MobileMoneyExpansionTile extends StatefulWidget {
+
+  static bool fetchFees = true;
+
+
   const MobileMoneyExpansionTile({
     super.key,
     required this.wallets,
@@ -47,10 +51,13 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
 
   @override
   Widget build(BuildContext context) {
-    // if (widget.isSelected) {
-    //   autoSelectFirstWallet();
+    // if(MobileMoneyExpansionTile.fetchFees == true) {
+    //   if (widget.isSelected) {
+    //     autoSelectFirstWallet();
+    //   }
+      // MobileMoneyExpansionTile.fetchFees = false;
     // }
-    print("hereeeeee ${widget.wallets.length}");
+    // print("hereeeeee ${widget.wallets.length}");
     return Column(
       children: [
         if (widget.isSelected) const SizedBox(height: Dimens.paddingDefault),

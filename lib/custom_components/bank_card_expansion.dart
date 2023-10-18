@@ -133,6 +133,9 @@ class _BankCardExpansionTileState extends State<BankCardExpansionTile> {
               isSelected: e.key == selectedTabIndex,
               onTap: () {
                 setState(() {
+                  if (widget.savedCards.length < 1){
+                    return;
+                  }
                   selectedTabIndex = e.key;
                   widget.onUseNewCardSelected(e.key == 0);
                 });

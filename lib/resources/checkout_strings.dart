@@ -1,7 +1,3 @@
-
-
-
-
 // import 'package:feature_checkout/ux/models/web_checkout_state.dart';
 
 enum CheckoutHtmlState {
@@ -9,11 +5,9 @@ enum CheckoutHtmlState {
   success, //meaning loading is successful
   loadingBegan, // means loading has began
   htmlLoadingFailed, // means htmlLoading failed
-
 }
 
 class CheckoutStrings {
-
   static const checkout = 'Checkout';
   static const youWillBeCharged = "You will be charged";
 
@@ -35,10 +29,12 @@ class CheckoutStrings {
 
   static const mobileNetwork = "Mobile Network";
 
-  static const paymentWithMomoInfoHead = "You will be required to enter your MTN "
+  static const paymentWithMomoInfoHead =
+      "You will be required to enter your MTN "
       "Mobile Money PIN to authorise this payment.\n\nIf you don't receive any authorisation prompt, dial ";
 
-  static const paymentWithMomoInfoTail = " go to My Account and select Approvals";
+  static const paymentWithMomoInfoTail =
+      " go to My Account and select Approvals";
 
   static const vodafoneCash = "Vodafone Cash";
 
@@ -237,7 +233,6 @@ class CheckoutStrings {
 
   static String airtelTigoMoneyString = "Airtel Tigo Money";
 
-
   static String checkAgainTimeLeft({required int timeLeft}) {
     return 'Check Again (00:0$timeLeft)';
   }
@@ -253,29 +248,32 @@ class CheckoutStrings {
 
   static const hubtel_pin_desc = "Please enter your Hubtel PIN \n to proceed";
 
-  static const resetString = "For security reasons, all your debit/credit accounts will be removed. You would have to sign in again and set a new pin";
+  static const resetString =
+      "For security reasons, all your debit/credit accounts will be removed. You would have to sign in again and set a new pin";
 
   static const okay = "Okay";
 
   static const secureHubtelPin = "Set Your Hubtel Pin";
 
-  static const secureHubtelPinMessage = "Secure your Hubtel Balance transactions by approving each one with your own pin";
+  static const secureHubtelPinMessage =
+      "Secure your Hubtel Balance transactions by approving each one with your own pin";
 
   static const success = "Success";
 
   static const cancelTransaction = "Cancel Transaction?";
 
-  static const  doYouWantToCancelTransaction = 'Do you want to cancel this transaction?';
+  static const doYouWantToCancelTransaction =
+      'Do you want to cancel this transaction?';
 
   static const keepYourTransactionSecure = "Keep your account secure";
 
   static const setHubtelPin = "Set your hubtel account pin";
 
-  static const  confirmYourPin = "Confirm Your Pin";
+  static const confirmYourPin = "Confirm Your Pin";
 
   static const renterYourPin = "Re-enter your Hubtel account PIN to confirm";
 
-  static const  keepYourAccountSecure = "Keep your account secure";
+  static const keepYourAccountSecure = "Keep your account secure";
 
   static const setYourAccountPin = "Set your hubtel account pin";
 
@@ -307,6 +305,13 @@ class CheckoutStrings {
 
   static const five = "5";
 
+  static const BankCard = "Bank Card";
 
+  static String getChannelNameForBankPayment(String cardNumber) {
+    return cardNumber.startsWith(CheckoutStrings.four)
+        ? CheckoutStrings.cardNotPresentVisa
+        : CheckoutStrings.cardnotpresent_mastercard;
+  }
 
+  static const other = "Others";
 }

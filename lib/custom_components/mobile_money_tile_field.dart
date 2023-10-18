@@ -16,7 +16,7 @@ import 'package:unified_checkout_sdk/utils/string_extensions.dart';
 import '../platform/models/wallet_type.dart';
 
 class MobileMoneyTileField extends StatefulWidget {
-  const MobileMoneyTileField({
+  MobileMoneyTileField({
     Key? key,
     required this.fieldController,
     this.wallets,
@@ -24,6 +24,7 @@ class MobileMoneyTileField extends StatefulWidget {
     required this.onWalletSelected,
     required this.onProviderSelected,
     required this.hintText,
+    this.showWalletAdditionTile
   }) : super(key: key);
 
   final TextEditingController fieldController;
@@ -32,6 +33,7 @@ class MobileMoneyTileField extends StatefulWidget {
   final String hintText;
   final void Function(Wallet) onWalletSelected;
   final void Function(MomoProvider) onProviderSelected;
+  bool? showWalletAdditionTile = true;
 
   @override
   State<MobileMoneyTileField> createState() => _MobileMoneyTileFieldState();
@@ -98,40 +100,47 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                     return ListTile(
                       onTap: () {
                         setState(() {
-                          widget.fieldController.text = e.accountNo ?? "";
+                          widget.fieldController.text = widget.showWalletAdditionTile ?? true ? e.accountNo ?? "" : e.accountName ?? "";
                         });
                         expandOptions = false;
                         widget.onWalletSelected(e);
                       },
-                      title: Text(e.accountNo ?? "", style: AppTextStyle.body2(),),
-                      subtitle: Text(
-                        (e.provider ?? "").capitalize(),
-                        style: AppTextStyle.body2().copyWith(color: HubtelColors.neutral.shade600),
-                      ),
+                      title: Text(widget.showWalletAdditionTile ?? true ? e.accountNo ?? "" : e.accountName ?? "", style: AppTextStyle.body2(),),
+                      subtitle: widget.showWalletAdditionTile ?? true ? Visibility(
+                        visible: widget.showWalletAdditionTile ?? true,
+                        child: Text(
+                          widget.showWalletAdditionTile ?? true ? (e.provider ?? "").capitalize() : "",
+                          style: AppTextStyle.body2().copyWith(color: HubtelColors.neutral.shade600),
+                        ),
+                      ) : null ,
                     );
                   }),
-                  ListTile(
-                    onTap: () {
-                      setState(() {
-                        expandOptions = false;
-                      });
-                      // Navigation.openAddMomoWalletPage(
-                      //   context: context,
-                      // );
-                    },
-                    leading: const Icon(
-                      Icons.add_circle_outline_rounded,
-                      color: HubtelColors.teal,
-                      size: Dimens.defaultIconNormal,
-                    ),
-                    title:  Text(
-                      CheckoutStrings.addMobileMoneyWallet,
-                      style: AppTextStyle.body2().copyWith(
-                        fontWeight: FontWeight.bold,
+                  Visibility(
+                    visible: widget.showWalletAdditionTile ?? true,
+                    child: ListTile(
+                      onTap: () {
+                        setState(() {
+                          expandOptions = false;
+                        });
+                        // Navigation.openAddMomoWalletPage(
+                        //   context: context,
+                        // );
+                      },
+                      leading: const Icon(
+                        Icons.add_circle_outline_rounded,
+                        color: HubtelColors.teal,
+                        size: Dimens.defaultIconNormal,
                       ),
+                      title:  Text(
+                        CheckoutStrings.addMobileMoneyWallet,
+                        style: AppTextStyle.body2().copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      minLeadingWidth: Dimens.paddingNano,
                     ),
-                    minLeadingWidth: Dimens.paddingNano,
                   )
+
                 ]
                     : widget.providers != null
                     ? widget.providers!
