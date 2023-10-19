@@ -32,6 +32,24 @@ class HBPlainTextButtonLarge extends StatefulWidget {
   @override
   State<HBPlainTextButtonLarge> createState() => _HBPlainTextButtonLargeState();
 
+  factory HBPlainTextButtonLarge.createCustomButton({
+    required String title,
+    required VoidCallback? buttonAction,
+    double? padding,
+    double? fontSize,
+    double? width,
+    Color? color,
+  }) {
+    return HBPlainTextButtonLarge(
+      title: title,
+      enabledTextColor: color ?? HubtelColors.teal,
+      disabledTextColor: HubtelColors.neutral.shade300,
+      buttonAction: buttonAction,
+      buttonPaddings: padding,
+      fontSize: fontSize,
+    );
+  }
+
   factory HBPlainTextButtonLarge.createTealButton({
     required String title,
     required VoidCallback? buttonAction,

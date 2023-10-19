@@ -480,7 +480,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
                                           anotherEditingController:
                                               anotherMomoSelectorController,
                                           onChannelChanged: (provider) {
-                                            selectedProvider = MomoProvider(alias: provider);
+                                            selectedProvider =
+                                                MomoProvider(alias: provider);
                                             fetchFees2();
                                             log('onChannelChanged - provider {$provider}',
                                                 name: '$runtimeType');
@@ -784,12 +785,14 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
             Navigator.pop(context);
             // Goto Transaction Status Screen
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CheckStatusScreen(
-                          checkoutResponse: checkoutResponse ?? MomoResponse(),
-                          checkoutCompleted: widget.checkoutCompleted,
-                        )));
+              context,
+              MaterialPageRoute(
+                builder: (context) => CheckStatusScreen(
+                  checkoutResponse: checkoutResponse ?? MomoResponse(),
+                  checkoutCompleted: widget.checkoutCompleted,
+                ),
+              ),
+            );
           });
     } else {
       widget.showErrorDialog(context: context, message: result.message);
@@ -884,7 +887,10 @@ class _CheckoutHomeScreen2State {
   final ValueNotifier<String> _selectedChannel = ValueNotifier('Hubtel');
 
   ValueNotifier<double?> get checkoutFees => _checkoutFees;
+
   ValueNotifier<bool> get isButtonEnabled => _isButtonEnabled;
+
   ValueNotifier<bool> get isLoadingFees => _isLoadingFees;
+
   ValueNotifier<String> get selectedChannel => _selectedChannel;
 }

@@ -60,8 +60,7 @@ class CheckoutHomeScreen extends StatefulWidget {
       required this.checkoutPurchase,
       required this.businessInfo,
       required this.checkoutCompleted,
-        this.themeConfig
-      })
+      this.themeConfig})
       : super(key: key);
 
   @override
@@ -176,46 +175,11 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
     cardNumberInputController.addListener(onNewCardInputComplete);
     cardDateInputController.addListener(onNewCardInputComplete);
     cardCvvInputController.addListener(onNewCardInputComplete);
-
-    // totalAmountPayable =
-    //     widget.checkoutConfig.checkoutPurchase.instantServicePurchase?.amount ?? 0.00;
-    //
-    // viewModel = context.read<CheckoutViewModel>();
-    // _getWallets();
-    //
-    // controller = WebViewController()
-    //   ..loadHtmlString(CheckoutStrings.makeHtmlString(widget.accessToken ?? ""))
-    //   ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    //   ..addJavaScriptChannel(
-    //     'DeviceCollectionComplete',
-    //     onMessageReceived: (message) {
-    //       if (message.message == CheckoutHtmlState.loadingBegan.toString()) {
-    //         _checkoutInstantService();
-    //         print("checkout succeeded successfully");
-    //       } else if (message.message == CheckoutHtmlState.success.toString()) {
-    //         print("checkout succeeded successfully");
-    //         // TODO : Go back and go to the check status screen
-    //       } else if (message.message == CheckoutHtmlState.htmlLoadingFailed) {
-    //         if (!mounted) return;
-    //         // widget.dismissDialog(context: context);
-    //
-    //         widget.showErrorDialog(
-    //           context: context,
-    //           message: "Something unexpected happened",
-    //         );
-    //       }
-    //     },
-    //   );
-
-    //
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = widget.themeConfig?.checkoutTheme();
-    return MaterialApp(
-      theme: theme,
-      home: AppPage(
+    return AppPage(
           appBarBackgroundColor: HubtelColors.neutral.shade300,
           hideBackNavigation: true,
           pageDecoration: PageDecoration(
@@ -225,11 +189,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           actions: [
             IconButton(
               onPressed: () {
-                //TODO
-                // showDialog(
-                //   context: context,
-                //   builder: (context) => showCancelDialog(),
-                // );
                 Navigator.pop(context);
               },
               icon: Icon(
@@ -243,28 +202,23 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           onBackPressed: () {},
           bottomNavigation: Container(
             color: Colors.white,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(Dimens.paddingDefault),
             child: AnimatedBuilder(
               builder: (context, child) {
                 return CustomButton(
-
-                    title:
-                        '${CheckoutStrings.pay} ${(totalAmountPayable ?? widget.checkoutPurchase.amount).formatMoney()}'
-                            .toUpperCase(),
-                    isEnabled: checkoutHomeScreenState.isButtonEnabled.value,
-                    buttonAction: () => {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => CheckoutStatusScreen()))
-                          // payWithMomo()
-                          checkout()
-                        },
-                    loading: checkoutHomeScreenState.isLoadingFees.value,
-                    isDisabledBgColor: HubtelColors.lighterGrey,
-                    disabledTitleColor: HubtelColors.grey,
-                    style: HubtelButtonStyle.solid,
-                    isEnabledBgColor: HubtelColors.teal[500]);
+                  title:
+                      '${CheckoutStrings.pay} ${(totalAmountPayable ?? widget.checkoutPurchase.amount).formatMoney()}'
+                          .toUpperCase(),
+                  isEnabled: checkoutHomeScreenState.isButtonEnabled.value,
+                  buttonAction: () {
+                    checkout();
+                  },
+                  loading: checkoutHomeScreenState.isLoadingFees.value,
+                  isDisabledBgColor: HubtelColors.lighterGrey,
+                  disabledTitleColor: HubtelColors.grey,
+                  style: HubtelButtonStyle.solid,
+                  isEnabledBgColor: ThemeConfig.themeColor,
+                );
               },
               animation: Listenable.merge([
                 checkoutHomeScreenState.isButtonEnabled,
@@ -302,8 +256,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                               margin: symmetricPad(
                                 horizontal: Dimens.paddingDefault,
                               ),
-                              shadowColor:
-                                  HubtelColors.neutral.shade300.withOpacity(0.1),
+                              shadowColor: HubtelColors.neutral.shade300
+                                  .withOpacity(0.1),
                               elevation: 20,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
@@ -371,7 +325,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                   value);
                                               if (value) {
                                                 autoSelectProviderFromSelectedWallet();
-                                                print(selectedWallet?.accountNo);
+                                                print(
+                                                    selectedWallet?.accountNo);
                                                 fetchFees();
                                               }
                                             },
@@ -506,8 +461,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                     ),
                   ],
                 )
-              : WebViewWidget(controller: controller)),
-    );
+              : WebViewWidget(controller: controller));
   }
 
   void preselectMomoWallet() {
@@ -801,21 +755,27 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
             Navigator.pop(context);
             // Goto Transaction Status Screen
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CheckStatusScreen(
-                          checkoutResponse: momoResponse ?? MomoResponse(),
-                          checkoutCompleted: widget.checkoutCompleted,
-                        )));
+              context,
+              MaterialPageRoute(
+                builder: (context) => CheckStatusScreen(
+                  checkoutResponse: momoResponse ?? MomoResponse(),
+                  checkoutCompleted: widget.checkoutCompleted,
+                  themeConfig: widget.themeConfig,
+                ),
+              ),
+            );
           });
     } else {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CheckStatusScreen(
-                    checkoutResponse: momoResponse ?? MomoResponse(),
-                    checkoutCompleted: widget.checkoutCompleted,
-                  )));
+        context,
+        MaterialPageRoute(
+          builder: (context) => CheckStatusScreen(
+            checkoutResponse: momoResponse ?? MomoResponse(),
+            checkoutCompleted: widget.checkoutCompleted,
+            themeConfig: widget.themeConfig,
+          ),
+        ),
+      );
     }
   }
 
@@ -922,7 +882,10 @@ class _CheckoutHomeScreenState {
   final ValueNotifier<String> _selectedChannel = ValueNotifier('Hubtel');
 
   ValueNotifier<double?> get checkoutFees => _checkoutFees;
+
   ValueNotifier<bool> get isButtonEnabled => _isButtonEnabled;
+
   ValueNotifier<bool> get isLoadingFees => _isLoadingFees;
+
   ValueNotifier<String> get selectedChannel => _selectedChannel;
 }
