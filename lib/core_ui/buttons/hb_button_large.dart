@@ -1,7 +1,4 @@
-
-
-
-import'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 
 class HBPlainTextButtonLarge extends StatefulWidget {
@@ -89,7 +86,7 @@ class _HBPlainTextButtonLargeState extends State<HBPlainTextButtonLarge> {
   @override
   Widget build(BuildContext context) {
     final enabledColor =
-    widget.isEnabled ? widget.enabledTextColor : widget.disabledTextColor;
+        widget.isEnabled ? widget.enabledTextColor : widget.disabledTextColor;
 
     return Padding(
       padding: EdgeInsets.all(widget.buttonPaddings ?? 16.0),

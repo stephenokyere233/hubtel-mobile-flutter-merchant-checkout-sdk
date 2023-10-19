@@ -1,11 +1,9 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/app_page.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/input_field.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
-import 'package:unified_checkout_sdk/core_ui/ui_extensions/widget_extensions.dart';
 import 'package:unified_checkout_sdk/platform/models/wallet.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 import 'package:unified_checkout_sdk/utils/string_extensions.dart';
