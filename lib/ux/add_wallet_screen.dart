@@ -19,10 +19,11 @@ class AddWalletScreen extends StatelessWidget {
   final _mobileNumberController = TextEditingController();
   final checkoutViewModel = CheckoutViewModel();
 
+  final AddWalletScreenState state =
+  AddWalletScreenState(checkoutViewModel: CheckoutViewModel());
+
   @override
   Widget build(BuildContext context) {
-    final AddWalletScreenState state =
-        AddWalletScreenState(checkoutViewModel: checkoutViewModel);
     return AppPage(
       title: CheckoutStrings.addWalletScreenTitle,
       elevation: 0.1,
@@ -187,10 +188,6 @@ class AddWalletScreenState {
   }
 
   Future<void> addWallet() async {
-    // _isButtonLoading.value = true;
-    // await Future.delayed(const Duration(seconds: 2)).then((value) {
-    //   _isButtonLoading.value = false;
-    // }).onError((error, stackTrace) => null);
 
     checkoutViewModel.fetchWallets().then((value) {
       value.data?.forEach((element) {

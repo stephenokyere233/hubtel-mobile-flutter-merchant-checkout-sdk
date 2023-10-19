@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/app_page.dart';
+import 'package:unified_checkout_sdk/ux/viewModel/checkout_view_model.dart';
 
 import '../core_ui/custom_button.dart';
 import '../core_ui/dimensions.dart';
@@ -12,7 +13,7 @@ import '../resources/checkout_strings.dart';
 class NewMandateIdScreen extends StatelessWidget {
   NewMandateIdScreen({super.key});
 
-  final state = NewMandateIdScreenState();
+  final state = NewMandateIdScreenState(checkoutViewModel: CheckoutViewModel());
   final _mandateIdController = TextEditingController();
 
   @override
@@ -66,7 +67,10 @@ class NewMandateIdScreen extends StatelessWidget {
               const SizedBox(height: Dimens.paddingDefault),
               Text(
                 CheckoutStrings.gMoneyInstructionsHeading,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: Dimens.paddingDefault),
               Text(
@@ -82,7 +86,10 @@ class NewMandateIdScreen extends StatelessWidget {
 }
 
 class NewMandateIdScreenState extends ValueNotifier<MandateScreenUiModel> {
-  NewMandateIdScreenState() : super(MandateScreenUiModel());
+  NewMandateIdScreenState({required this.checkoutViewModel})
+      : super(MandateScreenUiModel());
+
+  CheckoutViewModel checkoutViewModel;
 
   bool get validated => value.isButtonEnabled;
 
