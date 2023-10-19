@@ -102,6 +102,21 @@ class CheckoutStrings {
   static var addNumberHint = 'eg 054 025 6631';
   static var ghanaCardNumberHint = 'ABC-XXXXXXXXXX-X';
 
+  static var mandateIdHint = 'Enter Mandate ID';
+
+  static String gMoneyInstructionsHeading = 'Steps to generate a mandate ID on G-Money';
+  static String gMoneySteps = '''
+1 Dial *422#
+
+2 Select Option 2 (G-Money)
+
+3 Select Option 4 (Payment Services)
+
+4 Select Option 6 (Mandate)
+
+5 Select Option 1 (Create Mandate)
+  ''';
+
   static String getPaymentPromptMessage({required String walletNumber}) {
     return "A bill prompt has been sent to you on $walletNumber, please authorise the payment.";
   }
