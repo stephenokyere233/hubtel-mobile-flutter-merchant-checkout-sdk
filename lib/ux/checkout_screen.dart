@@ -212,298 +212,302 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AppPage(
-        appBarBackgroundColor: HubtelColors.neutral.shade300,
-        hideBackNavigation: true,
-        pageDecoration: PageDecoration(
-          backgroundColor: HubtelColors
-              .neutral.shade300, // Theme.of(context).scaffoldBackgroundColor,
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              //TODO
-              // showDialog(
-              //   context: context,
-              //   builder: (context) => showCancelDialog(),
-              // );
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              CupertinoIcons.xmark_circle_fill,
-              color: HubtelColors.neutral.shade900,
-              size: Dimens.mdIconSize,
-            ),
-          )
-        ],
-        elevation: 0,
-        onBackPressed: () {},
-        bottomNavigation: Container(
-          color: Colors.white,
-          padding: const EdgeInsets.all(16),
-          child: AnimatedBuilder(
-            builder: (context, child) {
-              return CustomButton(
-
-                  title:
-                      '${CheckoutStrings.pay} ${(totalAmountPayable ?? widget.checkoutPurchase.amount).formatMoney()}'
-                          .toUpperCase(),
-                  isEnabled: checkoutHomeScreenState.isButtonEnabled.value,
-                  buttonAction: () => {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => CheckoutStatusScreen()))
-                        // payWithMomo()
-                        checkout()
-                      },
-                  loading: checkoutHomeScreenState.isLoadingFees.value,
-                  isDisabledBgColor: HubtelColors.lighterGrey,
-                  disabledTitleColor: HubtelColors.grey,
-                  style: HubtelButtonStyle.solid,
-                  isEnabledBgColor: HubtelColors.teal[500]);
-            },
-            animation: Listenable.merge([
-              checkoutHomeScreenState.isButtonEnabled,
-              checkoutHomeScreenState.isLoadingFees
-            ]),
+    final theme = widget.themeConfig?.checkoutTheme();
+    return MaterialApp(
+      theme: theme,
+      home: AppPage(
+          appBarBackgroundColor: HubtelColors.neutral.shade300,
+          hideBackNavigation: true,
+          pageDecoration: PageDecoration(
+            backgroundColor: HubtelColors
+                .neutral.shade300, // Theme.of(context).scaffoldBackgroundColor,
           ),
-        ),
-        body: !showWebView
-            ? Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          const SizedBox(height: Dimens.paddingDefault),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: Dimens.paddingDefault,
-                            ),
-                            child: ValueListenableBuilder(
-                              builder: (ctx, value, child) => PaymentInfoCard(
-                                checkoutPurchase: widget.checkoutPurchase,
-                                checkoutFees: checkoutHomeScreenState
-                                        .checkoutFees.value ??
-                                    0.00,
-                                businessInfo: widget.businessInfo,
-                                totalAmountPayable: totalAmountPayable,
+          actions: [
+            IconButton(
+              onPressed: () {
+                //TODO
+                // showDialog(
+                //   context: context,
+                //   builder: (context) => showCancelDialog(),
+                // );
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                CupertinoIcons.xmark_circle_fill,
+                color: HubtelColors.neutral.shade900,
+                size: Dimens.mdIconSize,
+              ),
+            )
+          ],
+          elevation: 0,
+          onBackPressed: () {},
+          bottomNavigation: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.all(16),
+            child: AnimatedBuilder(
+              builder: (context, child) {
+                return CustomButton(
+
+                    title:
+                        '${CheckoutStrings.pay} ${(totalAmountPayable ?? widget.checkoutPurchase.amount).formatMoney()}'
+                            .toUpperCase(),
+                    isEnabled: checkoutHomeScreenState.isButtonEnabled.value,
+                    buttonAction: () => {
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => CheckoutStatusScreen()))
+                          // payWithMomo()
+                          checkout()
+                        },
+                    loading: checkoutHomeScreenState.isLoadingFees.value,
+                    isDisabledBgColor: HubtelColors.lighterGrey,
+                    disabledTitleColor: HubtelColors.grey,
+                    style: HubtelButtonStyle.solid,
+                    isEnabledBgColor: HubtelColors.teal[500]);
+              },
+              animation: Listenable.merge([
+                checkoutHomeScreenState.isButtonEnabled,
+                checkoutHomeScreenState.isLoadingFees
+              ]),
+            ),
+          ),
+          body: !showWebView
+              ? Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            const SizedBox(height: Dimens.paddingDefault),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: Dimens.paddingDefault,
                               ),
-                              valueListenable:
-                                  checkoutHomeScreenState.checkoutFees,
-                            ),
-                          ),
-                          const SizedBox(height: Dimens.iconMediumLarge),
-                          Card(
-                            margin: symmetricPad(
-                              horizontal: Dimens.paddingDefault,
-                            ),
-                            shadowColor:
-                                HubtelColors.neutral.shade300.withOpacity(0.1),
-                            elevation: 20,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                Dimens.buttonBorderRadius,
+                              child: ValueListenableBuilder(
+                                builder: (ctx, value, child) => PaymentInfoCard(
+                                  checkoutPurchase: widget.checkoutPurchase,
+                                  checkoutFees: checkoutHomeScreenState
+                                          .checkoutFees.value ??
+                                      0.00,
+                                  businessInfo: widget.businessInfo,
+                                  totalAmountPayable: totalAmountPayable,
+                                ),
+                                valueListenable:
+                                    checkoutHomeScreenState.checkoutFees,
                               ),
                             ),
-                            color: HubtelColors.neutral,
-                            child: Container(
-                              width: double.maxFinite,
-                              padding: const EdgeInsets.only(
-                                top: Dimens.paddingDefault,
+                            const SizedBox(height: Dimens.iconMediumLarge),
+                            Card(
+                              margin: symmetricPad(
+                                horizontal: Dimens.paddingDefault,
                               ),
-                              decoration: BoxDecoration(
-                                color: HubtelColors.neutral.shade100,
+                              shadowColor:
+                                  HubtelColors.neutral.shade300.withOpacity(0.1),
+                              elevation: 20,
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
-                                    Dimens.buttonBorderRadius),
+                                  Dimens.buttonBorderRadius,
+                                ),
                               ),
-                              child: Consumer<CheckoutViewModel>(
-                                builder: ((context, value, child) => Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: Dimens.paddingDefault,
-                                          ),
-                                          child: Text(
-                                            CheckoutStrings.payWith,
-                                            style:
-                                                AppTextStyle.body1().copyWith(
-                                              fontWeight: FontWeight.bold,
+                              color: HubtelColors.neutral,
+                              child: Container(
+                                width: double.maxFinite,
+                                padding: const EdgeInsets.only(
+                                  top: Dimens.paddingDefault,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: HubtelColors.neutral.shade100,
+                                  borderRadius: BorderRadius.circular(
+                                      Dimens.buttonBorderRadius),
+                                ),
+                                child: Consumer<CheckoutViewModel>(
+                                  builder: ((context, value, child) => Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: Dimens.paddingDefault,
+                                            ),
+                                            child: Text(
+                                              CheckoutStrings.payWith,
+                                              style:
+                                                  AppTextStyle.body1().copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        const SizedBox(height: Dimens.four),
-                                        MobileMoneyExpansionTile(
-                                          controller:
-                                              mobileMoneyExpansionController,
-                                          mobileNumberController:
-                                              mobileNumberController,
-                                          providerController:
-                                              momoProviderController,
-                                          wallets: wallets,
-                                          providers: value.providers,
-                                          isSelected:
-                                              walletType == WalletType.Momo,
-                                          selectedProviderMessage:
-                                              showSelectedProviderMessage(
-                                            selectedProvider:
-                                                selectedProvider ??
-                                                    MomoProvider(),
-                                          ),
-                                          onWalletSelected: (wallet) {
-                                            selectedWallet = wallet;
-                                            autoSelectProviderFromSelectedWallet();
-                                            fetchFees();
-                                          },
-                                          onProviderSelected: (provider) {
-                                            setState(() {
-                                              selectedProvider = provider;
-                                            });
-                                          },
-                                          onExpansionChanged: (value) async {
-                                            await onMomoTileExpansionChanged(
-                                                value);
-                                            if (value) {
+                                          const SizedBox(height: Dimens.four),
+                                          MobileMoneyExpansionTile(
+                                            controller:
+                                                mobileMoneyExpansionController,
+                                            mobileNumberController:
+                                                mobileNumberController,
+                                            providerController:
+                                                momoProviderController,
+                                            wallets: wallets,
+                                            providers: value.providers,
+                                            isSelected:
+                                                walletType == WalletType.Momo,
+                                            selectedProviderMessage:
+                                                showSelectedProviderMessage(
+                                              selectedProvider:
+                                                  selectedProvider ??
+                                                      MomoProvider(),
+                                            ),
+                                            onWalletSelected: (wallet) {
+                                              selectedWallet = wallet;
                                               autoSelectProviderFromSelectedWallet();
-                                              print(selectedWallet?.accountNo);
                                               fetchFees();
-                                            }
-                                          },
-                                        ),
-
-                                        //
-                                        Container(
-                                          height: 1,
-                                          width: double.maxFinite,
-                                          color: HubtelColors.grey.shade300,
-                                        ),
-                                        BankCardExpansionTile(
-                                          controller:
-                                              bankCardExpansionController,
-                                          isSelected:
-                                              walletType == WalletType.Card,
-                                          newCardFormKey: newCardFormKey,
-                                          savedCardFormKey: savedCardFormKey,
-                                          savedCards: savedCards,
-                                          onSavedCardCvvChanged: (value) {
-                                            setState(() {
-                                              savedCardCvv = value;
-                                            });
-                                          },
-                                          onUseNewCardSelected: (value) {
-                                            setState(() {
-                                              useNewCard = value ?? true;
-                                            });
-                                          },
-                                          onSavedCardSelected: (savedCard) {
-                                            setState(() {
-                                              // selectedSavedCard = savedCard;
-                                            });
-                                          },
-                                          savedCardNumberFieldController:
-                                              savedCardNumberFieldController,
-                                          onNewCardNumberChanged: (value) {
-                                            setState(() {
-                                              newCardNumber =
-                                                  value.replaceAll(" ", "");
-                                            });
-                                          },
-                                          onNewCardDateChanged: (value) {
-                                            setState(() {
-                                              newCardExpiry =
-                                                  value.replaceAll(" ", "");
-                                            });
-                                          },
-                                          onNewCardCvvChanged: (value) {
-                                            setState(() {
-                                              newCardCvv = value;
-                                            });
-                                          },
-                                          onExpansionChanged: (value) {
-                                            if (value == true) {
+                                            },
+                                            onProviderSelected: (provider) {
                                               setState(() {
-                                                isMobileMoneyExpanded = false;
-                                                selectedWallet = null;
-                                                walletType = WalletType.Card;
-                                                checkoutHomeScreenState
-                                                    .isButtonEnabled
-                                                    .value = false;
+                                                selectedProvider = provider;
                                               });
-                                              bankCardExpansionController
-                                                  .expand();
-                                              mobileMoneyExpansionController
-                                                  .collapse();
-                                              otherPaymentWalletExpansionController
-                                                  .collapse();
+                                            },
+                                            onExpansionChanged: (value) async {
+                                              await onMomoTileExpansionChanged(
+                                                  value);
+                                              if (value) {
+                                                autoSelectProviderFromSelectedWallet();
+                                                print(selectedWallet?.accountNo);
+                                                fetchFees();
+                                              }
+                                            },
+                                          ),
 
-                                              // onNewCardInputComplete();
-                                            }
-                                          },
-                                          onCardSaveChecked: (value) {
-                                            setState(() {
-                                              shouldSaveCardForFuture = value;
-                                            });
-                                          },
-                                          cardNumberInputController:
-                                              cardNumberInputController,
-                                          cardDateInputController:
-                                              cardDateInputController,
-                                          cardCvvInputController:
-                                              cardCvvInputController,
-                                        ),
-                                        Container(
-                                          height: 1,
-                                          width: double.maxFinite,
-                                          color: HubtelColors.grey.shade300,
-                                        ),
-                                        OtherPaymentExpansionTile(
-                                          controller:
-                                              otherPaymentWalletExpansionController,
-                                          onExpansionChanged: (value) async {
-                                            // setState(() {
-                                            //   walletType == WalletType.Hubtel;
-                                            // });
-                                            await onOtherTileExpansionChanged(
-                                                value);
-                                            if (preselectOtherMomoWallet) {
-                                              preselectWallet();
-                                            }
-                                          },
-                                          isSelected:
-                                              walletType == WalletType.Hubtel,
-                                          editingController:
-                                              momoSelectorController,
-                                          onWalletSelected: (wallet) {
-                                            selectedWallet = wallet;
-                                          },
-                                          wallets: wallets,
-                                          anotherEditingController:
-                                              anotherMomoSelectorController,
-                                          onChannelChanged: (provider) {
-                                            selectedProvider =
-                                                MomoProvider(alias: provider);
-                                            changeWalletType(provider);
-                                            fetchFees2();
-                                            log('onChannelChanged - provider {$provider}',
-                                                name: '$runtimeType');
-                                          },
-                                        )
-                                      ],
-                                    )),
+                                          //
+                                          Container(
+                                            height: 1,
+                                            width: double.maxFinite,
+                                            color: HubtelColors.grey.shade300,
+                                          ),
+                                          BankCardExpansionTile(
+                                            controller:
+                                                bankCardExpansionController,
+                                            isSelected:
+                                                walletType == WalletType.Card,
+                                            newCardFormKey: newCardFormKey,
+                                            savedCardFormKey: savedCardFormKey,
+                                            savedCards: savedCards,
+                                            onSavedCardCvvChanged: (value) {
+                                              setState(() {
+                                                savedCardCvv = value;
+                                              });
+                                            },
+                                            onUseNewCardSelected: (value) {
+                                              setState(() {
+                                                useNewCard = value ?? true;
+                                              });
+                                            },
+                                            onSavedCardSelected: (savedCard) {
+                                              setState(() {
+                                                // selectedSavedCard = savedCard;
+                                              });
+                                            },
+                                            savedCardNumberFieldController:
+                                                savedCardNumberFieldController,
+                                            onNewCardNumberChanged: (value) {
+                                              setState(() {
+                                                newCardNumber =
+                                                    value.replaceAll(" ", "");
+                                              });
+                                            },
+                                            onNewCardDateChanged: (value) {
+                                              setState(() {
+                                                newCardExpiry =
+                                                    value.replaceAll(" ", "");
+                                              });
+                                            },
+                                            onNewCardCvvChanged: (value) {
+                                              setState(() {
+                                                newCardCvv = value;
+                                              });
+                                            },
+                                            onExpansionChanged: (value) {
+                                              if (value == true) {
+                                                setState(() {
+                                                  isMobileMoneyExpanded = false;
+                                                  selectedWallet = null;
+                                                  walletType = WalletType.Card;
+                                                  checkoutHomeScreenState
+                                                      .isButtonEnabled
+                                                      .value = false;
+                                                });
+                                                bankCardExpansionController
+                                                    .expand();
+                                                mobileMoneyExpansionController
+                                                    .collapse();
+                                                otherPaymentWalletExpansionController
+                                                    .collapse();
+
+                                                // onNewCardInputComplete();
+                                              }
+                                            },
+                                            onCardSaveChecked: (value) {
+                                              setState(() {
+                                                shouldSaveCardForFuture = value;
+                                              });
+                                            },
+                                            cardNumberInputController:
+                                                cardNumberInputController,
+                                            cardDateInputController:
+                                                cardDateInputController,
+                                            cardCvvInputController:
+                                                cardCvvInputController,
+                                          ),
+                                          Container(
+                                            height: 1,
+                                            width: double.maxFinite,
+                                            color: HubtelColors.grey.shade300,
+                                          ),
+                                          OtherPaymentExpansionTile(
+                                            controller:
+                                                otherPaymentWalletExpansionController,
+                                            onExpansionChanged: (value) async {
+                                              // setState(() {
+                                              //   walletType == WalletType.Hubtel;
+                                              // });
+                                              await onOtherTileExpansionChanged(
+                                                  value);
+                                              if (preselectOtherMomoWallet) {
+                                                preselectWallet();
+                                              }
+                                            },
+                                            isSelected:
+                                                walletType == WalletType.Hubtel,
+                                            editingController:
+                                                momoSelectorController,
+                                            onWalletSelected: (wallet) {
+                                              selectedWallet = wallet;
+                                            },
+                                            wallets: wallets,
+                                            anotherEditingController:
+                                                anotherMomoSelectorController,
+                                            onChannelChanged: (provider) {
+                                              selectedProvider =
+                                                  MomoProvider(alias: provider);
+                                              changeWalletType(provider);
+                                              fetchFees2();
+                                              log('onChannelChanged - provider {$provider}',
+                                                  name: '$runtimeType');
+                                            },
+                                          )
+                                        ],
+                                      )),
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: Dimens.paddingDefault),
-                        ],
+                            const SizedBox(height: Dimens.paddingDefault),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              )
-            : WebViewWidget(controller: controller));
+                  ],
+                )
+              : WebViewWidget(controller: controller)),
+    );
   }
 
   void preselectMomoWallet() {

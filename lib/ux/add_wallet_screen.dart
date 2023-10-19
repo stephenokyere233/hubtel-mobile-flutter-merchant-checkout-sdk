@@ -6,6 +6,7 @@ import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/input_field.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 import 'package:unified_checkout_sdk/utils/string_extensions.dart';
+import 'package:unified_checkout_sdk/ux/viewModel/checkout_view_model.dart';
 
 import '../core_ui/custom_button.dart';
 import '../core_ui/hubtel_colors.dart';
@@ -15,11 +16,13 @@ import '../resources/checkout_drawables.dart';
 class AddWalletScreen extends StatelessWidget {
   AddWalletScreen({super.key});
 
-  final AddWalletScreenState state = AddWalletScreenState();
   final _mobileNumberController = TextEditingController();
+  final checkoutViewModel = CheckoutViewModel();
 
   @override
   Widget build(BuildContext context) {
+    final AddWalletScreenState state =
+    AddWalletScreenState(checkoutViewModel: checkoutViewModel);
     return AppPage(
       title: CheckoutStrings.addWalletScreenTitle,
       elevation: 0.1,
@@ -28,7 +31,7 @@ class AddWalletScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: AnimatedBuilder(
           animation:
-              Listenable.merge([state.isButtonEnabled, state.isButtonLoading]),
+          Listenable.merge([state.isButtonEnabled, state.isButtonLoading]),
           builder: (BuildContext context, Widget? child) {
             return CustomButton(
               title: 'CONTINUE'.toUpperCase(),
@@ -55,8 +58,8 @@ class AddWalletScreen extends StatelessWidget {
             Text(
               CheckoutStrings.mobileMoneyNumber,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.black,
-                  ),
+                color: Colors.black,
+              ),
             ),
             const SizedBox(
               height: Dimens.paddingSmall,
@@ -84,8 +87,8 @@ class AddWalletScreen extends StatelessWidget {
             Text(
               CheckoutStrings.selectNetwork,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.black,
-                  ),
+                color: Colors.black,
+              ),
             ),
             const SizedBox(
               height: Dimens.paddingSmall,
@@ -102,7 +105,7 @@ class AddWalletScreen extends StatelessWidget {
                         children: [
                           CircleImage(
                             imageProvider:
-                                AssetImage(state.providers[index].$2),
+                            AssetImage(state.providers[index].$2),
                             borderColor: state.selectedIndex.value == index
                                 ? Theme.of(context).primaryColor
                                 : Colors.transparent,
@@ -143,6 +146,10 @@ class AddWalletScreenState {
   final ValueNotifier<bool> _isButtonLoading = ValueNotifier(false);
   final ValueNotifier<bool> _isButtonEnabled = ValueNotifier(false);
 
+  final CheckoutViewModel checkoutViewModel;
+
+  AddWalletScreenState({required this.checkoutViewModel});
+
   final List<(String, String)> providers = [
     (CheckoutStrings.mtn.toUpperCase(), CheckoutDrawables.mtnMomo),
     (CheckoutStrings.vodafone.capitalize(), CheckoutDrawables.vodafoneCashLogo1),
@@ -180,10 +187,18 @@ class AddWalletScreenState {
   }
 
   Future<void> addWallet() async {
-    _isButtonLoading.value = true;
-    await Future.delayed(const Duration(seconds: 2)).then((value) {
-      _isButtonLoading.value = false;
-    }).onError((error, stackTrace) => null);
+    // _isButtonLoading.value = true;
+    // await Future.delayed(const Duration(seconds: 2)).then((value) {
+    //   _isButtonLoading.value = false;
+    // }).onError((error, stackTrace) => null);
+
+    checkoutViewModel.fetchWallets().then((value) {
+      value.data?.forEach((element) {
+        log('$element', name: '$runtimeType');
+      });
+    }).onError((error, stackTrace) {
+      log('$error', error: stackTrace, name: '$runtimeType');
+    });
   }
 
   rest() {
