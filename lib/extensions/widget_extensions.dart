@@ -56,7 +56,7 @@ extension WidgetExtension on StatefulWidget{
                 child: Text(
                   message,
                   style: AppTextStyle.body2().copyWith(
-                    color: HubtelColors.errorColor,
+                    color: ThemeConfig.themeColor,
                   ),
                 ),
               ),

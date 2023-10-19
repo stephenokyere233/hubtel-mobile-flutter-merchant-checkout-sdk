@@ -182,7 +182,7 @@ class PaymentInfoCard extends StatelessWidget {
                         style: HubtelButtonStyle.solid,
                         isDisabledBgColor: Colors.transparent,
                         isEnabledBgColor: Colors.transparent,
-                        enabledTitleColor: Theme.of(context).primaryColor,
+                        enabledTitleColor: ThemeConfig.themeColor,
                       );
                     },
                   )
@@ -200,7 +200,7 @@ class PaymentInfoCard extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   // color: HubtelColors.yellow.shade200,
-                  color: Theme.of(context).primaryColor.withOpacity(0.3),
+                  color: ThemeConfig.themeColor.withOpacity(0.3),
                   border: Border(
                     left: BorderSide(color: HubtelColors.neutral.shade400),
                     right: BorderSide(color: HubtelColors.neutral.shade400),

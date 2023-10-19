@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:unified_checkout_sdk/core_ui/app_page.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
+import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/ux/viewModel/checkout_view_model.dart';
 
 import '../core_ui/custom_button.dart';
@@ -25,7 +26,7 @@ class AddGhCardScreen extends StatelessWidget {
       title: 'Verification',
       bottomNavigation: Container(
         color: Colors.white,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(Dimens.paddingDefault),
         child: ValueListenableBuilder(
           builder: (context, uiModel, child) => CustomButton(
             title: 'Submit'.toUpperCase(),
@@ -35,14 +36,13 @@ class AddGhCardScreen extends StatelessWidget {
             isDisabledBgColor: HubtelColors.lighterGrey,
             disabledTitleColor: HubtelColors.grey,
             style: HubtelButtonStyle.solid,
-            // isEnabledBgColor: Theme.of(context).primaryColor,
-            isEnabledBgColor: HubtelColors.teal,
+            isEnabledBgColor: ThemeConfig.themeColor,
           ),
           valueListenable: state.ghCardState,
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(Dimens.paddingNano),
+        padding: const EdgeInsets.all(Dimens.paddingDefault),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -54,10 +54,11 @@ class AddGhCardScreen extends StatelessWidget {
               Center(
                 child: Text(
                   'Verify your Government ID',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                  // style: Theme.of(context)
+                  //     .textTheme
+                  //     .bodyLarge
+                  //     ?.copyWith(fontWeight: FontWeight.bold),
+                  style: AppTextStyle.body2().copyWith(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -67,6 +68,7 @@ class AddGhCardScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: Text(
                     'A valid government-issued ID card is required to verify your account',
+                    // style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),

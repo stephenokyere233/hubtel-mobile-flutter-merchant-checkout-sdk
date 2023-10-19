@@ -112,7 +112,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
     return customExpansion.ExpansionTile(
       controller: widget.controller,
       headerBackgroundColor:
-          widget.isSelected ? HubtelColors.teal.shade100 : Colors.transparent,
+          widget.isSelected ? ThemeConfig.themeColor.withOpacity(0.3) : Colors.transparent,
       onExpansionChanged: widget.onExpansionChanged,
       maintainState: true,
       title: Text(
@@ -157,7 +157,6 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
       ),
       leadingWidth: Dimens.iconMedium,
       titleAlignment: ListTileTitleAlignment.center,
-      //TODO: CHECK WHY STATE NOT UPDATING
       children: [
         MobileMoneyTileField(
             showWalletAdditionTile: false,

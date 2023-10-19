@@ -1,5 +1,3 @@
-
-
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,14 +8,13 @@ import 'package:unified_checkout_sdk/core_ui/card_number_input_formatter.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 import 'package:unified_checkout_sdk/core_ui/input_field.dart';
+import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/custom_components/ccontainer.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 import 'package:unified_checkout_sdk/utils/helpers/edge_insets.dart';
 
-
-
 class NewBankCardForm extends StatefulWidget {
-  NewBankCardForm({
+  const NewBankCardForm({
     super.key,
     required this.onCardSaveChecked,
     required this.onNewCardNumberChanged,
@@ -84,27 +81,27 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
             ),
             suffixWidget: (cardNumber.startsWith("4") && cardNumber.length >= 3)
                 ? CContainer(
-              padding: onlySidePad(right: Dimens.paddingDefault),
-              child: AppImageWidget.local(
-                image: const AssetImage(""),
-                width: Dimens.iconMedium,
-                height: Dimens.iconSmall,
-                boxFit: BoxFit.contain,
-                borderRadius: 0,
-              ),
-            )
+                    padding: onlySidePad(right: Dimens.paddingDefault),
+                    child: AppImageWidget.local(
+                      image: const AssetImage(""),
+                      width: Dimens.iconMedium,
+                      height: Dimens.iconSmall,
+                      boxFit: BoxFit.contain,
+                      borderRadius: 0,
+                    ),
+                  )
                 : (cardNumber.startsWith("5") && cardNumber.length >= 3)
-                ? CContainer(
-              padding: onlySidePad(right: Dimens.paddingDefault),
-              child: AppImageWidget.local(
-                image: const AssetImage(""),
-                width: Dimens.iconMedium,
-                height: Dimens.iconSmall,
-                boxFit: BoxFit.contain,
-                borderRadius: 0,
-              ),
-            )
-                : SizedBox.shrink(),
+                    ? CContainer(
+                        padding: onlySidePad(right: Dimens.paddingDefault),
+                        child: AppImageWidget.local(
+                          image: const AssetImage(""),
+                          width: Dimens.iconMedium,
+                          height: Dimens.iconSmall,
+                          boxFit: BoxFit.contain,
+                          borderRadius: 0,
+                        ),
+                      )
+                    : SizedBox.shrink(),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(Dimens.inputBorderRadius),
@@ -134,7 +131,8 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                   },
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(Dimens.inputBorderRadius),
+                    borderRadius:
+                        BorderRadius.circular(Dimens.inputBorderRadius),
                   ),
                   // contentPadding: symmetricPad(
                   //   horizontal: AppDimens.paddingDefault,
@@ -164,7 +162,8 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                   },
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(Dimens.inputBorderRadius),
+                    borderRadius:
+                        BorderRadius.circular(Dimens.inputBorderRadius),
                   ),
                   // contentPadding: symmetricPad(
                   //   horizontal: AppDimens.paddingDefault,
@@ -184,12 +183,8 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  CheckoutStrings.saveCardForFuture,
-                  style: TextStyle(
-                    // fontSize: AppDimens.smallFontSize,
-                  ),
-                ),
+                Text(CheckoutStrings.saveCardForFuture,
+                    style: AppTextStyle.body2()),
 
                 CContainer(
                   padding: symmetricPad(
@@ -200,7 +195,9 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                     Dimens.defaultBorderRadiusLarge,
                   ),
                   width: Dimens.radioButtonSize,
-                  color: saveCardForFuture ? Theme.of(context).primaryColor : HubtelColors.neutral.shade400,
+                  color: saveCardForFuture
+                      ? ThemeConfig.themeColor
+                      : HubtelColors.neutral.shade400,
                   child: AnimatedToggleSwitch<bool>.dual(
                       current: saveCardForFuture,
                       first: false,

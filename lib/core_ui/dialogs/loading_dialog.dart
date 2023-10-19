@@ -1,9 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/loading_indicator.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
-
-
 
 loadingDialog(BuildContext context, {String? loadingText}) {
   showDialog(
@@ -16,10 +13,12 @@ loadingDialog(BuildContext context, {String? loadingText}) {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const SizedBox(
+          SizedBox(
             height: 40,
             width: 40,
-            child: LoadingIndicator(),
+            child: LoadingIndicator(
+              loaderColor: ThemeConfig.themeColor,
+            ),
           ),
           const SizedBox(height: 15),
           Text(
