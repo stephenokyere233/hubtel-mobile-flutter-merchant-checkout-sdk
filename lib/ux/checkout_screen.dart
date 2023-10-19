@@ -9,6 +9,7 @@ import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/core_ui/ui_extensions/widget_extensions.dart';
 import 'package:unified_checkout_sdk/custom_components/bank_card_expansion.dart';
+import 'package:unified_checkout_sdk/custom_components/bank_pay_tile.dart';
 import 'package:unified_checkout_sdk/custom_components/mobile_money_expansion_tile.dart';
 import 'package:unified_checkout_sdk/custom_components/payment_info_card.dart';
 import 'package:unified_checkout_sdk/custom_components/show_selected_message.dart';
@@ -16,6 +17,7 @@ import 'package:unified_checkout_sdk/extensions/string_extensions.dart';
 import 'package:unified_checkout_sdk/extensions/widget_extensions.dart';
 import 'package:unified_checkout_sdk/network_manager/extensions/uistate.dart';
 import 'package:unified_checkout_sdk/platform/models/card_data.dart';
+import 'package:unified_checkout_sdk/platform/models/channel_fetch_response.dart';
 import 'package:unified_checkout_sdk/platform/models/checkout_requirements.dart';
 import 'package:unified_checkout_sdk/platform/models/mobile_money_request.dart';
 import 'package:unified_checkout_sdk/platform/models/momo_provider.dart';
@@ -25,11 +27,14 @@ import 'package:unified_checkout_sdk/platform/models/setup_payer_auth%20_respons
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth_request.dart';
 import 'package:unified_checkout_sdk/platform/models/wallet.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
+import 'package:unified_checkout_sdk/resources/html_strings.dart';
 import 'package:unified_checkout_sdk/utils/checkout_utils.dart';
 import 'package:unified_checkout_sdk/utils/currency_formatter.dart';
 import 'package:unified_checkout_sdk/utils/helpers/edge_insets.dart';
 import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart'
     as customExpansion;
+import 'package:unified_checkout_sdk/ux/bank_pay_receipt_screen.dart';
+import 'package:unified_checkout_sdk/ux/new_mandate_id_screen.dart';
 import 'package:unified_checkout_sdk/ux/otp_3ds_screen.dart';
 import 'package:unified_checkout_sdk/ux/viewModel/checkout_view_model.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -60,8 +65,7 @@ class CheckoutHomeScreen extends StatefulWidget {
       required this.checkoutPurchase,
       required this.businessInfo,
       required this.checkoutCompleted,
-        this.themeConfig
-      })
+      this.themeConfig})
       : super(key: key);
 
   @override
@@ -91,6 +95,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
   late customExpansion.ExpansionTileController
       otherPaymentWalletExpansionController;
+
+  late customExpansion.ExpansionTileController bankPayExpansionController;
 
   bool? isMobileMoneyExpanded;
 
@@ -136,15 +142,19 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
   late final WebViewController controller;
 
-  final viewModel = CheckoutViewModel();
+   late final CheckoutViewModel viewModel;
 
   @override
   initState() {
     super.initState();
+    viewModel = context.read<CheckoutViewModel>();
+
     mobileMoneyExpansionController = customExpansion.ExpansionTileController();
     bankCardExpansionController = customExpansion.ExpansionTileController();
     otherPaymentWalletExpansionController =
         customExpansion.ExpansionTileController();
+    bankPayExpansionController = customExpansion.ExpansionTileController();
+
     mobileNumberController = TextEditingController();
     momoProviderController = TextEditingController();
 
@@ -244,7 +254,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           child: AnimatedBuilder(
             builder: (context, child) {
               return CustomButton(
-
                   title:
                       '${CheckoutStrings.pay} ${(totalAmountPayable ?? widget.checkoutPurchase.amount).formatMoney()}'
                           .toUpperCase(),
@@ -356,7 +365,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                           onWalletSelected: (wallet) {
                                             selectedWallet = wallet;
                                             autoSelectProviderFromSelectedWallet();
-                                            fetchFees();
+                                            fetchFees2();
                                           },
                                           onProviderSelected: (provider) {
                                             setState(() {
@@ -369,7 +378,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                             if (value) {
                                               autoSelectProviderFromSelectedWallet();
                                               print(selectedWallet?.accountNo);
-                                              fetchFees();
+                                              fetchFees2();
                                             }
                                           },
                                         ),
@@ -438,6 +447,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                   .collapse();
                                               otherPaymentWalletExpansionController
                                                   .collapse();
+                                              bankPayExpansionController
+                                                  .collapse();
 
                                               // onNewCardInputComplete();
                                             }
@@ -490,6 +501,33 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                             log('onChannelChanged - provider {$provider}',
                                                 name: '$runtimeType');
                                           },
+                                        ),
+                                        Container(
+                                          height: 1,
+                                          width: double.maxFinite,
+                                          color: HubtelColors.grey.shade300,
+                                        ),
+                                        BankPayExpansionTile(
+                                          controller:
+                                              bankPayExpansionController,
+                                          onExpansionChanged: (value) {
+                                            if (value) {
+                                              bankCardExpansionController
+                                                  .collapse();
+                                              mobileMoneyExpansionController
+                                                  .collapse();
+                                              otherPaymentWalletExpansionController
+                                                  .collapse();
+                                              bankPayExpansionController
+                                                  .collapse();
+
+                                                walletType = WalletType.BankPay;
+
+                                              fetchFees2();
+                                            }
+                                          },
+                                          isSelected:
+                                              walletType == WalletType.BankPay,
                                         )
                                       ],
                                     )),
@@ -548,6 +586,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
       mobileMoneyExpansionController.expand();
       bankCardExpansionController.collapse();
       otherPaymentWalletExpansionController.collapse();
+      bankPayExpansionController.collapse();
 
       // final channel = viewModel.getMomoChannelName(selectedProvider?.name);
       // final feeSum = await computeCheckoutFeeSum(channel);
@@ -608,10 +647,11 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   _handleButtonActivation() {
-    if (walletType == WalletType.Card) {
+    if (walletType == WalletType.Card || walletType == WalletType.BankPay) {
       checkoutHomeScreenState.isButtonEnabled.value = true;
       return;
     }
+
     if (selectedWallet != null && selectedProvider != null) {
       checkoutHomeScreenState.isButtonEnabled.value = true;
     }
@@ -654,6 +694,11 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   fetchFees2() async {
     checkoutHomeScreenState.isLoadingFees.value = true;
     checkoutHomeScreenState.isButtonEnabled.value = false;
+
+    if (walletType == WalletType.BankPay) {
+      selectedProvider = MomoProvider(
+          name: CheckoutStrings.bankPay, alias: CheckoutStrings.bankPay);
+    }
 
     if (walletType == WalletType.Card) {
       selectedProvider = MomoProvider(
@@ -698,13 +743,25 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   void checkout() {
     if (walletType == WalletType.Momo ||
         walletType == WalletType.Zeepay ||
-        walletType == WalletType.GMoney ||
         walletType == WalletType.Hubtel) {
       payWithMomo();
     }
 
+    if (walletType == WalletType.GMoney) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => NewMandateIdScreen(
+                    momoRequest: getCheckoutRequest(),
+                  )));
+    }
+
     if (walletType == WalletType.Card) {
       _setup();
+    }
+
+    if (walletType == WalletType.BankPay) {
+      payWithMomo();
     }
   }
 
@@ -804,6 +861,22 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                           checkoutCompleted: widget.checkoutCompleted,
                         )));
           });
+    } else if (walletType == WalletType.BankPay) {
+      print("Fetching logo ${viewModel.channelResponse?.businessLogoUrl}");
+      final businessRequirements = HtmlRequirements(
+          imageUrl: CheckoutViewModel?.channelFetch?.businessLogoUrl ?? "",
+          clientName: momoResponse?.customerName ?? "",
+          customerMsisdn: momoResponse?.customerMsisdn ?? "",
+          slipId: momoResponse?.invoiceNumber ?? "",
+          email: momoResponse?.email ?? "",
+          businessName: CheckoutViewModel?.channelFetch?.businessName ?? "");
+
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BankPayReceiptScreen(
+                  mobileMoneyResponse: momoResponse ?? MomoResponse(),
+                  businessDetails: businessRequirements)));
     } else {
       Navigator.push(
           context,
@@ -885,6 +958,16 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           description: widget.checkoutPurchase?.purchaseDescription ?? "",
           clientReference: widget.checkoutPurchase.clientReference,
           mandateId: "");
+    } else if (walletType == WalletType.BankPay) {
+      return MobileMoneyPaymentRequest(
+          customerName: "",
+          customerMsisdn: CheckoutRequirements.customerMsisdn,
+          channel: "bankpay",
+          amount: "${widget.checkoutPurchase?.amount ?? 0.00}",
+          primaryCallbackUrl: CheckoutRequirements.callbackUrl,
+          description: widget.checkoutPurchase?.purchaseDescription ?? "",
+          clientReference: widget.checkoutPurchase.clientReference,
+          mandateId: "");
     }
 
     return MobileMoneyPaymentRequest();
@@ -906,7 +989,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
     if (isCardNumberInputComplete &&
         isCardDateInputComplete &&
         isCardCvvInputComplete) {
-      fetchFees();
+      fetchFees2();
     }
   }
 }
@@ -918,7 +1001,10 @@ class _CheckoutHomeScreenState {
   final ValueNotifier<String> _selectedChannel = ValueNotifier('Hubtel');
 
   ValueNotifier<double?> get checkoutFees => _checkoutFees;
+
   ValueNotifier<bool> get isButtonEnabled => _isButtonEnabled;
+
   ValueNotifier<bool> get isLoadingFees => _isLoadingFees;
+
   ValueNotifier<String> get selectedChannel => _selectedChannel;
 }

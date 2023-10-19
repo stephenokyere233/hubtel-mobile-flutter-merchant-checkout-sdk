@@ -1,4 +1,5 @@
 import 'package:unified_checkout_sdk/network_manager/api_core.dart';
+import 'package:unified_checkout_sdk/platform/models/add_mobile_wallet.dart';
 
 import 'package:unified_checkout_sdk/platform/models/channel_fetch_response.dart';
 import 'package:unified_checkout_sdk/platform/models/checkout_payment_status_response.dart';
@@ -81,5 +82,13 @@ class CheckoutApi extends ApiCore {
     return BaseApiResponse(response: data, apiResult: result.apiResult);
   }
 
+  Future<ResultWrapper<Wallet>> addWallet({required AddMobileWalletBody req}) async {
+    final result = await requester.makeRequest(
+        apiEndPoint: endPoints.checkoutEndPoint.addMobileWallet(request: req)
+    );
+    final data = DataResponse<Wallet>.fromJson(result.response, (x) => Wallet.fromJson(x));
+
+    return BaseApiResponse(response: data, apiResult: result.apiResult);
+  }
 
 }

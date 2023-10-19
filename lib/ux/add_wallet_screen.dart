@@ -1,22 +1,37 @@
 import 'dart:developer';
+// import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/app_page.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/input_field.dart';
+import 'package:unified_checkout_sdk/core_ui/ui_extensions/widget_extensions.dart';
+import 'package:unified_checkout_sdk/extensions/widget_extensions.dart';
+import 'package:unified_checkout_sdk/network_manager/extensions/uistate.dart';
+import 'package:unified_checkout_sdk/platform/models/add_mobile_wallet.dart';
+import 'package:unified_checkout_sdk/platform/models/checkout_requirements.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 import 'package:unified_checkout_sdk/utils/string_extensions.dart';
+import 'package:unified_checkout_sdk/ux/viewModel/checkout_view_model.dart';
 
 import '../core_ui/custom_button.dart';
 import '../core_ui/hubtel_colors.dart';
 import '../custom_components/circle_image.dart';
 import '../resources/checkout_drawables.dart';
 
-class AddWalletScreen extends StatelessWidget {
+class AddWalletScreen extends StatefulWidget {
   AddWalletScreen({super.key});
 
+  @override
+  State<AddWalletScreen> createState() => _AddWalletScreenState();
+}
+
+class _AddWalletScreenState extends State<AddWalletScreen> {
   final AddWalletScreenState state = AddWalletScreenState();
+
   final _mobileNumberController = TextEditingController();
+
+  final checkoutViewModel = CheckoutViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +43,22 @@ class AddWalletScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: AnimatedBuilder(
           animation:
-              Listenable.merge([state.isButtonEnabled, state.isButtonLoading]),
+          Listenable.merge([state.isButtonEnabled, state.isButtonLoading]),
           builder: (BuildContext context, Widget? child) {
             return CustomButton(
               title: 'CONTINUE'.toUpperCase(),
               isEnabled: state.isButtonEnabled.value,
-              buttonAction: () => {state.addWallet()},
+              buttonAction: () =>
+              {
+                _addMobileWallet()
+              },
               loading: state.isButtonLoading.value,
               isDisabledBgColor: HubtelColors.lighterGrey,
               disabledTitleColor: HubtelColors.grey,
               style: HubtelButtonStyle.solid,
-              isEnabledBgColor: Theme.of(context).primaryColor,
+              isEnabledBgColor: Theme
+                  .of(context)
+                  .primaryColor,
             );
           },
         ),
@@ -54,9 +74,13 @@ class AddWalletScreen extends StatelessWidget {
             ),
             Text(
               CheckoutStrings.mobileMoneyNumber,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.black,
-                  ),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(
+                color: Colors.black,
+              ),
             ),
             const SizedBox(
               height: Dimens.paddingSmall,
@@ -83,9 +107,13 @@ class AddWalletScreen extends StatelessWidget {
             ),
             Text(
               CheckoutStrings.selectNetwork,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.black,
-                  ),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(
+                color: Colors.black,
+              ),
             ),
             const SizedBox(
               height: Dimens.paddingSmall,
@@ -102,9 +130,11 @@ class AddWalletScreen extends StatelessWidget {
                         children: [
                           CircleImage(
                             imageProvider:
-                                AssetImage(state.providers[index].$2),
+                            AssetImage(state.providers[index].$2),
                             borderColor: state.selectedIndex.value == index
-                                ? Theme.of(context).primaryColor
+                                ? Theme
+                                .of(context)
+                                .primaryColor
                                 : Colors.transparent,
                             onTap: () {
                               state.selectedIndex.value = index;
@@ -134,6 +164,38 @@ class AddWalletScreen extends StatelessWidget {
       ),
     );
   }
+
+  _addMobileWallet() async {
+
+    final request = AddMobileWalletBody(
+        accountNo: state.mobileNumber.value,
+        provider: state.provider.value,
+        customerMobileNumber: CheckoutRequirements.customerMsisdn
+    );
+
+    widget.showLoadingDialog(context: context, text: "Please Wait");
+
+    final response  = await checkoutViewModel.addWallet(req: request);
+
+    if (!mounted) return;
+
+    Navigator.pop(context);
+
+    if (response.state == UiState.success){
+      widget.showPromptDialog(
+          context: context,
+          title: "Success",
+          subtitle: response.message,
+        buttonAction: ()=>{
+            Navigator.pop(context),
+            Navigator.pop(context)
+        },
+          buttonTitle: "OKAY"
+      );
+    }else{
+      widget.showErrorDialog(context: context, message: response.message);
+    }
+  }
 }
 
 class AddWalletScreenState {
@@ -145,7 +207,8 @@ class AddWalletScreenState {
 
   final List<(String, String)> providers = [
     (CheckoutStrings.mtn.toUpperCase(), CheckoutDrawables.mtnMomo),
-    (CheckoutStrings.vodafone.capitalize(), CheckoutDrawables.vodafoneCashLogo1),
+    (CheckoutStrings.vodafone.capitalize(), CheckoutDrawables
+        .vodafoneCashLogo1),
     (CheckoutStrings.airtelDashTigo, CheckoutDrawables.airtelTigo),
   ];
 
@@ -179,12 +242,6 @@ class AddWalletScreenState {
     _isButtonLoading.value = !_isButtonLoading.value;
   }
 
-  Future<void> addWallet() async {
-    _isButtonLoading.value = true;
-    await Future.delayed(const Duration(seconds: 2)).then((value) {
-      _isButtonLoading.value = false;
-    }).onError((error, stackTrace) => null);
-  }
 
   rest() {
     _mobileNumber.dispose();

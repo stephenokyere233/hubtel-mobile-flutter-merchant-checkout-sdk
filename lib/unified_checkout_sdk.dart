@@ -102,9 +102,4 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Future<String> fetchData() async {
-// Simulate an API request (Replace with your actual API call)
-    await Future.delayed(const Duration(seconds: 2));
-    return "Hello, FutureBuilder!";
-  }
 }

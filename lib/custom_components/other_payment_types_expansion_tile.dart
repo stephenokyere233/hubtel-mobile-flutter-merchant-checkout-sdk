@@ -108,7 +108,6 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
 
   @override
   Widget build(BuildContext context) {
-    // _onPaymentTypeChanged(selectedAccount: widget.selectedAccount);
     return customExpansion.ExpansionTile(
       controller: widget.controller,
       headerBackgroundColor:
@@ -245,7 +244,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
     if (OtherAccountTypes.Hubtel.rawValue == selectedAccount) {
       widget.onChannelChanged('hubtel-gh');
       setState(() {
-        // widget.selectedAccount = "Hubtel";
+        widget.selectedAccount = "Hubtel";
         widget.showHubtelWalletActions = true;
         widget.showGmoneyWalletActions = false;
         widget.showZeePayWalletActions = false;
@@ -258,7 +257,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
     if (OtherAccountTypes.GMoney.rawValue == selectedAccount) {
       widget.onChannelChanged('g-money');
       setState(() {
-        // widget.selectedAccount = "GMoney";
+        widget.selectedAccount = "GMoney";
         widget.showHubtelWalletActions = false;
         widget.showGmoneyWalletActions = true;
         widget.showZeePayWalletActions = false;
@@ -267,9 +266,9 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
     }
 
     if (OtherAccountTypes.Zeepay.rawValue == selectedAccount) {
-
+      widget.onChannelChanged('zeepay');
       setState(() {
-        widget.onChannelChanged('zeepay');
+
         widget.showHubtelWalletActions = false;
         widget.showGmoneyWalletActions = false;
         widget.showZeePayWalletActions = true;

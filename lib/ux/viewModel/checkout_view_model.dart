@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:unified_checkout_sdk/network_manager/api_core.dart';
 import 'package:unified_checkout_sdk/network_manager/checkout_endpoints.dart';
 import 'package:unified_checkout_sdk/network_manager/endpoints.dart';
 import 'package:unified_checkout_sdk/network_manager/requester.dart';
 import 'package:unified_checkout_sdk/platform/datasource/api/checkout_api.dart';
+import 'package:unified_checkout_sdk/platform/models/add_mobile_wallet.dart';
 import 'package:unified_checkout_sdk/platform/models/channel_fetch_response.dart';
 import 'package:unified_checkout_sdk/platform/models/checkout_payment_status_response.dart';
 import 'package:unified_checkout_sdk/platform/models/enroll_3ds_response.dart';
@@ -33,30 +36,50 @@ class CheckoutViewModel extends ChangeNotifier {
   List<Wallet>? wallets;
 
   final List<MomoProvider> providers = [
-    MomoProvider(name: "MTN", logoUrl: "", alias: "mtn-gh", receiveMoneyPromptValue: "mtn-gh", preapprovalConfirmValue: "", directDebitValue:"mtn-gh-direct-debit" ),
-    MomoProvider(name: "Vodafone", logoUrl: "", alias: "vodafone", receiveMoneyPromptValue: "vodafone-gh", preapprovalConfirmValue: "", directDebitValue:"vodafone-gh-direct-debit"),
-    MomoProvider(name: "Airtel Tigo", logoUrl: "", alias: "airtelTigo", receiveMoneyPromptValue: "tigo-gh", preapprovalConfirmValue: "", directDebitValue:"tigo-gh-direct-debit"),
+    MomoProvider(
+        name: "MTN",
+        logoUrl: "",
+        alias: "mtn-gh",
+        receiveMoneyPromptValue: "mtn-gh",
+        preapprovalConfirmValue: "",
+        directDebitValue: "mtn-gh-direct-debit"),
+    MomoProvider(
+        name: "Vodafone",
+        logoUrl: "",
+        alias: "vodafone",
+        receiveMoneyPromptValue: "vodafone-gh",
+        preapprovalConfirmValue: "",
+        directDebitValue: "vodafone-gh-direct-debit"),
+    MomoProvider(
+        name: "Airtel Tigo",
+        logoUrl: "",
+        alias: "airtelTigo",
+        receiveMoneyPromptValue: "tigo-gh",
+        preapprovalConfirmValue: "",
+        directDebitValue: "tigo-gh-direct-debit"),
   ];
 
   late final CheckoutApi _checkoutApi = CheckoutApi(requester: requester);
 
-  String getMomoChannelName(String? selectedProviderName) {
-    final lowerCasedSelectedProviderName = selectedProviderName?.toLowerCase();
-
-    final isProviderMTN =
-        lowerCasedSelectedProviderName?.contains(CheckoutStrings.mtnShortString) ?? false;
-    final isProviderVodafone =
-        lowerCasedSelectedProviderName?.contains(CheckoutStrings.vodafone) ?? false;
-    final isProviderAirtelTigo = lowerCasedSelectedProviderName
-        ?.contains(RegExp(CheckoutStrings.atRegex)) ??
-        false;
-
-    if (isProviderMTN) return CheckoutStrings.mtnGh;
-    if (isProviderVodafone) return CheckoutStrings.vodafone_gh_ussd;
-    if (isProviderAirtelTigo) return CheckoutStrings.tigoGh ;
-
-    return '';
-  }
+  // String getMomoChannelName(String? selectedProviderName) {
+  //   final lowerCasedSelectedProviderName = selectedProviderName?.toLowerCase();
+  //
+  //   final isProviderMTN = lowerCasedSelectedProviderName
+  //           ?.contains(CheckoutStrings.mtnShortString) ??
+  //       false;
+  //   final isProviderVodafone =
+  //       lowerCasedSelectedProviderName?.contains(CheckoutStrings.vodafone) ??
+  //           false;
+  //   final isProviderAirtelTigo = lowerCasedSelectedProviderName
+  //           ?.contains(RegExp(CheckoutStrings.atRegex)) ??
+  //       false;
+  //
+  //   if (isProviderMTN) return CheckoutStrings.mtnGh;
+  //   if (isProviderVodafone) return CheckoutStrings.vodafone_gh_ussd;
+  //   if (isProviderAirtelTigo) return CheckoutStrings.tigoGh;
+  //
+  //   return '';
+  // }
 
   //TODO: fetch channels
   Future<UiResult<ChannelFetchResponse>> fetchChannels() async {
@@ -65,8 +88,10 @@ class CheckoutViewModel extends ChangeNotifier {
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
       channelResponse = result.response?.data;
+      print("fetched channels ${channelResponse?.businessLogoUrl}");
       CheckoutViewModel.channelFetch = result.response?.data;
       print(channelResponse?.isHubtelInternalMerchant);
+      notifyListeners();
       return UiResult(state: UiState.success, message: "Success", data: data);
     }
     return UiResult(
@@ -95,8 +120,8 @@ class CheckoutViewModel extends ChangeNotifier {
   }
 
   //TODO: Fetch fees
-  Future<UiResult<NewGetFeesResponse>> fetchFees({required String channel, required double amount}) async {
-
+  Future<UiResult<NewGetFeesResponse>> fetchFees(
+      {required String channel, required double amount}) async {
     final result = await _checkoutApi.fetchFees(channel, amount);
 
     if (result.apiResult == ApiResult.Success) {
@@ -112,14 +137,18 @@ class CheckoutViewModel extends ChangeNotifier {
   }
 
   //TODO: Make Receive Money Payment Prompt.
-  Future<UiResult<MomoResponse>> payWithMomo({required MobileMoneyPaymentRequest req}) async {
-
+  Future<UiResult<MomoResponse>> payWithMomo(
+      {required MobileMoneyPaymentRequest req}) async {
     final result = await _checkoutApi.payWithMomo(req: req);
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
       print(result.response?.data?.amountCharged);
-      return UiResult(state: UiState.success, message: "Success", data: data);
+      return UiResult(
+        state: UiState.success,
+        message: "Success",
+        data: data,
+      );
     }
     return UiResult(
         state: UiState.error,
@@ -129,9 +158,10 @@ class CheckoutViewModel extends ChangeNotifier {
 
   //TODO: Check PaymentStatus here
 
-  Future<UiResult<CheckoutOrderStatus>> checkStatus({required String clientReference}) async {
-
-    final result = await _checkoutApi.checkStatus(clientReference: clientReference);
+  Future<UiResult<CheckoutOrderStatus>> checkStatus(
+      {required String clientReference}) async {
+    final result =
+        await _checkoutApi.checkStatus(clientReference: clientReference);
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
@@ -144,8 +174,8 @@ class CheckoutViewModel extends ChangeNotifier {
   }
 
   //TODO Setup Device for bank card Payments
-  Future<UiResult<Setup3dsResponse>> setup({required SetupPayerAuthRequest request}) async {
-
+  Future<UiResult<Setup3dsResponse>> setup(
+      {required SetupPayerAuthRequest request}) async {
     final result = await _checkoutApi.setupDevice(request: request);
 
     if (result.apiResult == ApiResult.Success) {
@@ -159,8 +189,8 @@ class CheckoutViewModel extends ChangeNotifier {
   }
 
   //TODO make enrollment request in sdk
-  Future<UiResult<Enroll3dsResponse>> enroll({required String transactionId}) async {
-
+  Future<UiResult<Enroll3dsResponse>> enroll(
+      {required String transactionId}) async {
     final result = await _checkoutApi.enroll(transactionId: transactionId);
 
     if (result.apiResult == ApiResult.Success) {
@@ -170,9 +200,20 @@ class CheckoutViewModel extends ChangeNotifier {
     return UiResult(
         state: UiState.error,
         message: result.response?.message ?? "",
-        data: null
-    );
+        data: null);
   }
 
+  //TODO: make call to add mobile wallet to sdk
+  Future<UiResult<Wallet>> addWallet({required AddMobileWalletBody req}) async {
+    final result = await _checkoutApi.addWallet(req: req);
 
+    if (result.apiResult == ApiResult.Success) {
+      final data = result.response?.data;
+      return UiResult(state: UiState.success, message: "Success", data: data);
+    }
+    return UiResult(
+        state: UiState.error,
+        message: result.response?.message ?? "",
+        data: null);
+  }
 }

@@ -333,6 +333,10 @@ class CheckoutStrings {
 
   static const BankCard = "Bank Card";
 
+  static const bankPay = "bankpay";
+
+  static const bank_pay = "Bank Pay";
+
   static String getChannelNameForBankPayment(String cardNumber) {
     return cardNumber.startsWith(CheckoutStrings.four)
         ? CheckoutStrings.cardNotPresentVisa
@@ -360,4 +364,5 @@ class CheckoutStrings {
       'Your account has been verified successfully';
 
   static const other = "Others";
+
 }

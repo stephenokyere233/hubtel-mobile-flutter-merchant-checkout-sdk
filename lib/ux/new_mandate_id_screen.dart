@@ -1,7 +1,17 @@
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/app_page.dart';
+import 'package:unified_checkout_sdk/core_ui/ui_extensions/widget_extensions.dart';
+import 'package:unified_checkout_sdk/extensions/widget_extensions.dart';
+import 'package:unified_checkout_sdk/network_manager/extensions/uistate.dart';
+import 'package:unified_checkout_sdk/platform/models/checkout_payment_status_response.dart';
+import 'package:unified_checkout_sdk/platform/models/mobile_money_request.dart';
+import 'package:unified_checkout_sdk/platform/models/momo_response.dart';
+import 'package:unified_checkout_sdk/platform/models/payment_status.dart';
+import 'package:unified_checkout_sdk/ux/check_status_screen.dart';
+import 'package:unified_checkout_sdk/ux/viewModel/checkout_view_model.dart';
 
 import '../core_ui/custom_button.dart';
 import '../core_ui/dimensions.dart';
@@ -9,11 +19,21 @@ import '../core_ui/hubtel_colors.dart';
 import '../core_ui/input_field.dart';
 import '../resources/checkout_strings.dart';
 
-class NewMandateIdScreen extends StatelessWidget {
-  NewMandateIdScreen({super.key});
+class NewMandateIdScreen extends StatefulWidget {
+  NewMandateIdScreen({required this.momoRequest, super.key});
 
+  MobileMoneyPaymentRequest momoRequest;
+
+  @override
+  State<NewMandateIdScreen> createState() => _NewMandateIdScreenState();
+}
+
+class _NewMandateIdScreenState extends State<NewMandateIdScreen> {
   final state = NewMandateIdScreenState();
+
   final _mandateIdController = TextEditingController();
+
+  final viewModel = CheckoutViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +48,7 @@ class NewMandateIdScreen extends StatelessWidget {
             return CustomButton(
               title: 'Continue'.toUpperCase(),
               isEnabled: state.validated,
-              buttonAction: () => {state.submit()},
+              buttonAction: () => {_makeCheckoutPayment()},
               isDisabledBgColor: HubtelColors.lighterGrey,
               disabledTitleColor: HubtelColors.grey,
               style: HubtelButtonStyle.solid,
@@ -66,7 +86,10 @@ class NewMandateIdScreen extends StatelessWidget {
               const SizedBox(height: Dimens.paddingDefault),
               Text(
                 CheckoutStrings.gMoneyInstructionsHeading,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: Dimens.paddingDefault),
               Text(
@@ -78,6 +101,33 @@ class NewMandateIdScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _makeCheckoutPayment() async {
+    widget.showLoadingDialog(context: context, text: "Please Wait");
+
+    widget.momoRequest.mandateId = state.value.id;
+
+    final response = await viewModel.payWithMomo(req: widget.momoRequest);
+
+    if (!mounted) return;
+
+    Navigator.pop(context);
+
+    if (response.state == UiState.success) {
+      final data = response.data;
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CheckStatusScreen(
+              checkoutResponse: data ?? MomoResponse(),
+              checkoutCompleted: (status) => {}),
+        ),
+      );
+    } else {
+      widget.showErrorDialog(context: context, message: response.message);
+    }
   }
 }
 

@@ -5,7 +5,8 @@ enum WalletType {
   Gratis("hubtel"),
   GMoney("GMoney"),
   Zeepay("Zeepay"),
-  Hubtel("hubtel");
+  Hubtel("hubtel"),
+  BankPay("BankPay");
 
   const WalletType(this.optionValue);
 

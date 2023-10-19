@@ -30,5 +30,6 @@ final class CheckoutDrawables {
   static const String g_money_logo = '$_baseUrl/gmoney.png';
   static const String zee_pay_logo = '$_baseUrl/zeepay.png';
   static const String vodafoneCashLogo1 = "$_baseUrl/vodafone_cash.png";
+  static const String bankPay = "$_baseUrl/bank_pay.png";
 
 }

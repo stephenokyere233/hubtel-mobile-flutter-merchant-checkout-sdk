@@ -178,7 +178,13 @@ class Dimens {
   static const extraLargePaddingSpace = 114.0;
 
   static const frameHeight = 248.0;
+
   static const toolBarHeight = 58.0;
+
+  static const hundred = 100.00;
+
+  static const seventyFive = 75.00;
+
 
   static const BorderRadiusGeometry borderRadius12 = BorderRadius.all(
     Radius.circular(
