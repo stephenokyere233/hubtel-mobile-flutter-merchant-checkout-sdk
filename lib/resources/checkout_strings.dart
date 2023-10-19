@@ -32,6 +32,21 @@ class CheckoutStrings {
 
   static const mobileNetwork = "Mobile Network";
 
+  static var mandateIdHint = 'Enter Mandate ID';
+
+  static String gMoneyInstructionsHeading = 'Steps to generate a mandate ID on G-Money';
+  static String gMoneySteps = '''
+1 Dial *422#
+
+2 Select Option 2 (G-Money)
+
+3 Select Option 4 (Payment Services)
+
+4 Select Option 6 (Mandate)
+
+5 Select Option 1 (Create Mandate)
+  ''';
+
   static const paymentWithMomoInfoHead =
       "You will be required to enter your MTN "
       "Mobile Money PIN to authorise this payment.\n\nIf you don't receive any authorisation prompt, dial ";
