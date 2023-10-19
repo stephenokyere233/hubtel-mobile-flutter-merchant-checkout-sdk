@@ -14,15 +14,16 @@ import 'package:unified_checkout_sdk/ux/add_wallet_screen.dart';
 import '../platform/models/wallet_type.dart';
 
 class MobileMoneyTileField extends StatefulWidget {
-  const MobileMoneyTileField({
-    Key? key,
-    required this.fieldController,
-    this.wallets,
-    this.providers,
-    required this.onWalletSelected,
-    required this.onProviderSelected,
-    required this.hintText,
-  }) : super(key: key);
+  MobileMoneyTileField(
+      {Key? key,
+      required this.fieldController,
+      this.wallets,
+      this.providers,
+      required this.onWalletSelected,
+      required this.onProviderSelected,
+      required this.hintText,
+      this.showWalletAdditionTile})
+      : super(key: key);
 
   final TextEditingController fieldController;
   final List<Wallet>? wallets;
@@ -30,6 +31,7 @@ class MobileMoneyTileField extends StatefulWidget {
   final String hintText;
   final void Function(Wallet) onWalletSelected;
   final void Function(MomoProvider) onProviderSelected;
+  bool? showWalletAdditionTile = true;
 
   @override
   State<MobileMoneyTileField> createState() => _MobileMoneyTileFieldState();
@@ -91,53 +93,67 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                           if (e.type?.toLowerCase() ==
                                   WalletType.Card.optionValue.toLowerCase() ||
                               e.type?.toLowerCase() ==
-                                  WalletType.Hubtel.optionValue.toLowerCase()) {
-                            return const SizedBox();
-                          }
+                                  WalletType.Hubtel.optionValue.toLowerCase())
+                            return SizedBox();
                           return ListTile(
                             onTap: () {
                               setState(() {
-                                widget.fieldController.text = e.accountNo ?? '';
+                                widget.fieldController.text =
+                                    widget.showWalletAdditionTile ?? true
+                                        ? e.accountNo ?? ""
+                                        : e.accountName ?? "";
                               });
                               expandOptions = false;
                               widget.onWalletSelected(e);
                             },
                             title: Text(
-                              e.accountNo ?? '',
+                              widget.showWalletAdditionTile ?? true
+                                  ? e.accountNo ?? ""
+                                  : e.accountName ?? "",
                               style: AppTextStyle.body2(),
                             ),
-                            subtitle: Text(
-                              (e.provider ?? '').capitalize(),
-                              style: AppTextStyle.body2().copyWith(
-                                  color: HubtelColors.neutral.shade600),
-                            ),
+                            subtitle: widget.showWalletAdditionTile ?? true
+                                ? Visibility(
+                                    visible:
+                                        widget.showWalletAdditionTile ?? true,
+                                    child: Text(
+                                      widget.showWalletAdditionTile ?? true
+                                          ? (e.provider ?? "").capitalize()
+                                          : "",
+                                      style: AppTextStyle.body2().copyWith(
+                                          color: HubtelColors.neutral.shade600),
+                                    ),
+                                  )
+                                : null,
                           );
                         }),
-                        ListTile(
-                          onTap: () {
-                            setState(() {
-                              expandOptions = false;
-                            });
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AddWalletScreen(),
-                              ),
-                            );
-                          },
-                          leading: Icon(
-                            Icons.add_circle_outline_rounded,
-                            color: Theme.of(context).primaryColor,
-                            size: Dimens.defaultIconNormal,
-                          ),
-                          title: Text(
-                            CheckoutStrings.addMobileMoneyWallet,
-                            style: AppTextStyle.body2().copyWith(
-                              fontWeight: FontWeight.bold,
+                        Visibility(
+                          visible: widget.showWalletAdditionTile ?? true,
+                          child: ListTile(
+                            onTap: () {
+                              setState(() {
+                                expandOptions = false;
+                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddWalletScreen(),
+                                ),
+                              );
+                            },
+                            leading: const Icon(
+                              Icons.add_circle_outline_rounded,
+                              color: HubtelColors.teal,
+                              size: Dimens.defaultIconNormal,
                             ),
+                            title: Text(
+                              CheckoutStrings.addMobileMoneyWallet,
+                              style: AppTextStyle.body2().copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            minLeadingWidth: Dimens.paddingNano,
                           ),
-                          minLeadingWidth: Dimens.paddingNano,
                         )
                       ]
                     : widget.providers != null

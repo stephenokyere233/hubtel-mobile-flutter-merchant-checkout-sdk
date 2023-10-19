@@ -1,7 +1,3 @@
-
-
-
-
 // import 'package:feature_checkout/ux/models/web_checkout_state.dart';
 
 enum CheckoutHtmlState {
@@ -9,11 +5,9 @@ enum CheckoutHtmlState {
   success, //meaning loading is successful
   loadingBegan, // means loading has began
   htmlLoadingFailed, // means htmlLoading failed
-
 }
 
 class CheckoutStrings {
-
   static const package = 'unified_checkout_sdk';
   static const checkout = 'Checkout';
   static const String ghanaCardHeading = 'Ghana Card Details';
@@ -38,10 +32,27 @@ class CheckoutStrings {
 
   static const mobileNetwork = "Mobile Network";
 
-  static const paymentWithMomoInfoHead = "You will be required to enter your MTN "
+  static var mandateIdHint = 'Enter Mandate ID';
+
+  static String gMoneyInstructionsHeading = 'Steps to generate a mandate ID on G-Money';
+  static String gMoneySteps = '''
+1 Dial *422#
+
+2 Select Option 2 (G-Money)
+
+3 Select Option 4 (Payment Services)
+
+4 Select Option 6 (Mandate)
+
+5 Select Option 1 (Create Mandate)
+  ''';
+
+  static const paymentWithMomoInfoHead =
+      "You will be required to enter your MTN "
       "Mobile Money PIN to authorise this payment.\n\nIf you don't receive any authorisation prompt, dial ";
 
-  static const paymentWithMomoInfoTail = " go to My Account and select Approvals";
+  static const paymentWithMomoInfoTail =
+      " go to My Account and select Approvals";
 
   static const vodafoneCash = "Vodafone Cash";
 
@@ -263,7 +274,6 @@ class CheckoutStrings {
 
   static String airtelTigoMoneyString = "Airtel Tigo Money";
 
-
   static String checkAgainTimeLeft({required int timeLeft}) {
     return 'Check Again (00:0$timeLeft)';
   }
@@ -279,29 +289,32 @@ class CheckoutStrings {
 
   static const hubtel_pin_desc = "Please enter your Hubtel PIN \n to proceed";
 
-  static const resetString = "For security reasons, all your debit/credit accounts will be removed. You would have to sign in again and set a new pin";
+  static const resetString =
+      "For security reasons, all your debit/credit accounts will be removed. You would have to sign in again and set a new pin";
 
   static const okay = "Okay";
 
   static const secureHubtelPin = "Set Your Hubtel Pin";
 
-  static const secureHubtelPinMessage = "Secure your Hubtel Balance transactions by approving each one with your own pin";
+  static const secureHubtelPinMessage =
+      "Secure your Hubtel Balance transactions by approving each one with your own pin";
 
   static const success = "Success";
 
   static const cancelTransaction = "Cancel Transaction?";
 
-  static const  doYouWantToCancelTransaction = 'Do you want to cancel this transaction?';
+  static const doYouWantToCancelTransaction =
+      'Do you want to cancel this transaction?';
 
   static const keepYourTransactionSecure = "Keep your account secure";
 
   static const setHubtelPin = "Set your hubtel account pin";
 
-  static const  confirmYourPin = "Confirm Your Pin";
+  static const confirmYourPin = "Confirm Your Pin";
 
   static const renterYourPin = "Re-enter your Hubtel account PIN to confirm";
 
-  static const  keepYourAccountSecure = "Keep your account secure";
+  static const keepYourAccountSecure = "Keep your account secure";
 
   static const setYourAccountPin = "Set your hubtel account pin";
 
@@ -333,6 +346,14 @@ class CheckoutStrings {
 
   static const five = "5";
 
+  static const BankCard = "Bank Card";
+
+  static String getChannelNameForBankPayment(String cardNumber) {
+    return cardNumber.startsWith(CheckoutStrings.four)
+        ? CheckoutStrings.cardNotPresentVisa
+        : CheckoutStrings.cardnotpresent_mastercard;
+  }
+
   static const String fullName = 'Full Name';
   static const String cardDetailsTitle = 'Card Details';
   static const String cardNumber = 'Card Number';
@@ -348,7 +369,10 @@ class CheckoutStrings {
   static const genderSample = 'Male';
   static const orderMessage = 'Your order has been placed';
   static const ordersAndDelivery = 'Orders and Delivery';
-  static const confirmationMessage = 'Your {walletName} will be debited with {GHS 0.00} after your order is confirmed';
-  static const String verificationSuccess = 'Your account has been verified successfully';
+  static const confirmationMessage =
+      'Your {walletName} will be debited with {GHS 0.00} after your order is confirmed';
+  static const String verificationSuccess =
+      'Your account has been verified successfully';
 
+  static const other = "Others";
 }

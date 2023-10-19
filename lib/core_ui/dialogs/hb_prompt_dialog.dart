@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:unified_checkout_sdk/core_ui/dialogs/hb_button_large.dart';
+import 'package:unified_checkout_sdk/core_ui/buttons/hb_button_large.dart';
 import 'package:unified_checkout_sdk/core_ui/dialogs/hb_rounded_dialog.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';

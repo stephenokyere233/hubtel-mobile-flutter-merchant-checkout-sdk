@@ -59,8 +59,8 @@ class AddWalletScreen extends StatelessWidget {
             Text(
               CheckoutStrings.mobileMoneyNumber,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.black,
-                  ),
+                color: Colors.black,
+              ),
             ),
             const SizedBox(
               height: Dimens.paddingSmall,
@@ -88,8 +88,8 @@ class AddWalletScreen extends StatelessWidget {
             Text(
               CheckoutStrings.selectNetwork,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.black,
-                  ),
+                color: Colors.black,
+              ),
             ),
             const SizedBox(
               height: Dimens.paddingSmall,
@@ -106,7 +106,7 @@ class AddWalletScreen extends StatelessWidget {
                         children: [
                           CircleImage(
                             imageProvider:
-                                AssetImage(state.providers[index].$2),
+                            AssetImage(state.providers[index].$2),
                             borderColor: state.selectedIndex.value == index
                                 ? Theme.of(context).primaryColor
                                 : Colors.transparent,

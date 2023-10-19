@@ -1,9 +1,10 @@
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:unified_checkout_sdk/core_ui/app_image_widget.dart';
 import 'package:unified_checkout_sdk/custom_components/mobile_money_tile_field.dart';
-import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart' as customExpansion;
+import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart'
+    as customExpansion;
 import 'package:flutter/scheduler.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
@@ -13,7 +14,11 @@ import 'package:unified_checkout_sdk/platform/models/momo_provider.dart';
 import 'package:unified_checkout_sdk/platform/models/wallet.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 
+import '../resources/checkout_drawables.dart';
+
 class MobileMoneyExpansionTile extends StatefulWidget {
+  static bool fetchFees = true;
+
   const MobileMoneyExpansionTile({
     super.key,
     required this.wallets,
@@ -49,10 +54,14 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
 
   @override
   Widget build(BuildContext context) {
-    // if (widget.isSelected) {
-    //   autoSelectFirstWallet();
+    // if(MobileMoneyExpansionTile.fetchFees == true) {
+    //   if (widget.isSelected) {
+    //     autoSelectFirstWallet();
+    //   }
+    // MobileMoneyExpansionTile.fetchFees = false;
     // }
-    log("hereeeeee ${widget.wallets.length}", time: DateTime.now(), name: runtimeType.toString());
+    log("hereeeeee ${widget.wallets.length}",
+        time: DateTime.now(), name: runtimeType.toString());
     return Column(
       children: [
         if (widget.isSelected) const SizedBox(height: Dimens.paddingDefault),
@@ -78,29 +87,29 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // AppImageWidget.local(
-              //   image: const AssetImage(CheckoutDrawables.mtnMomoLogo),
-              //   width: Dimens.iconMedium,
-              //   height: Dimens.iconSmall,
-              //   boxFit: BoxFit.contain,
-              //   borderRadius: 0,
-              // ),
+              AppImageWidget.local(
+                image: const AssetImage(CheckoutDrawables.mtnMomoLogo),
+                width: Dimens.iconMedium,
+                height: Dimens.iconSmall,
+                boxFit: BoxFit.contain,
+                borderRadius: 0,
+              ),
               const SizedBox(width: Dimens.paddingDefaultSmall),
-              // AppImageWidget.local(
-              //   image: const AssetImage(CheckoutDrawables.vodafoneCashLogo),
-              //   width: Dimens.iconSmall,
-              //   height: Dimens.iconSmall,
-              //   boxFit: BoxFit.contain,
-              //   borderRadius: 0,
-              // ),
+              AppImageWidget.local(
+                image: const AssetImage(CheckoutDrawables.vodafoneCashLogo),
+                width: Dimens.iconSmall,
+                height: Dimens.iconSmall,
+                boxFit: BoxFit.contain,
+                borderRadius: 0,
+              ),
               const SizedBox(width: Dimens.paddingDefaultSmall),
-              // AppImageWidget.local(
-              //   image: const AssetImage(CheckoutDrawables.airtelTigoLogo),
-              //   width: Dimens.iconSmall,
-              //   height: Dimens.iconSmall,
-              //   boxFit: BoxFit.contain,
-              //   borderRadius: 0,
-              // ),
+              AppImageWidget.local(
+                image: const AssetImage(CheckoutDrawables.airtelTigoLogo),
+                width: Dimens.iconSmall,
+                height: Dimens.iconSmall,
+                boxFit: BoxFit.contain,
+                borderRadius: 0,
+              ),
             ],
           ),
           leading: CustomRadioIndicator(
@@ -137,24 +146,23 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
     );
   }
 
-void autoSelectFirstWallet() {
-  SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-    var firstWallet = widget.wallets.firstOrNull;
+  void autoSelectFirstWallet() {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      var firstWallet = widget.wallets.firstOrNull;
 
-    if (firstWallet != null) {
-      widget.onWalletSelected.call(firstWallet);
-      widget.mobileNumberController.text = firstWallet.accountNo ?? "";
-      var provider = widget.providers
-          .where((p) =>
-              p.alias?.toLowerCase() ==
-              firstWallet.provider?.toLowerCase())
-          .toList()
-          .firstOrNull;
-      if (provider != null) {
-        widget.onProviderSelected.call(provider);
-        widget.providerController.text = provider.name ?? "";
+      if (firstWallet != null) {
+        widget.onWalletSelected.call(firstWallet);
+        widget.mobileNumberController.text = firstWallet.accountNo ?? "";
+        var provider = widget.providers
+            .where((p) =>
+                p.alias?.toLowerCase() == firstWallet.provider?.toLowerCase())
+            .toList()
+            .firstOrNull;
+        if (provider != null) {
+          widget.onProviderSelected.call(provider);
+          widget.providerController.text = provider.name ?? "";
+        }
       }
-    }
-  });
-}
+    });
+  }
 }

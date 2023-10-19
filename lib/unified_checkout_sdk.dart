@@ -12,6 +12,7 @@ import 'package:unified_checkout_sdk/platform/models/configuration_obj.dart';
 import 'package:unified_checkout_sdk/platform/models/payment_status.dart';
 import 'package:unified_checkout_sdk/platform/models/purchase_item.dart';
 import 'package:unified_checkout_sdk/ux/checkout_screen.dart';
+import 'package:unified_checkout_sdk/ux/checkout_screen2.dart';
 import 'package:unified_checkout_sdk/ux/viewModel/checkout_view_model.dart';
 
 import 'network_manager/extensions/uistate.dart';
@@ -34,7 +35,6 @@ class CheckoutScreen extends StatefulWidget {
   late final Function(PaymentStatus) onCheckoutComplete;
 
   Color? _primaryColor;
-
 
   CheckoutScreen({
     Key? key,
@@ -73,7 +73,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           builder: (context,
               AsyncSnapshot<UiResult<ChannelFetchResponse>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator(color: widget.themeConfig?.primaryColor ?? HubtelColors.teal,));
+              return Center(
+                  child: CircularProgressIndicator(
+                color: widget.themeConfig?.primaryColor ?? HubtelColors.teal,
+              ));
             } else {
               if (snapshot.hasData) {
                 final businessInfo = snapshot.data?.data?.getBusinessInfo() ??
@@ -85,12 +88,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   checkoutPurchase: widget.purchaseInfo,
                   businessInfo: businessInfo,
                   checkoutCompleted: widget.onCheckoutComplete,
-                  themeConfig: widget.themeConfig ?? ThemeConfig(primaryColor: HubtelColors.teal),
+                    themeConfig: widget.themeConfig ?? ThemeConfig(primaryColor: HubtelColors.teal),
                 );
               }
             }
             return Center(
-              child: CircularProgressIndicator(color: Colors.teal[500], backgroundColor: Colors.teal[500]),
+              child: CircularProgressIndicator(
+                  color: Colors.teal[500], backgroundColor: Colors.teal[500]),
             );
           },
         ),

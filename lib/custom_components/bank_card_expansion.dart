@@ -4,6 +4,7 @@ import 'package:unified_checkout_sdk/custom_components/bank_card_type_tab.dart';
 import 'package:unified_checkout_sdk/custom_components/custom_indicator.dart';
 import 'package:unified_checkout_sdk/custom_components/new_bank_card_form.dart';
 import 'package:unified_checkout_sdk/custom_components/saved_bank_card_form.dart';
+import 'package:unified_checkout_sdk/resources/checkout_drawables.dart';
 import 'package:unified_checkout_sdk/utils/bank_card_helper.dart';
 import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart'
     as customExpansion;
@@ -104,7 +105,7 @@ class _BankCardExpansionTileState extends State<BankCardExpansionTile> {
         mainAxisSize: MainAxisSize.min,
         children: [
           AppImageWidget.local(
-            image: const AssetImage(""),
+            image: const AssetImage(CheckoutDrawables.masterCard),
             width: Dimens.iconNormal2,
             height: Dimens.iconSmall,
             boxFit: BoxFit.contain,
@@ -112,7 +113,7 @@ class _BankCardExpansionTileState extends State<BankCardExpansionTile> {
           ),
           const SizedBox(width: Dimens.paddingDefaultSmall),
           AppImageWidget.local(
-            image: const AssetImage(""),
+            image: const AssetImage(CheckoutDrawables.visa),
             width: Dimens.iconMedium,
             height: Dimens.iconSmall,
             boxFit: BoxFit.contain,
@@ -137,6 +138,9 @@ class _BankCardExpansionTileState extends State<BankCardExpansionTile> {
                   isSelected: e.key == selectedTabIndex,
                   onTap: () {
                     setState(() {
+                      if (widget.savedCards.length < 1) {
+                        return;
+                      }
                       selectedTabIndex = e.key;
                       widget.onUseNewCardSelected(e.key == 0);
                     });

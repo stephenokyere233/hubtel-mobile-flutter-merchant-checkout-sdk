@@ -19,23 +19,24 @@ import '../resources/checkout_strings.dart';
 
 
 
-class PaymentStatusScreen extends StatefulWidget {
+class CheckStatusScreen extends StatefulWidget {
+
   final MomoResponse checkoutResponse;
 
   final viewModel = CheckoutViewModel();
 
   Function(PaymentStatus) checkoutCompleted;
 
-  PaymentStatusScreen({
+  CheckStatusScreen({
     super.key, required this.checkoutResponse,
     required this.checkoutCompleted
   });
 
   @override
-  State<PaymentStatusScreen> createState() => _PaymentStatusScreenState();
+  State<CheckStatusScreen> createState() => _CheckStatusScreenState();
 }
 
-class _PaymentStatusScreenState extends State<PaymentStatusScreen> {
+class _CheckStatusScreenState extends State<CheckStatusScreen> {
   // late PaymentStatusViewModel paymentStatusViewModel;
   PaymentStatus paymentStatus = PaymentStatus.unspecified;
   String paymentStatusErrorMessage = 'Transaction Failed';
@@ -189,7 +190,7 @@ class _PaymentStatusScreenState extends State<PaymentStatusScreen> {
 
     if (paymentStatus == PaymentStatus.failed) {
       Navigator.popUntil(context,  ModalRoute.withName(CheckoutRequirements.routeName));
-      widget.checkoutCompleted.call(PaymentStatus.paid);
+      widget.checkoutCompleted.call(paymentStatus);
       return;
     }
 

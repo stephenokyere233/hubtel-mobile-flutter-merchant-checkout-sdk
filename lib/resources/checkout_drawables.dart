@@ -8,7 +8,7 @@ final class CheckoutDrawables {
   static const String masterCard = "$_baseUrl/master-card-logo.png";
   static const String mtnMomoLogo = "$_baseUrl/mtn-momo.png";
   static const String mtnMomo = '$_baseUrl/mtn_momo.png';
-  static const String vodafoneCashLogo = "$_baseUrl/vodafone_cash.png";
+  static const String vodafoneCashLogo = "$_baseUrl/vodafone_cash_logo.png";
   static const String airtelTigoLogo = "$_baseUrl/tigo-cash.png";
   static const String airtelTigo = "$_baseUrl/airtel_tigo.png";
   static const String processingPayment = '$_baseUrl/ic_processing_payment.svg';
@@ -26,5 +26,9 @@ final class CheckoutDrawables {
   static const String success = '$_baseUrl/success.svg';
   static const String enterpriseInsurance = '$_baseUrl/enterprise_insurance.svg';
   static const String iconClose = '$_baseUrl/icon_close_circle.svg';
+  static const String hubtel_logo = '$_baseUrl/hubtel_icon.png';
+  static const String g_money_logo = '$_baseUrl/gmoney.png';
+  static const String zee_pay_logo = '$_baseUrl/zeepay.png';
+  static const String vodafoneCashLogo1 = "$_baseUrl/vodafone_cash.png";
 
 }
