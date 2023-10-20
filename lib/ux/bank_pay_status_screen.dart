@@ -1,9 +1,12 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unified_checkout_sdk/core_ui/app_page.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
+import 'package:unified_checkout_sdk/platform/models/checkout_requirements.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 
 import '../core_ui/custom_button.dart';
@@ -35,7 +38,7 @@ class BankPayStatusScreen extends StatelessWidget {
         child: CustomButton(
           title: CheckoutStrings.okay.toUpperCase(),
           isEnabled: true,
-          buttonAction: () => onOkayButtonClicked(),
+          buttonAction: () => onOkayButtonClicked(context),
           isDisabledBgColor: HubtelColors.lighterGrey,
           disabledTitleColor: HubtelColors.grey,
           style: HubtelButtonStyle.solid,
@@ -94,7 +97,9 @@ class BankPayStatusScreen extends StatelessWidget {
     );
   }
 
-  onOkayButtonClicked() async {
-    // TODO: implement okay clicked in bank pay status screen
+  onOkayButtonClicked(BuildContext context) async {
+    Navigator.popUntil(
+        context, ModalRoute.withName(CheckoutRequirements.routeName));
+
   }
 }

@@ -14,6 +14,7 @@ import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/core_ui/ui_extensions/widget_extensions.dart';
 import 'package:unified_checkout_sdk/platform/models/momo_response.dart';
+import 'package:unified_checkout_sdk/ux/bank_pay_status_screen.dart';
 import 'package:unified_checkout_sdk/ux/check_status_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 // import 'package:path_provider/path_provider.dart';
@@ -105,7 +106,7 @@ class _BankPayReceiptScreenState extends State<BankPayReceiptScreen> {
     Navigator.pop(context);
 
     if (openFile != null){
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckStatusScreen(checkoutResponse: MomoResponse(), checkoutCompleted: (value)=>{})));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>const BankPayStatusScreen()));
     }
 
 
