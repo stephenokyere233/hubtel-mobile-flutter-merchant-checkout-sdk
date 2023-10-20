@@ -3,6 +3,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/app_page.dart';
+import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/core_ui/ui_extensions/widget_extensions.dart';
 import 'package:unified_checkout_sdk/extensions/widget_extensions.dart';
 import 'package:unified_checkout_sdk/network_manager/extensions/uistate.dart';
@@ -52,7 +53,7 @@ class _NewMandateIdScreenState extends State<NewMandateIdScreen> {
               isDisabledBgColor: HubtelColors.lighterGrey,
               disabledTitleColor: HubtelColors.grey,
               style: HubtelButtonStyle.solid,
-              isEnabledBgColor: Theme.of(context).primaryColor,
+              isEnabledBgColor: ThemeConfig.themeColor,
             );
           },
         ),

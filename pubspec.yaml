@@ -19,9 +19,9 @@ dependencies:
   webview_flutter: ^4.2.4
   pdf: ^3.4.0
   path_provider: ^2.0.4
-  flutter_html_to_pdf: ^0.7.0
   printing: ^5.11.0
   open_filex: ^4.3.2
+  flutter_html_to_pdf: ^0.7.0
 
 dev_dependencies:
   flutter_test:

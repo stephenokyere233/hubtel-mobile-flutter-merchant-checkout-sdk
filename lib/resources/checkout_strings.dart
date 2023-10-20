@@ -129,7 +129,7 @@ class CheckoutStrings {
 
   static String amount = "Amount";
   static String fees = "Fees";
-  static String elevy = "E-Levy";
+  static String eLevy = "E-Levy";
 
   static String cancel = "Cancel";
   static String iHavePaid = "I HAVE PAID";
@@ -144,6 +144,14 @@ class CheckoutStrings {
   static String incorrectPin = "Incorrect Pin";
 
   static String transactionSuccessful = "Transaction Successful";
+
+  static String payAtBankBranch = 'Pay at your bank branch via ';
+  static String ghanaGov = 'Ghana.GOV';
+  static String paymentPlatform = '\npayment platform.';
+  static String bankPayStatusSteps1 = 'Once complete you may check the status';
+  static String bankPayStatusSteps2 = '\nof this pay-in-slip in your payment';
+  static String bankPayStatusSteps3 = '\nhistory or dial ';
+  static String bankPayShortCode = '*718*108#';
 
   static String makeHtmlString(String accessToken) {
     return '''
