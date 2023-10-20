@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
-import 'package:unified_checkout_sdk/core_ui/hubtel_color.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 
 const TextStyle _baseTextStyle = TextStyle(
@@ -125,21 +124,5 @@ class ThemeConfig {
     bodySmall: AppTextStyle.body2(), // use for caption
   );
 
-  ThemeData checkoutTheme() => ThemeData(
-        textTheme: textTheme,
-        // colorScheme: ColorScheme.fromSeed(seedColor: _primaryColor,),
-        primaryColor: _primaryColor,
-        brightness: Brightness.light,
-        checkboxTheme: CheckboxThemeData(
-          fillColor: MaterialStateColor.resolveWith(
-              (states) => _primaryColor),
-        ),
-        appBarTheme: const AppBarTheme(
-          foregroundColor: HubtelColors.neutral,
-          backgroundColor: HubtelColors.white,
-        ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          selectedItemColor: _primaryColor,
-        ),
-      );
+  static Color themeColor = HubtelColors.teal;
 }

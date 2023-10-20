@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
+import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 
 class CustomRadioIndicator extends StatelessWidget {
   const CustomRadioIndicator({super.key, required this.isSelected});
@@ -18,8 +19,8 @@ class CustomRadioIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-            color: Theme.of(context).primaryColor, width: isSelected ? 6 : 2),
-        color: isSelected ? Theme.of(context).primaryColor : HubtelColors.neutral,
+            color: ThemeConfig.themeColor, width: isSelected ? 6 : 2),
+        color: isSelected ? ThemeConfig.themeColor : HubtelColors.neutral,
       ),
       child: Center(
         child: Container(

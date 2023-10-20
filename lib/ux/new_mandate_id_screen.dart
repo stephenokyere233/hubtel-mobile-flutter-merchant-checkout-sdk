@@ -134,6 +134,8 @@ class _NewMandateIdScreenState extends State<NewMandateIdScreen> {
 class NewMandateIdScreenState extends ValueNotifier<MandateScreenUiModel> {
   NewMandateIdScreenState() : super(MandateScreenUiModel());
 
+  // CheckoutViewModel checkoutViewModel;
+
   bool get validated => value.isButtonEnabled;
 
   onIdChanged(String id) {

@@ -1,5 +1,7 @@
 library unified_checkout_sdk;
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
@@ -64,6 +66,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // if (widget.themeConfig != null) {
+    //   log(widget.themeConfig!.primaryColor.toString(), name: '$runtimeType');
+    //   ThemeConfig.themeColor = widget.themeConfig!.primaryColor;
+    // }
+
+    log('${widget.themeConfig!.primaryColor}', name: '$runtimeType');
+    ThemeConfig.themeColor = widget.themeConfig!.primaryColor;
     return MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => CheckoutViewModel())],
       child: Container(
@@ -75,7 +84,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                   child: CircularProgressIndicator(
-                color: widget.themeConfig?.primaryColor ?? HubtelColors.teal,
+                color: ThemeConfig.themeColor,
               ));
             } else {
               if (snapshot.hasData) {
@@ -88,13 +97,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   checkoutPurchase: widget.purchaseInfo,
                   businessInfo: businessInfo,
                   checkoutCompleted: widget.onCheckoutComplete,
-                    themeConfig: widget.themeConfig ?? ThemeConfig(primaryColor: HubtelColors.teal),
+                  themeConfig: widget.themeConfig ??
+                      ThemeConfig(primaryColor: HubtelColors.teal),
                 );
               }
             }
             return Center(
               child: CircularProgressIndicator(
-                  color: Colors.teal[500], backgroundColor: Colors.teal[500]),
+                  color: ThemeConfig.themeColor, backgroundColor: Colors.teal[500]),
             );
           },
         ),

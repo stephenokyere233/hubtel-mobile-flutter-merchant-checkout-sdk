@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
+import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 
 class BankCardTypeTab extends StatelessWidget {
   const BankCardTypeTab({
@@ -23,12 +24,12 @@ class BankCardTypeTab extends StatelessWidget {
         margin: const EdgeInsets.symmetric(
           horizontal: Dimens.paddingDefaultSmall,
         ),
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: Dimens.paddingDefaultSmall,
           horizontal: Dimens.paddingDefault,
         ),
         decoration: BoxDecoration(
-            color: isSelected ? Theme.of(context).primaryColor : HubtelColors.neutral,
+            color: isSelected ? ThemeConfig.themeColor : HubtelColors.neutral,
             borderRadius: BorderRadius.circular(Dimens.paddingDefault)),
         child: Text(
           tabText,

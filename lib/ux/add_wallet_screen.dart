@@ -10,6 +10,8 @@ import 'package:unified_checkout_sdk/extensions/widget_extensions.dart';
 import 'package:unified_checkout_sdk/network_manager/extensions/uistate.dart';
 import 'package:unified_checkout_sdk/platform/models/add_mobile_wallet.dart';
 import 'package:unified_checkout_sdk/platform/models/checkout_requirements.dart';
+import 'package:unified_checkout_sdk/core_ui/text_style.dart';
+import 'package:unified_checkout_sdk/platform/models/wallet.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 import 'package:unified_checkout_sdk/utils/string_extensions.dart';
 import 'package:unified_checkout_sdk/ux/viewModel/checkout_view_model.dart';
@@ -37,34 +39,29 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
   Widget build(BuildContext context) {
     return AppPage(
       title: CheckoutStrings.addWalletScreenTitle,
+      titleStyle: AppTextStyle.headline3(),
       elevation: 0.1,
       bottomNavigation: Container(
         color: Colors.white,
         padding: const EdgeInsets.all(16),
         child: AnimatedBuilder(
-          animation:
-          Listenable.merge([state.isButtonEnabled, state.isButtonLoading]),
+          animation: Listenable.merge([state]),
           builder: (BuildContext context, Widget? child) {
             return CustomButton(
               title: 'CONTINUE'.toUpperCase(),
-              isEnabled: state.isButtonEnabled.value,
-              buttonAction: () =>
-              {
-                _addMobileWallet()
-              },
-              loading: state.isButtonLoading.value,
+              isEnabled: state.value.isButtonEnabled,
+              buttonAction: () => {_addMobileWallet()},
+              loading: state.value.isButtonLoading,
               isDisabledBgColor: HubtelColors.lighterGrey,
               disabledTitleColor: HubtelColors.grey,
               style: HubtelButtonStyle.solid,
-              isEnabledBgColor: Theme
-                  .of(context)
-                  .primaryColor,
+              isEnabledBgColor: Theme.of(context).primaryColor,
             );
           },
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(Dimens.paddingNano),
+        padding: const EdgeInsets.all(Dimens.paddingDefault),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,19 +71,13 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
             ),
             Text(
               CheckoutStrings.mobileMoneyNumber,
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(
-                color: Colors.black,
-              ),
+              style: AppTextStyle.body2(),
             ),
             const SizedBox(
               height: Dimens.paddingSmall,
             ),
             ValueListenableBuilder(
-              builder: (context, str, child) {
+              builder: (context, uiModel, child) {
                 return InputField(
                   controller: _mobileNumberController,
                   hintText: CheckoutStrings.addNumberHint,
@@ -100,20 +91,14 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                   focusBorderColor: Colors.transparent,
                 );
               },
-              valueListenable: state._mobileNumber,
+              valueListenable: state,
             ),
             const SizedBox(
               height: Dimens.paddingDefault,
             ),
             Text(
               CheckoutStrings.selectNetwork,
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(
-                color: Colors.black,
-              ),
+              style: AppTextStyle.body1(),
             ),
             const SizedBox(
               height: Dimens.paddingSmall,
@@ -130,21 +115,22 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                         children: [
                           CircleImage(
                             imageProvider:
-                            AssetImage(state.providers[index].$2),
-                            borderColor: state.selectedIndex.value == index
-                                ? Theme
-                                .of(context)
-                                .primaryColor
-                                : Colors.transparent,
+                                AssetImage(state.providers[index].$2),
+                            borderColor: state.value.selectedIndex == index
+                                ? ThemeConfig.themeColor
+                                : Colors.transparent.withOpacity(0.1),
                             onTap: () {
-                              state.selectedIndex.value = index;
+                              state.value.selectedIndex = index;
                               state.onProviderSelected(index);
-                              state.mobileNumber.value =
+                              state.value.mobileNumber =
                                   _mobileNumberController.value.text;
                             },
                           ),
                           const SizedBox(height: Dimens.paddingMicro),
-                          Text(state.providers[index].$1)
+                          Text(
+                            state.providers[index].$1,
+                            style: AppTextStyle.body1(),
+                          )
                         ],
                       );
                     },
@@ -156,7 +142,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
                     // padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   );
                 },
-                valueListenable: state._selectedIndex,
+                valueListenable: state,
               ),
             )
           ],
@@ -166,88 +152,122 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
   }
 
   _addMobileWallet() async {
-
     final request = AddMobileWalletBody(
-        accountNo: state.mobileNumber.value,
-        provider: state.provider.value,
-        customerMobileNumber: CheckoutRequirements.customerMsisdn
-    );
+        accountNo: state.value.mobileNumber,
+        provider: state.value.provider,
+        customerMobileNumber: CheckoutRequirements.customerMsisdn);
 
     widget.showLoadingDialog(context: context, text: "Please Wait");
 
-    final response  = await checkoutViewModel.addWallet(req: request);
+    final response = await checkoutViewModel.addWallet(req: request);
 
     if (!mounted) return;
 
     Navigator.pop(context);
 
-    if (response.state == UiState.success){
+    if (response.state == UiState.success) {
       widget.showPromptDialog(
           context: context,
           title: "Success",
           subtitle: response.message,
-        buttonAction: ()=>{
-            Navigator.pop(context),
-            Navigator.pop(context)
-        },
-          buttonTitle: "OKAY"
-      );
-    }else{
+          buttonAction: () => {Navigator.pop(context), Navigator.pop(context)},
+          buttonTitle: "OKAY");
+    } else {
       widget.showErrorDialog(context: context, message: response.message);
     }
   }
 }
 
-class AddWalletScreenState {
-  final ValueNotifier<String> _mobileNumber = ValueNotifier('');
-  final ValueNotifier<String> _provider = ValueNotifier('');
-  final ValueNotifier<int> _selectedIndex = ValueNotifier(-1);
-  final ValueNotifier<bool> _isButtonLoading = ValueNotifier(false);
-  final ValueNotifier<bool> _isButtonEnabled = ValueNotifier(false);
+class AddWalletUiModel {
+  String _mobileNumber = '';
+  String _provider = '';
+  int _selectedIndex = -1;
+  bool _isButtonLoading = false;
+  bool _isButtonEnabled = false;
+  bool _showLoadingDialog = false;
+  List<Wallet> _wallets = [];
+
+  String get mobileNumber => _mobileNumber;
+
+  set mobileNumber(String value) {
+    _mobileNumber = value;
+  }
+
+  String get provider => _provider;
+
+  set provider(String value) {
+    _provider = value;
+  }
+
+  int get selectedIndex => _selectedIndex;
+
+  set selectedIndex(int value) {
+    _selectedIndex = value;
+  }
+
+  bool get isButtonLoading => _isButtonLoading;
+
+  set isButtonLoading(bool value) {
+    _isButtonLoading = value;
+  }
+
+  bool get isButtonEnabled => _isButtonEnabled;
+
+  set isButtonEnabled(bool value) {
+    _isButtonEnabled = value;
+  }
+
+  bool get showLoadingDialog => _showLoadingDialog;
+
+  set showLoadingDialog(bool value) {
+    _showLoadingDialog = value;
+  }
+
+  List<Wallet> get wallets => _wallets;
+
+  set wallets(List<Wallet> value) {
+    _wallets = value;
+  }
+}
+
+class AddWalletScreenState extends ValueNotifier<AddWalletUiModel> {
+  AddWalletScreenState() : super(AddWalletUiModel());
+
+  // CheckoutViewModel checkoutViewModel;
 
   final List<(String, String)> providers = [
     (CheckoutStrings.mtn.toUpperCase(), CheckoutDrawables.mtnMomo),
-    (CheckoutStrings.vodafone.capitalize(), CheckoutDrawables
-        .vodafoneCashLogo1),
+    (CheckoutStrings.vodafone.capitalize(), CheckoutDrawables.vodafoneCash),
     (CheckoutStrings.airtelDashTigo, CheckoutDrawables.airtelTigo),
   ];
 
-  ValueNotifier<String> get mobileNumber => _mobileNumber;
-
-  ValueNotifier<String> get provider => _provider;
-
-  ValueNotifier<int> get selectedIndex => _selectedIndex;
-
-  ValueNotifier<bool> get isButtonLoading => _isButtonLoading;
-
-  ValueNotifier<bool> get isButtonEnabled => _isButtonEnabled;
-
-  onNumberChanged(String value) {
-    _mobileNumber.value = value;
+  onNumberChanged(String number) {
+    value.mobileNumber = number;
     enableButton();
   }
 
   onProviderSelected(int index) {
     assert(index < providers.length);
-    _provider.value = providers[index].$1;
+    value.provider = providers[index].$1;
     enableButton();
+    notifyListeners();
   }
 
   enableButton() {
-    _isButtonEnabled.value =
-        _provider.value.isNotEmpty && _mobileNumber.value.length >= 10;
+    value.isButtonEnabled =
+        value.provider.isNotEmpty && value.mobileNumber.length >= 10;
+    notifyListeners();
   }
 
   onLoadingToggled() {
-    _isButtonLoading.value = !_isButtonLoading.value;
+    value.isButtonEnabled = !value.isButtonEnabled;
   }
 
+  bool get isLoading => value.showLoadingDialog;
 
-  rest() {
-    _mobileNumber.dispose();
-    _provider.dispose();
-    _selectedIndex.dispose();
-    _isButtonLoading.dispose();
-    _isButtonEnabled.dispose();
+  Future<void> addWallet() async {}
+
+  reset() {
+    dispose();
   }
 }

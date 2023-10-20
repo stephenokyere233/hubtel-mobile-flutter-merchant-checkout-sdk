@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unified_checkout_sdk/platform/models/verification_response.dart';
 import 'package:unified_checkout_sdk/resources/checkout_styles.dart';
 import '../../core_ui/dimensions.dart';
 import '../../resources/checkout_colors.dart';
@@ -7,7 +8,9 @@ import '../../resources/checkout_strings.dart';
 import 'info_entry.dart';
 
 class GhanaCard extends StatelessWidget {
-  const GhanaCard({super.key});
+  const GhanaCard({super.key, this.verificationResponse});
+
+  final VerificationResponse? verificationResponse;
 
   @override
   Widget build(BuildContext context) {
@@ -23,45 +26,41 @@ class GhanaCard extends StatelessWidget {
             right: 0.0,
             child: Image.asset(CheckoutDrawables.ghanaArmsCoat),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(Dimens.paddingDefault),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   CheckoutStrings.ghanaCardHeading,
                   style: Styles.appBarTextStyle,
                 ),
-                Padding(
+                const Padding(
                     padding: EdgeInsets.only(bottom: Dimens.paddingDefault)),
                 InfoCard(
                   label: CheckoutStrings.fullName,
-                  value: CheckoutStrings.fullNameSample,
+                  value: verificationResponse?.fullName ?? '',
                 ),
-                Padding(
+                const Padding(
                     padding: EdgeInsets.only(bottom: Dimens.paddingDefault)),
                 InfoCard(
                   label: CheckoutStrings.personalId,
-                  value: CheckoutStrings.personalIdSample,
+                  value: verificationResponse?.nationalID ?? '',
                 ),
-                Padding(
+                const Padding(
                     padding: EdgeInsets.only(bottom: Dimens.paddingDefault)),
                 Row(
                   children: [
                     InfoCard(
                       label: CheckoutStrings.birthDate,
-                      value: CheckoutStrings.birthDateSample,
+                      value: verificationResponse?.birthday ?? '',
                     ),
-                    Spacer(
-                      flex: 6,
-                    ),
+                    const Spacer(flex: 6),
                     InfoCard(
                       label: CheckoutStrings.gender,
-                      value: CheckoutStrings.genderSample,
+                      value: verificationResponse?.gender ?? '',
                     ),
-                    Spacer(
-                      flex: 1,
-                    ),
+                    const Spacer(flex: 1),
                   ],
                 )
               ],

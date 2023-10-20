@@ -13,7 +13,7 @@ import 'package:unified_checkout_sdk/resources/checkout_drawables.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 import 'package:unified_checkout_sdk/utils/currency_formatter.dart';
 import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart'
-    as customExpansion;
+as customExpansion;
 
 enum OtherAccountTypes {
   Hubtel("Hubtel"),
@@ -72,10 +72,10 @@ class OtherPaymentExpansionTile extends StatefulWidget {
 
   OtherPaymentExpansionTile(
       {Key? key,
-      required this.controller,
-      required this.onExpansionChanged,
-      required this.editingController,
-      required this.isSelected,
+        required this.controller,
+        required this.onExpansionChanged,
+        required this.editingController,
+        required this.isSelected,
         required this.wallets,
         required this.onWalletSelected,
         required this.anotherEditingController,
@@ -108,10 +108,11 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
 
   @override
   Widget build(BuildContext context) {
+    // _onPaymentTypeChanged(selectedAccount: widget.selectedAccount);
     return customExpansion.ExpansionTile(
       controller: widget.controller,
       headerBackgroundColor:
-          widget.isSelected ? HubtelColors.teal.shade100 : Colors.transparent,
+      widget.isSelected ? ThemeConfig.themeColor.withOpacity(0.3) : Colors.transparent,
       onExpansionChanged: widget.onExpansionChanged,
       maintainState: true,
       title: Text(
@@ -156,7 +157,6 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
       ),
       leadingWidth: Dimens.iconMedium,
       titleAlignment: ListTileTitleAlignment.center,
-      //TODO: CHECK WHY STATE NOT UPDATING
       children: [
         MobileMoneyTileField(
             showWalletAdditionTile: false,
@@ -170,7 +170,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
               log('$provider', name: '$runtimeType');
             },
             hintText: "Hubtel"),
-        
+
         Visibility(
             visible: widget.showHubtelWalletActions,
             child: Container(
@@ -244,7 +244,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
     if (OtherAccountTypes.Hubtel.rawValue == selectedAccount) {
       widget.onChannelChanged('hubtel-gh');
       setState(() {
-        widget.selectedAccount = "Hubtel";
+        // widget.selectedAccount = "Hubtel";
         widget.showHubtelWalletActions = true;
         widget.showGmoneyWalletActions = false;
         widget.showZeePayWalletActions = false;
@@ -257,7 +257,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
     if (OtherAccountTypes.GMoney.rawValue == selectedAccount) {
       widget.onChannelChanged('g-money');
       setState(() {
-        widget.selectedAccount = "GMoney";
+        // widget.selectedAccount = "GMoney";
         widget.showHubtelWalletActions = false;
         widget.showGmoneyWalletActions = true;
         widget.showZeePayWalletActions = false;
@@ -266,9 +266,9 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
     }
 
     if (OtherAccountTypes.Zeepay.rawValue == selectedAccount) {
-      widget.onChannelChanged('zeepay');
-      setState(() {
 
+      setState(() {
+        widget.onChannelChanged('zeepay');
         widget.showHubtelWalletActions = false;
         widget.showGmoneyWalletActions = false;
         widget.showZeePayWalletActions = true;
@@ -279,5 +279,3 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
 
   }
 }
-
-

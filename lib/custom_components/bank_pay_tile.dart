@@ -57,7 +57,7 @@ class _BankPayExpansionTileState extends State<BankPayExpansionTile> {
     return customExpansion.ExpansionTile(
       controller: widget.controller,
       headerBackgroundColor:
-      widget.isSelected ? HubtelColors.teal.shade100 : Colors.transparent,
+      widget.isSelected ? ThemeConfig.themeColor.withOpacity(0.3) : Colors.transparent,
       onExpansionChanged: widget.onExpansionChanged,
       maintainState: true,
       title: Text(

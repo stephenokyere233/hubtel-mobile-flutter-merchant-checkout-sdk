@@ -72,7 +72,7 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
           controller: widget.controller,
           headerBackgroundColor: widget.isSelected
               // ? HubtelColors.teal.shade100
-              ? Theme.of(context).primaryColor.withOpacity(0.3)
+              ? ThemeConfig.themeColor.withOpacity(0.3)
               : Colors.transparent,
           onExpansionChanged: widget.onExpansionChanged,
           title: Text(

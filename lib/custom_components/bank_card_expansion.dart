@@ -88,7 +88,7 @@ class _BankCardExpansionTileState extends State<BankCardExpansionTile> {
     return customExpansion.ExpansionTile(
       controller: widget.controller,
       headerBackgroundColor: widget.isSelected
-          ? Theme.of(context).primaryColor.withOpacity(0.3)
+          ? ThemeConfig.themeColor.withOpacity(0.3)
           : Colors.transparent,
       onExpansionChanged: widget.onExpansionChanged,
       maintainState: true,

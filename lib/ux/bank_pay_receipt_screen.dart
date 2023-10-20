@@ -11,6 +11,7 @@ import 'package:unified_checkout_sdk/core_ui/app_page.dart';
 import 'package:unified_checkout_sdk/core_ui/custom_button.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
+import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/core_ui/ui_extensions/widget_extensions.dart';
 import 'package:unified_checkout_sdk/platform/models/momo_response.dart';
 import 'package:unified_checkout_sdk/ux/check_status_screen.dart';
@@ -74,7 +75,7 @@ class _BankPayReceiptScreenState extends State<BankPayReceiptScreen> {
             isDisabledBgColor: HubtelColors.lighterGrey,
             disabledTitleColor: HubtelColors.grey,
             style: HubtelButtonStyle.solid,
-            isEnabledBgColor: HubtelColors.teal[500]),
+            isEnabledBgColor:ThemeConfig.themeColor),
       ),
       body: SafeArea(
         child: Center(

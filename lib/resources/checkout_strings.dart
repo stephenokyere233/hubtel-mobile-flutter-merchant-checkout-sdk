@@ -117,7 +117,7 @@ class CheckoutStrings {
     return "A bill prompt has been sent to you on $walletNumber, please authorise the payment.";
   }
 
-  static String pleaseWait = "Please Wait";
+  static String pleaseWait = "Please wait";
 
   static String loading = "loading";
 

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
-import 'package:unified_checkout_sdk/core_ui/hubtel_color.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/core_ui/ui_extensions/widget_extensions.dart';
@@ -480,7 +479,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
                                           anotherEditingController:
                                               anotherMomoSelectorController,
                                           onChannelChanged: (provider) {
-                                            selectedProvider = MomoProvider(alias: provider);
+                                            selectedProvider =
+                                                MomoProvider(alias: provider);
                                             fetchFees2();
                                             log('onChannelChanged - provider {$provider}',
                                                 name: '$runtimeType');
@@ -543,15 +543,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
       mobileMoneyExpansionController.expand();
       bankCardExpansionController.collapse();
       otherPaymentWalletExpansionController.collapse();
-
-      // final channel = viewModel.getMomoChannelName(selectedProvider?.name);
-      // final feeSum = await computeCheckoutFeeSum(channel);
-      // final purchaseAmount =
-      //     widget.checkoutConfig.checkoutPurchase.instantServicePurchase?.amount ?? 0.00;
-
-      //   setState(() {
-      //     totalAmountPayable = purchaseAmount + feeSum;
-      //   });
     }
   }
 
@@ -564,15 +555,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
       mobileMoneyExpansionController.collapse();
       bankCardExpansionController.collapse();
       otherPaymentWalletExpansionController.expand();
-
-      // final channel = viewModel.getMomoChannelName(selectedProvider?.name);
-      // final feeSum = await computeCheckoutFeeSum(channel);
-      // final purchaseAmount =
-      //     widget.checkoutConfig.checkoutPurchase.instantServicePurchase?.amount ?? 0.00;
-
-      //   setState(() {
-      //     totalAmountPayable = purchaseAmount + feeSum;
-      //   });
     }
   }
 
@@ -595,7 +577,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
         setState(() {
           wallets = response.data ?? [];
         });
-        viewModel.notifyListeners();
       } else {
         print(response.hasError);
       }
@@ -613,11 +594,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
   }
 
   fetchFees() async {
-    // setState(() {
-    //   isLoadingFees = true;
-    //   isButtonEnabled = false;
-    // });
-
     if (walletType == WalletType.Card) {
       selectedProvider = MomoProvider(
           name: CheckoutStrings.BankCard,
@@ -751,10 +727,12 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
           reference: "",
           customData: result.data?.customData ?? "");
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  CheckoutWebViewWidget(pageData: webViewCheckoutData)));
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              CheckoutWebViewWidget(pageData: webViewCheckoutData),
+        ),
+      );
     } else {
       Navigator.pop(context);
 
@@ -784,12 +762,14 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
             Navigator.pop(context);
             // Goto Transaction Status Screen
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CheckStatusScreen(
-                          checkoutResponse: checkoutResponse ?? MomoResponse(),
-                          checkoutCompleted: widget.checkoutCompleted,
-                        )));
+              context,
+              MaterialPageRoute(
+                builder: (context) => CheckStatusScreen(
+                  checkoutResponse: checkoutResponse ?? MomoResponse(),
+                  checkoutCompleted: widget.checkoutCompleted,
+                ),
+              ),
+            );
           });
     } else {
       widget.showErrorDialog(context: context, message: result.message);
@@ -884,7 +864,10 @@ class _CheckoutHomeScreen2State {
   final ValueNotifier<String> _selectedChannel = ValueNotifier('Hubtel');
 
   ValueNotifier<double?> get checkoutFees => _checkoutFees;
+
   ValueNotifier<bool> get isButtonEnabled => _isButtonEnabled;
+
   ValueNotifier<bool> get isLoadingFees => _isLoadingFees;
+
   ValueNotifier<String> get selectedChannel => _selectedChannel;
 }
