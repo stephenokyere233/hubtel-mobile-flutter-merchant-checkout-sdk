@@ -485,6 +485,9 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
                                             log('onChannelChanged - provider {$provider}',
                                                 name: '$runtimeType');
                                           },
+                                          onMandateTap: (value){
+                                            print("onMandateTap, $value");
+                                          },
                                         )
                                       ],
                                     )),

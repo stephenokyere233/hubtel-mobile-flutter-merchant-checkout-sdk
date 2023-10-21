@@ -146,6 +146,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
   late customExpansion.ExpansionTileController bankPayExpansionController;
 
+  bool isNewMandateIdChecked = false;
+
   @override
   initState() {
     super.initState();
@@ -441,12 +443,15 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                               preselectWallet();
                                             }
                                           },
-                                          isSelected:
-                                              walletType == WalletType.Hubtel,
+                                          isSelected: walletType ==
+                                                  WalletType.Hubtel ||
+                                              walletType == WalletType.GMoney ||
+                                              walletType == WalletType.Zeepay,
                                           editingController:
                                               momoSelectorController,
                                           onWalletSelected: (wallet) {
                                             selectedWallet = wallet;
+                                            fetchFees2();
                                           },
                                           wallets: wallets,
                                           anotherEditingController:
@@ -458,6 +463,12 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                             fetchFees2();
                                             log('onChannelChanged - provider {$provider}',
                                                 name: '$runtimeType');
+                                          },
+                                          onMandateTap: (value) {
+                                            isNewMandateIdChecked = value;
+
+                                            print(
+                                                "onMandateTap, $isNewMandateIdChecked");
                                           },
                                         ),
                                         Container(
@@ -757,7 +768,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
             ),
           );
 
-          if (navigatorResult == true){
+          if (navigatorResult == true) {
             payWithMomo();
           }
       }

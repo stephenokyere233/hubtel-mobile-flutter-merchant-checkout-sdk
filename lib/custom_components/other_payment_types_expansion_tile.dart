@@ -32,17 +32,16 @@ class OtherPaymentExpansionTile extends StatefulWidget {
 
   bool expandOptions = false;
 
-  bool showHubtelWalletActions = false;
-
-  bool showGmoneyWalletActions = false;
-
-  bool showZeePayWalletActions = false;
-
   String selectedAccount = "Hubtel";
+
 
   Function(Wallet) onWalletSelected;
 
   Function(String) onChannelChanged;
+
+  // Function(bool) onMandateTap;
+
+  ValueChanged<bool> onMandateTap;
 
   List<Wallet> walletTypes = [
     Wallet(
@@ -79,15 +78,18 @@ class OtherPaymentExpansionTile extends StatefulWidget {
         required this.wallets,
         required this.onWalletSelected,
         required this.anotherEditingController,
-        required this.onChannelChanged
+        required this.onChannelChanged,
+        required this.onMandateTap
       })
       : super(key: key);
 
   final customExpansion.ExpansionTileController controller;
   final void Function(bool)? onExpansionChanged;
+
   final bool isSelected;
 
   // final double value;
+
 
   @override
   State<OtherPaymentExpansionTile> createState() =>
@@ -104,11 +106,24 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
   // void initState() {
   //   super.initState();
   //   autoSelectFirstWallet();
+
   // }
+
+  bool showHubtelWalletActions = false;
+
+  bool showGmoneyWalletActions = false;
+
+  bool showZeePayWalletActions = false;
+
+  bool checkMarkSelected = false;
 
   @override
   Widget build(BuildContext context) {
     // _onPaymentTypeChanged(selectedAccount: widget.selectedAccount);
+    log("ZeePay ${showZeePayWalletActions}");
+    log("GMoney ${showGmoneyWalletActions}");
+    log("Hubtel ${showHubtelWalletActions}");
+    log("isSelected ${widget.isSelected}");
     return customExpansion.ExpansionTile(
       controller: widget.controller,
       headerBackgroundColor:
@@ -172,7 +187,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
             hintText: "Hubtel"),
 
         Visibility(
-            visible: widget.showHubtelWalletActions,
+            visible: showHubtelWalletActions,
             child: Container(
               alignment: Alignment.topLeft,
               child: const Padding(
@@ -184,8 +199,8 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
               ),
             )),
         Visibility(
-            visible: widget.showGmoneyWalletActions ||
-                widget.showZeePayWalletActions,
+            visible: showGmoneyWalletActions ||
+                showZeePayWalletActions,
             child: Padding(
               padding: const EdgeInsets.only(top: 16),
               child: MobileMoneyTileField(
@@ -200,24 +215,29 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
                   hintText: "Hinting"),
             )),
         Visibility(
-          visible: widget.showGmoneyWalletActions,
+          visible: showGmoneyWalletActions,
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             Checkbox(
-                value: true, onChanged: (value) {}
+                value: checkMarkSelected, onChanged: (value) {
+                 widget.onMandateTap(value ?? false);
+                  setState(() {
+                    checkMarkSelected = value ?? false;
+                  });
+            }
             )
             ,
             Text("Use Mandate ID")
           ]),
         ),
         Visibility(
-            visible: widget.showGmoneyWalletActions,
+            visible: showGmoneyWalletActions,
             child: Padding(
               padding: EdgeInsets.only(top: 8),
               child: Text(
                   "You will be required to enter your Mandate ID to confirm your transaction"),
             )),
         Visibility(
-            visible: widget.showZeePayWalletActions,
+            visible: showZeePayWalletActions,
             child: Container(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -245,9 +265,9 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
       widget.onChannelChanged('hubtel-gh');
       setState(() {
         // widget.selectedAccount = "Hubtel";
-        widget.showHubtelWalletActions = true;
-        widget.showGmoneyWalletActions = false;
-        widget.showZeePayWalletActions = false;
+        showHubtelWalletActions = true;
+        showGmoneyWalletActions = false;
+        showZeePayWalletActions = false;
 
       });
 
@@ -258,9 +278,9 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
       widget.onChannelChanged('g-money');
       setState(() {
         // widget.selectedAccount = "GMoney";
-        widget.showHubtelWalletActions = false;
-        widget.showGmoneyWalletActions = true;
-        widget.showZeePayWalletActions = false;
+        showHubtelWalletActions = false;
+        showGmoneyWalletActions = true;
+        showZeePayWalletActions = false;
       });
       return;
     }
@@ -269,9 +289,9 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
 
       setState(() {
         widget.onChannelChanged('zeepay');
-        widget.showHubtelWalletActions = false;
-        widget.showGmoneyWalletActions = false;
-        widget.showZeePayWalletActions = true;
+        showHubtelWalletActions = false;
+        showGmoneyWalletActions = false;
+        showZeePayWalletActions = true;
       });
 
       return;
