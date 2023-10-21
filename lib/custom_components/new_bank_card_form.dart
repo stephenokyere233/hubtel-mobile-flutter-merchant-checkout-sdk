@@ -10,6 +10,7 @@ import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 import 'package:unified_checkout_sdk/core_ui/input_field.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/custom_components/ccontainer.dart';
+import 'package:unified_checkout_sdk/resources/checkout_drawables.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 import 'package:unified_checkout_sdk/utils/helpers/edge_insets.dart';
 
@@ -83,7 +84,7 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                 ? CContainer(
                     padding: onlySidePad(right: Dimens.paddingDefault),
                     child: AppImageWidget.local(
-                      image: const AssetImage(""),
+                      image: const AssetImage(CheckoutDrawables.visa),
                       width: Dimens.iconMedium,
                       height: Dimens.iconSmall,
                       boxFit: BoxFit.contain,
@@ -94,7 +95,7 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                     ? CContainer(
                         padding: onlySidePad(right: Dimens.paddingDefault),
                         child: AppImageWidget.local(
-                          image: const AssetImage(""),
+                          image: const AssetImage(CheckoutDrawables.masterCard),
                           width: Dimens.iconMedium,
                           height: Dimens.iconSmall,
                           boxFit: BoxFit.contain,

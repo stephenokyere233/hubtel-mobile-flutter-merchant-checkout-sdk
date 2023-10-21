@@ -5,6 +5,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:unified_checkout_sdk/core_ui/app_page.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
+import 'package:unified_checkout_sdk/core_ui/ui_extensions/widget_extensions.dart';
+import 'package:unified_checkout_sdk/extensions/widget_extensions.dart';
+import 'package:unified_checkout_sdk/network_manager/extensions/uistate.dart';
+import 'package:unified_checkout_sdk/platform/models/id_verification_request_body.dart';
+import 'package:unified_checkout_sdk/ux/gh_card_verification_screen.dart';
 import 'package:unified_checkout_sdk/ux/viewModel/checkout_view_model.dart';
 
 import '../core_ui/custom_button.dart';
@@ -13,15 +18,28 @@ import '../core_ui/input_field.dart';
 import '../resources/checkout_drawables.dart';
 import '../resources/checkout_strings.dart';
 
-class AddGhCardScreen extends StatelessWidget {
-  AddGhCardScreen({super.key});
+class AddGhCardScreen extends StatefulWidget {
 
+  String mobileNumber;
+
+  AddGhCardScreen({
+    super.key,
+    required this.mobileNumber
+  });
+
+  @override
+  State<AddGhCardScreen> createState() => _AddGhCardScreenState();
+}
+
+class _AddGhCardScreenState extends State<AddGhCardScreen> {
   final _cardController = TextEditingController();
+
+  late final state = _AddGhCardState();
+
   final viewModel = CheckoutViewModel();
 
   @override
   Widget build(BuildContext context) {
-    final state = AddGhCardScreenState(viewModel: viewModel);
     return AppPage(
       title: 'Verification',
       bottomNavigation: Container(
@@ -31,7 +49,7 @@ class AddGhCardScreen extends StatelessWidget {
           builder: (context, uiModel, child) => CustomButton(
             title: 'Submit'.toUpperCase(),
             isEnabled: state.value.isButtonEnabled,
-            buttonAction: () => {state.submit()},
+            buttonAction: () => _performVerificationDetailsCheck(context),
             loading: state.value.isButtonLoading,
             isDisabledBgColor: HubtelColors.lighterGrey,
             disabledTitleColor: HubtelColors.grey,
@@ -58,7 +76,7 @@ class AddGhCardScreen extends StatelessWidget {
                   //     .textTheme
                   //     .bodyLarge
                   //     ?.copyWith(fontWeight: FontWeight.bold),
-                  style: AppTextStyle.body2().copyWith(fontWeight: FontWeight.bold),
+                  style: AppTextStyle.body2().copyWith(fontWeight: FontWeight.w700),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -69,7 +87,7 @@ class AddGhCardScreen extends StatelessWidget {
                   child: Text(
                     'A valid government-issued ID card is required to verify your account',
                     // style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
+                    style: AppTextStyle.body2(),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -77,7 +95,7 @@ class AddGhCardScreen extends StatelessWidget {
               const SizedBox(height: Dimens.paddingDefault),
               Text(
                 'Ghana Card',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: AppTextStyle.body2(),
               ),
               const SizedBox(height: Dimens.paddingNano),
               InputField(
@@ -98,11 +116,38 @@ class AddGhCardScreen extends StatelessWidget {
       ),
     );
   }
+
+  _performVerificationDetailsCheck(BuildContext) async {
+    final verificationReqParams =
+        IDVerificationBody.create(widget.mobileNumber ?? "", state.value.cardNumber);
+
+    widget.showLoadingDialog(
+        context: context, text: CheckoutStrings.pleaseWait);
+
+    final result =
+        await viewModel.intakeIdDetails(params: verificationReqParams);
+
+    if (!mounted) return;
+
+    Navigator.pop(context);
+
+    if (result.state == UiState.success) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GhanaCardVerificationScreen(
+            verificationResponse: result.data,
+          ),
+        ),
+      );
+    } else {
+      widget.showErrorDialog(context: context, message: result.message);
+    }
+  }
 }
 
-class AddGhCardScreenState extends ValueNotifier<AddGhCardUiModel> {
-  CheckoutViewModel viewModel;
-  AddGhCardScreenState({required this.viewModel}) : super(AddGhCardUiModel());
+class _AddGhCardState extends ValueNotifier<_AddGhCardUiModel> {
+  _AddGhCardState() : super(_AddGhCardUiModel());
 
   onCardNumberChanged(String number) {
     value.cardNumber = number;
@@ -111,37 +156,11 @@ class AddGhCardScreenState extends ValueNotifier<AddGhCardUiModel> {
     notifyListeners();
   }
 
-  AddGhCardScreenState get ghCardState => this;
-
-  submit() async {
-    viewModel.fetchWallets().then((value) {
-      log(value.data.toString(), name: '$runtimeType');
-    }).onError((error, stackTrace) {
-      log('$error', name: '$runtimeType', error: stackTrace);
-    });
-  }
+  _AddGhCardState get ghCardState => this;
 }
 
-class AddGhCardUiModel {
-  String _cardNumber = '';
-  bool _isButtonLoading = false;
-  bool _isButtonEnabled = false;
-
-  String get cardNumber => _cardNumber;
-
-  set cardNumber(String value) {
-    _cardNumber = value;
-  }
-
-  bool get isButtonLoading => _isButtonLoading;
-
-  set isButtonLoading(bool value) {
-    _isButtonLoading = value;
-  }
-
-  bool get isButtonEnabled => _isButtonEnabled;
-
-  set isButtonEnabled(bool value) {
-    _isButtonEnabled = value;
-  }
+class _AddGhCardUiModel {
+  String cardNumber = '';
+  bool isButtonLoading = false;
+  bool isButtonEnabled = false;
 }

@@ -15,7 +15,7 @@ class VerificationCard extends StatelessWidget {
       child: Column(
         children: [
           // Image.asset(CheckoutDrawables.verificationSuccess),
-          SvgPicture.asset(CheckoutDrawables.success),
+          SvgPicture.asset(CheckoutDrawables.verificationSuccessSvg),
           Padding(
             padding: const EdgeInsets.only(
               top: Dimens.paddingSmall,

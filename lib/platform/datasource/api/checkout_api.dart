@@ -4,10 +4,12 @@ import 'package:unified_checkout_sdk/platform/models/add_mobile_wallet.dart';
 import 'package:unified_checkout_sdk/platform/models/channel_fetch_response.dart';
 import 'package:unified_checkout_sdk/platform/models/checkout_payment_status_response.dart';
 import 'package:unified_checkout_sdk/platform/models/enroll_3ds_response.dart';
+import 'package:unified_checkout_sdk/platform/models/id_verification_request_body.dart';
 import 'package:unified_checkout_sdk/platform/models/mobile_money_request.dart';
 import 'package:unified_checkout_sdk/platform/models/momo_response.dart';
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth%20_response.dart';
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth_request.dart';
+import 'package:unified_checkout_sdk/platform/models/verification_response.dart';
 import 'package:unified_checkout_sdk/platform/models/wallet.dart';
 
 import '../../../network_manager/extensions/data_response.dart';
@@ -87,6 +89,24 @@ class CheckoutApi extends ApiCore {
         apiEndPoint: endPoints.checkoutEndPoint.addMobileWallet(request: req)
     );
     final data = DataResponse<Wallet>.fromJson(result.response, (x) => Wallet.fromJson(x));
+
+    return BaseApiResponse(response: data, apiResult: result.apiResult);
+  }
+  
+  Future<ResultWrapper<VerificationResponse>> checkVerificationStatus({required String mobileNumber}) async {
+    
+    final result = await requester.makeRequest(apiEndPoint: endPoints.checkoutEndPoint.checkUserVerification(mobileNumber: mobileNumber));
+    
+    final data = DataResponse<VerificationResponse>.fromJson(result.response, (x) => VerificationResponse.fromJson(x));
+    
+    return BaseApiResponse(response: data, apiResult: result.apiResult);
+  }
+
+  Future<ResultWrapper<VerificationResponse>> intakeUserIdentification({required IDVerificationBody params}) async {
+
+    final result = await requester.makeRequest(apiEndPoint: endPoints.checkoutEndPoint.intakeUserInput(params: params));
+
+    final data = DataResponse<VerificationResponse>.fromJson(result.response, (x) => VerificationResponse.fromJson(x));
 
     return BaseApiResponse(response: data, apiResult: result.apiResult);
   }

@@ -1,4 +1,14 @@
-class VerificationResponse {
+
+
+import 'package:unified_checkout_sdk/network_manager/serializable.dart';
+import 'package:unified_checkout_sdk/platform/models/customer_verification_body.dart';
+
+
+enum VerificationStatus{
+  verified,
+  unverified;
+}
+class VerificationResponse implements Serializable{
   final String? status;
   final String? fullName;
   final String? surName;
@@ -11,6 +21,15 @@ class VerificationResponse {
   final String? phone;
   final String? email;
   final String? nationalID;
+
+  VerificationStatus getVerificationStatus() {
+    switch ((status ?? "").toLowerCase()) {
+      case "verified":
+        return VerificationStatus.verified;
+      default:
+        return VerificationStatus.unverified;
+    }
+  }
 
   VerificationResponse({
     this.status,
@@ -27,20 +46,20 @@ class VerificationResponse {
     this.nationalID,
   });
 
-  factory VerificationResponse.fromJson(Map<String, dynamic> json) {
+  factory VerificationResponse.fromJson(Map<String, dynamic>? json) {
     return VerificationResponse(
-      status: json['status'],
-      fullName: json['fullname'],
-      surName: json['surname'],
-      otherNames: json['othernames'],
-      birthday: json['birthday'],
-      gender: json['gender'],
-      motherName: json['motherName'],
-      fatherName: json['fatherName'],
-      region: json['region'],
-      phone: json['phone'],
-      email: json['email'],
-      nationalID: json['nationalId'],
+      status: json?['status'],
+      fullName: json?['fullname'],
+      surName: json?['surname'],
+      otherNames: json?['othernames'],
+      birthday: json?['birthday'],
+      gender: json?['gender'],
+      motherName: json?['motherName'],
+      fatherName: json?['fatherName'],
+      region: json?['region'],
+      phone: json?['phone'],
+      email: json?['email'],
+      nationalID: json?['nationalId'],
     );
   }
 
@@ -61,15 +80,15 @@ class VerificationResponse {
     };
   }
 
-  // CustomerVerificationBody toVerificationBody(String customerMsisdn) {
-  //   return CustomerVerificationBody(
-  //     CustomerMobileNumber: customerMsisdn,
-  //     VerifyIdType: "NationalId",
-  //     NationalId: nationalID,
-  //     Fullname: fullname,
-  //     DateOfBirth: birthday,
-  //     gender: gender,
-  //     email: email,
-  //   );
-  // }
+  CustomerVerificationBody toVerificationBody(String customerMsisdn) {
+    return CustomerVerificationBody(
+      customerMobileNumber: customerMsisdn,
+      verifyIdType: "NationalId",
+      nationalId: nationalID,
+      fullName: fullName,
+      dateOfBirth: birthday,
+      gender: gender,
+      email: email,
+    );
+  }
 }

@@ -11,11 +11,13 @@ import 'package:unified_checkout_sdk/platform/models/channel_fetch_response.dart
 import 'package:unified_checkout_sdk/platform/models/checkout_payment_status_response.dart';
 import 'package:unified_checkout_sdk/platform/models/enroll_3ds_response.dart';
 import 'package:unified_checkout_sdk/platform/models/get_fees_response.dart';
+import 'package:unified_checkout_sdk/platform/models/id_verification_request_body.dart';
 import 'package:unified_checkout_sdk/platform/models/mobile_money_request.dart';
 import 'package:unified_checkout_sdk/platform/models/momo_provider.dart';
 import 'package:unified_checkout_sdk/platform/models/momo_response.dart';
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth%20_response.dart';
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth_request.dart';
+import 'package:unified_checkout_sdk/platform/models/verification_response.dart';
 import 'package:unified_checkout_sdk/platform/models/wallet.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 
@@ -32,6 +34,8 @@ class CheckoutViewModel extends ChangeNotifier {
   static CheckoutType? checkoutType;
 
   bool? cardCheckoutCompletionStatus;
+
+  bool? merchantRequiresKyc;
 
   List<Wallet>? wallets;
 
@@ -88,6 +92,9 @@ class CheckoutViewModel extends ChangeNotifier {
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
       channelResponse = result.response?.data;
+
+      merchantRequiresKyc = result.response?.data?.requireNationalID;
+
       print("fetched channels ${channelResponse?.businessLogoUrl}");
       CheckoutViewModel.channelFetch = result.response?.data;
       print(channelResponse?.isHubtelInternalMerchant);
@@ -215,5 +222,31 @@ class CheckoutViewModel extends ChangeNotifier {
         state: UiState.error,
         message: result.response?.message ?? "",
         data: null);
+  }
+
+  //TODO: make call to check verification status of customer
+
+  Future<UiResult<VerificationResponse>> checkVerificationStatus({required String mobileNumber }) async{
+
+    final result = await _checkoutApi.checkVerificationStatus(mobileNumber: mobileNumber);
+
+    if (result.apiResult == ApiResult.Success){
+      final data = result.response?.data;
+      return UiResult(state: UiState.success, message: "Success", data: data);
+    }
+    return UiResult(state: UiState.error, message: result.response?.message ?? "", data: null);
+  }
+
+
+  //TODO: make call to intake Ghana Card details confirmation.
+  Future<UiResult<VerificationResponse>> intakeIdDetails({required IDVerificationBody params}) async{
+
+    final result = await _checkoutApi.intakeUserIdentification(params: params);
+
+    if (result.apiResult == ApiResult.Success){
+      final data = result.response?.data;
+      return UiResult(state: UiState.success, message: "Success", data: data);
+    }
+    return UiResult(state: UiState.error, message: result.response?.message ?? "", data: null);
   }
 }

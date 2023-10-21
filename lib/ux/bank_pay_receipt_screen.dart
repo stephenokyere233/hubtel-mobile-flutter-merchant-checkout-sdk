@@ -50,6 +50,7 @@ class _BankPayReceiptScreenState extends State<BankPayReceiptScreen> {
           HTMLStrings.generateString(
               widget.businessDetails, widget.mobileMoneyResponse)
       );
+
   }
 
 
@@ -89,6 +90,8 @@ class _BankPayReceiptScreenState extends State<BankPayReceiptScreen> {
   }
 
   Future<void> generatePdfFromHtml(String htmlContent) async {
+    print(widget.mobileMoneyResponse.toString());
+
     widget.showLoadingDialog(context: context, text: "Downloading");
     Directory? appDocDir = await getApplicationDocumentsDirectory();
     final targetPath = appDocDir.path;

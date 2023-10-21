@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import '../../core_ui/dimensions.dart';
 import '../../resources/checkout_colors.dart';
 import '../../resources/checkout_styles.dart';
@@ -23,13 +24,12 @@ class InfoCard extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Styles.cardLabelStyle.copyWith(color: labelColor),
+          style: AppTextStyle.body2(),
         ),
         const Padding(padding: EdgeInsets.only(bottom: Dimens.paddingNano)),
         Text(
           value,
-          style:
-              Styles.cardInfoStyle.copyWith(fontWeight: valueStyle?.fontWeight),
+          style: AppTextStyle.body2().copyWith(fontWeight: FontWeight.w800),
         ),
       ],
     );

@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -24,6 +23,7 @@ import 'package:unified_checkout_sdk/platform/models/momo_response.dart';
 import 'package:unified_checkout_sdk/platform/models/purchase_item.dart';
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth%20_response.dart';
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth_request.dart';
+import 'package:unified_checkout_sdk/platform/models/verification_response.dart';
 import 'package:unified_checkout_sdk/platform/models/wallet.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 import 'package:unified_checkout_sdk/utils/checkout_utils.dart';
@@ -31,6 +31,8 @@ import 'package:unified_checkout_sdk/utils/currency_formatter.dart';
 import 'package:unified_checkout_sdk/utils/helpers/edge_insets.dart';
 import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart'
     as customExpansion;
+import 'package:unified_checkout_sdk/ux/add_gh_card_screen.dart';
+import 'package:unified_checkout_sdk/ux/gh_card_verification_screen.dart';
 import 'package:unified_checkout_sdk/ux/otp_3ds_screen.dart';
 import 'package:unified_checkout_sdk/ux/viewModel/checkout_view_model.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -164,7 +166,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
         'DeviceCollectionComplete',
         onMessageReceived: (message) {
           if (message.message == CheckoutHtmlState.loadingBegan.toString()) {
-            _checkoutInstantServiceWithBankCard();
+            _checkoutInstantServiceWithBankCard(context);
             print("checkout succeeded successfully");
           } else if (message.message == CheckoutHtmlState.success.toString()) {
             print("checkout succeeded successfully");
@@ -403,7 +405,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                   .collapse();
                                               otherPaymentWalletExpansionController
                                                   .collapse();
-                                              bankPayExpansionController.collapse();
+                                              bankPayExpansionController
+                                                  .collapse();
 
                                               // onNewCardInputComplete();
                                             }
@@ -661,8 +664,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
     if (walletType == WalletType.BankPay) {
       selectedProvider = MomoProvider(
-          name: CheckoutStrings.bankPay,
-          alias: CheckoutStrings.bankPay);
+          name: CheckoutStrings.bankPay, alias: CheckoutStrings.bankPay);
     }
 
     final response = await viewModel.fetchFees(
@@ -699,29 +701,76 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   void checkout() {
-    if (walletType == WalletType.Momo ||
-        walletType == WalletType.Zeepay ||
-        walletType == WalletType.Hubtel) {
-      payWithMomo();
-    }
+    if (!(viewModel.merchantRequiresKyc == true)) {
+      _checkUserVerificationDetails();
+    } else {
+      if (walletType == WalletType.Momo ||
+          walletType == WalletType.Zeepay ||
+          walletType == WalletType.Hubtel) {
+        payWithMomo();
+      }
 
-    if (walletType == WalletType.GMoney) {
+      if (walletType == WalletType.GMoney) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NewMandateIdScreen(
+              momoRequest: getCheckoutRequest(),
+            ),
+          ),
+        );
+      }
+
+      if (walletType == WalletType.Card) {
+        _setup();
+      }
+
+      if (walletType == WalletType.BankPay) {
+        print(walletType);
+        payWithMomo();
+      }
+    }
+  }
+
+  _checkUserVerificationDetails() async {
+    widget.showLoadingDialog(
+        context: context, text: CheckoutStrings.pleaseWait);
+
+    final result = await viewModel.checkVerificationStatus(
+        mobileNumber: selectedWallet?.accountNo ?? "");
+
+    if (!mounted) return;
+
+    Navigator.pop(context);
+
+    if (result.state == UiState.success) {
+      switch (result.data?.getVerificationStatus()) {
+        case VerificationStatus.verified:
+          payWithMomo();
+        default:
+          final navigatorResult = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => GhanaCardVerificationScreen(
+                verificationResponse: result?.data,
+              ),
+            ),
+          );
+
+          if (navigatorResult == true){
+            payWithMomo();
+          }
+      }
+    } else {
+      //TODO: Go and intake Ghana card Details.
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => NewMandateIdScreen(
-            momoRequest: getCheckoutRequest(),
+          builder: (context) => AddGhCardScreen(
+            mobileNumber: selectedWallet?.accountNo ?? "",
           ),
         ),
       );
-    }
-
-    if (walletType == WalletType.Card) {
-      _setup();
-    }
-
-    if (walletType == WalletType.BankPay) {
-      payWithMomo();
     }
   }
 
@@ -774,7 +823,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
     }
   }
 
-  _checkoutInstantServiceWithBankCard() async {
+  _checkoutInstantServiceWithBankCard(BuildContext context) async {
     final result = await viewModel.enroll(
         transactionId: widget.threeDsResponse?.transactionId ?? "");
 
@@ -787,11 +836,24 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           orderId: "",
           reference: "",
           customData: result.data?.customData ?? "");
-      Navigator.push(
+
+      final onBankCallbackReceived = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   CheckoutWebViewWidget(pageData: webViewCheckoutData)));
+
+      if (onBankCallbackReceived == true) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CheckStatusScreen(
+                    checkoutResponse: MomoResponse(
+                        transactionId: widget.threeDsResponse?.transactionId,
+                        clientReference:
+                            widget.threeDsResponse?.clientReference),
+                    checkoutCompleted: widget.checkoutCompleted)));
+      }
     } else {
       Navigator.pop(context);
 
@@ -859,17 +921,20 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
     widget.showLoadingDialog(
         context: context, text: CheckoutStrings.pleaseWait);
     final result = await viewModel.payWithMomo(req: request);
+
     if (!mounted) return;
+
     Navigator.pop(context);
     if (result.state == UiState.success) {
       final checkoutResponse = result.data;
+      print("from Backendc ${checkoutResponse.toString()}");
       onCheckoutCompleted(result.data, context);
     } else {
       widget.showErrorDialog(context: context, message: result.message);
     }
   }
 
-    MobileMoneyPaymentRequest getCheckoutRequest() {
+  MobileMoneyPaymentRequest getCheckoutRequest() {
     if (walletType == WalletType.Momo) {
       if (CheckoutViewModel.checkoutType == CheckoutType.receivemoneyprompt) {
         return MobileMoneyPaymentRequest(
@@ -938,7 +1003,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
     return MobileMoneyPaymentRequest();
   }
-
 
   void onNewCardInputComplete() {
     final isCardNumberInputComplete =

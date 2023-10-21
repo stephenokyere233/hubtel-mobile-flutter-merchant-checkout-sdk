@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unified_checkout_sdk/core_ui/text_style.dart';
 import 'package:unified_checkout_sdk/platform/models/verification_response.dart';
 import 'package:unified_checkout_sdk/resources/checkout_styles.dart';
 import '../../core_ui/dimensions.dart';
@@ -31,9 +32,9 @@ class GhanaCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                 Text(
                   CheckoutStrings.ghanaCardHeading,
-                  style: Styles.appBarTextStyle,
+                  style: AppTextStyle.body2().copyWith(fontWeight: FontWeight.w800),
                 ),
                 const Padding(
                     padding: EdgeInsets.only(bottom: Dimens.paddingDefault)),

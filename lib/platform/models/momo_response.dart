@@ -62,7 +62,8 @@ class MomoResponse implements Serializable{
   factory MomoResponse.fromJson(Map<String, dynamic>? json) {
     return MomoResponse(
       transactionId: json?['transactionId'],
-      charges: json?['amount']?.toDouble(),
+      amount: json?['amount']?.toDouble(),
+      charges: json?['charges']?.toDouble(),
       amountAfterCharges: json?['amountAfterCharges']?.toDouble(),
       amountCharged: json?['amountCharged']?.toDouble(),
       deliveryFee: json?['deliveryFee']?.toDouble(),
@@ -77,5 +78,27 @@ class MomoResponse implements Serializable{
       invoiceNumber: json?['invoiceNumber'],
       email: json?['email'],
     );
+  }
+
+  @override
+  String toString() {
+    return 'MomoResponse{'
+        'transactionId: $transactionId, '
+        'charges: $charges, '
+        'amount: $amount, '
+        'amountAfterCharges: $amountAfterCharges, '
+        'amountCharged: $amountCharged, '
+        'deliveryFee: $deliveryFee, '
+        'description: $description, '
+        'clientReference: $clientReference, '
+        'hubtelPreapprovalId: $hubtelPreapprovalId, '
+        'otpPrefix: $otpPrefix, '
+        'customerMsisdn: $customerMsisdn, '
+        'skipOtp: $skipOtp, '
+        'verificationType: $verificationType, '
+        'customerName: $customerName, '
+        'invoiceNumber: $invoiceNumber, '
+        'email: $email'
+        '}';
   }
 }

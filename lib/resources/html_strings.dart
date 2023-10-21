@@ -38,6 +38,7 @@ class HTMLStrings {
 
   static String generateString(
       HtmlRequirements requirements, MomoResponse? checkoutResponse) {
+    print("heere${checkoutResponse.toString()}");
     return '''
 <!DOCTYPE html>
 <html lang="en">

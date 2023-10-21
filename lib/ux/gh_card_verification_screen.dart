@@ -25,7 +25,7 @@ class GhanaCardVerificationScreen extends StatelessWidget {
         child: CustomButton(
           title: 'Submit'.toUpperCase(),
           isEnabled: true,
-          buttonAction: () => {},
+          buttonAction: () => _handleSubmitButton(context),
           isDisabledBgColor: HubtelColors.lighterGrey,
           disabledTitleColor: HubtelColors.grey,
           style: HubtelButtonStyle.solid,
@@ -35,6 +35,7 @@ class GhanaCardVerificationScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(14.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const VerificationCard(),
             GhanaCard(verificationResponse: verificationResponse),
@@ -42,5 +43,9 @@ class GhanaCardVerificationScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _handleSubmitButton(BuildContext context){
+    Navigator.pop(context, true);
   }
 }

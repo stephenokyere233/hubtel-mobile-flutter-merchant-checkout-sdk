@@ -1,8 +1,12 @@
+
+
 import 'package:unified_checkout_sdk/network_manager/api_core.dart';
 import 'package:unified_checkout_sdk/network_manager/endpoint_core.dart';
 import 'package:unified_checkout_sdk/network_manager/requester.dart';
 import 'package:unified_checkout_sdk/platform/models/add_mobile_wallet.dart';
+import 'package:unified_checkout_sdk/platform/models/id_verification_request_body.dart';
 import 'package:unified_checkout_sdk/platform/models/mobile_money_request.dart';
+import 'package:unified_checkout_sdk/platform/models/otp_verify_request_body.dart';
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth_request.dart';
 import 'package:unified_checkout_sdk/utils/currency_formatter.dart';
 
@@ -112,6 +116,39 @@ class CheckoutEndPoint with EndPointCore {
     return createEndpoint(
         authority: _basePath,
         path: "api/v1/merchant/$merchantId/unifiedcheckout/addwallet",
+        requestType: HttpVerb.POST,
+        body: request.toMap());
+  }
+
+  Future<ApiEndPoint> checkUserVerification({required String mobileNumber}) {
+    return createEndpoint(
+      authority: _basePath,
+      path:
+          "api/v1/merchant/$merchantId/ghanacardkyc/ghanacard-details/$mobileNumber",
+      requestType: HttpVerb.GET,
+    );
+  }
+
+  Future<ApiEndPoint> confirmCardDetails() {
+    return createEndpoint(
+      authority: _basePath,
+      path: "/api/v1/merchant/$merchantId/ghanacardkyc/confirm-ghana-card",
+      requestType: HttpVerb.POST,
+    );
+  }
+
+  Future<ApiEndPoint> intakeUserInput({required IDVerificationBody params}) {
+    return createEndpoint(
+        authority: _basePath,
+        path: "api/v1/merchant/$merchantId/ghanacardkyc/addghanacard",
+        requestType: HttpVerb.GET,
+        body: params.toMap());
+  }
+
+  Future<ApiEndPoint> otpVerification({required OtpBodyRequest request}) {
+    return createEndpoint(
+        authority: _basePath,
+        path: "api/v1/merchant/$merchantId/unifiedcheckout/verifyotp",
         requestType: HttpVerb.POST,
         body: request.toMap()
     );
