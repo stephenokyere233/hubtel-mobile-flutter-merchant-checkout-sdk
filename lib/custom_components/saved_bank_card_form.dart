@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:unified_checkout_sdk/custom_components/bank_tile.dart';
-import 'package:unified_checkout_sdk/platform/models/card_data.dart';
+import 'package:unified_checkout_sdk/platform/models/bank_card_data.dart';
 
 import '../resources/checkout_strings.dart';
 
@@ -16,8 +16,8 @@ class SavedBankCardForm extends StatefulWidget {
   });
 
   final TextEditingController cardNumberFieldController;
-  final void Function(CardData) onCardSelected;
-  final List<CardData> cards;
+  final void Function(BankCardData) onCardSelected;
+  final List<BankCardData> cards;
   final void Function(String)? onCvvChanged;
   final GlobalKey<FormState> formKey;
 

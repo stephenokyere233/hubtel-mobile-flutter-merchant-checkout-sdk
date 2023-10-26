@@ -15,7 +15,7 @@ import 'package:unified_checkout_sdk/custom_components/show_selected_message.dar
 import 'package:unified_checkout_sdk/extensions/string_extensions.dart';
 import 'package:unified_checkout_sdk/extensions/widget_extensions.dart';
 import 'package:unified_checkout_sdk/network_manager/extensions/uistate.dart';
-import 'package:unified_checkout_sdk/platform/models/card_data.dart';
+import 'package:unified_checkout_sdk/platform/models/bank_card_data.dart';
 import 'package:unified_checkout_sdk/platform/models/checkout_requirements.dart';
 import 'package:unified_checkout_sdk/platform/models/mobile_money_request.dart';
 import 'package:unified_checkout_sdk/platform/models/momo_provider.dart';
@@ -111,7 +111,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
 
   GlobalKey<FormState> savedCardFormKey = GlobalKey<FormState>();
 
-  List<CardData> savedCards = [];
+  List<BankCardData> savedCards = [];
 
   bool useNewCard = true;
 

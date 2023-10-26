@@ -11,7 +11,7 @@ import 'package:unified_checkout_sdk/utils/custom_expansion_widget.dart'
 import 'package:flutter/scheduler.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/text_style.dart';
-import 'package:unified_checkout_sdk/platform/models/card_data.dart';
+import 'package:unified_checkout_sdk/platform/models/bank_card_data.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 
 // import 'app_image_asset.dart';
@@ -48,9 +48,9 @@ class BankCardExpansionTile extends StatefulWidget {
   final void Function(String)? onNewCardDateChanged;
   final void Function(String)? onNewCardCvvChanged;
 
-  final List<CardData> savedCards;
+  final List<BankCardData> savedCards;
   final GlobalKey<FormState> savedCardFormKey;
-  final void Function(CardData) onSavedCardSelected;
+  final void Function(BankCardData) onSavedCardSelected;
   final void Function(String)? onSavedCardCvvChanged;
   final GlobalKey<FormState> newCardFormKey;
 

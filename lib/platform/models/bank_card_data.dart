@@ -1,24 +1,25 @@
 import 'dart:convert';
 
-import 'package:unified_checkout_sdk/utils/helpers/serializable.dart';
+import '../../network_manager/serializable.dart';
 
-class CardData implements Serializable {
+
+class BankCardData implements Serializable {
   String? cardNumber;
   String? cardExpiryDate;
   String? cvv;
 
-  CardData({this.cardNumber, this.cardExpiryDate, this.cvv});
+  BankCardData({this.cardNumber, this.cardExpiryDate, this.cvv});
 
-  factory CardData.fromJson(Map<String, dynamic>? json) {
-    return CardData(
+  factory BankCardData.fromJson(Map<String, dynamic>? json) {
+    return BankCardData(
       cardNumber: json?["cardNumber"],
       cardExpiryDate: json?["cardExpiryDate"],
       cvv: json?["cvv"],
     );
   }
 
-  static CardData fromString(String? string) {
-    return CardData.fromJson(jsonDecode(string ?? ""));
+  static BankCardData fromString(String? string) {
+    return BankCardData.fromJson(jsonDecode(string ?? ""));
   }
 
   @override

@@ -4,7 +4,7 @@ import 'package:unified_checkout_sdk/core_ui/app_rich_text.dart';
 import 'package:unified_checkout_sdk/core_ui/dimensions.dart';
 import 'package:unified_checkout_sdk/core_ui/hubtel_colors.dart';
 import 'package:unified_checkout_sdk/core_ui/input_field.dart';
-import 'package:unified_checkout_sdk/platform/models/card_data.dart';
+import 'package:unified_checkout_sdk/platform/models/bank_card_data.dart';
 import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 import 'package:unified_checkout_sdk/utils/bank_card_helper.dart';
 import 'package:unified_checkout_sdk/utils/helpers/edge_insets.dart';
@@ -19,9 +19,9 @@ class BankTileDropdown extends StatefulWidget {
   });
 
   final TextEditingController fieldController;
-  final List<CardData>? cards;
+  final List<BankCardData>? cards;
   final String hintText;
-  final void Function(CardData) onCardSelected;
+  final void Function(BankCardData) onCardSelected;
 
   @override
   State<BankTileDropdown> createState() => _BankTileDropdownState();

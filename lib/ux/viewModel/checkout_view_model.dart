@@ -74,6 +74,10 @@ class CheckoutViewModel extends ChangeNotifier {
     return await prefManager.getMandateId();
   }
 
+  saveBankWallet() async {
+
+  }
+
   late final CheckoutApi _checkoutApi = CheckoutApi(requester: requester);
 
   // String getMomoChannelName(String? selectedProviderName) {
