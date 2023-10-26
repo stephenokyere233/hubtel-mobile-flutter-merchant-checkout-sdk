@@ -7,6 +7,8 @@ import 'package:unified_checkout_sdk/platform/models/enroll_3ds_response.dart';
 import 'package:unified_checkout_sdk/platform/models/id_verification_request_body.dart';
 import 'package:unified_checkout_sdk/platform/models/mobile_money_request.dart';
 import 'package:unified_checkout_sdk/platform/models/momo_response.dart';
+import 'package:unified_checkout_sdk/platform/models/preapproval_confirm_response.dart';
+import 'package:unified_checkout_sdk/platform/models/preapproval_req_params.dart';
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth%20_response.dart';
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth_request.dart';
 import 'package:unified_checkout_sdk/platform/models/verification_response.dart';
@@ -107,6 +109,15 @@ class CheckoutApi extends ApiCore {
     final result = await requester.makeRequest(apiEndPoint: endPoints.checkoutEndPoint.intakeUserInput(params: params));
 
     final data = DataResponse<VerificationResponse>.fromJson(result.response, (x) => VerificationResponse.fromJson(x));
+
+    return BaseApiResponse(response: data, apiResult: result.apiResult);
+  }
+
+  Future<ResultWrapper<PreApprovalResponse>> preApprovalConfirm({required PreapprovalConfirm params}) async {
+
+    final result = await requester.makeRequest(apiEndPoint: endPoints.checkoutEndPoint.getPreApprovalConfirmEndPoint(params));
+
+    final data = DataResponse<PreApprovalResponse>.fromJson(result.response, (x) => PreApprovalResponse.fromJson(x));
 
     return BaseApiResponse(response: data, apiResult: result.apiResult);
   }

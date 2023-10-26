@@ -40,77 +40,79 @@ class _AddGhCardScreenState extends State<AddGhCardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AppPage(
-      title: 'Verification',
-      bottomNavigation: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(Dimens.paddingDefault),
-        child: ValueListenableBuilder(
-          builder: (context, uiModel, child) => CustomButton(
-            title: 'Submit'.toUpperCase(),
-            isEnabled: state.value.isButtonEnabled,
-            buttonAction: () => _performVerificationDetailsCheck(context),
-            loading: state.value.isButtonLoading,
-            isDisabledBgColor: HubtelColors.lighterGrey,
-            disabledTitleColor: HubtelColors.grey,
-            style: HubtelButtonStyle.solid,
-            isEnabledBgColor: ThemeConfig.themeColor,
+    return Scaffold(
+      body: AppPage(
+        title: 'Verification',
+        bottomNavigation: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(Dimens.paddingDefault),
+          child: ValueListenableBuilder(
+            builder: (context, uiModel, child) => CustomButton(
+              title: 'Submit'.toUpperCase(),
+              isEnabled: state.value.isButtonEnabled,
+              buttonAction: () => _performVerificationDetailsCheck(context),
+              loading: state.value.isButtonLoading,
+              isDisabledBgColor: HubtelColors.lighterGrey,
+              disabledTitleColor: HubtelColors.grey,
+              style: HubtelButtonStyle.solid,
+              isEnabledBgColor: ThemeConfig.themeColor,
+            ),
+            valueListenable: state.ghCardState,
           ),
-          valueListenable: state.ghCardState,
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(Dimens.paddingDefault),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: Dimens.paddingDefault),
-              Center(child: SvgPicture.asset(CheckoutDrawables.verifySvg)),
-              const SizedBox(height: Dimens.paddingDefault),
-              Center(
-                child: Text(
-                  'Verify your Government ID',
-                  // style: Theme.of(context)
-                  //     .textTheme
-                  //     .bodyLarge
-                  //     ?.copyWith(fontWeight: FontWeight.bold),
-                  style: AppTextStyle.body2().copyWith(fontWeight: FontWeight.w700),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: Dimens.paddingDefault),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+        body: Padding(
+          padding: const EdgeInsets.all(Dimens.paddingDefault),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: Dimens.paddingDefault),
+                Center(child: SvgPicture.asset(CheckoutDrawables.verifySvg)),
+                const SizedBox(height: Dimens.paddingDefault),
+                Center(
                   child: Text(
-                    'A valid government-issued ID card is required to verify your account',
-                    // style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
-                    style: AppTextStyle.body2(),
+                    'Verify your Government ID',
+                    // style: Theme.of(context)
+                    //     .textTheme
+                    //     .bodyLarge
+                    //     ?.copyWith(fontWeight: FontWeight.bold),
+                    style: AppTextStyle.body2().copyWith(fontWeight: FontWeight.w700),
                     textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              const SizedBox(height: Dimens.paddingDefault),
-              Text(
-                'Ghana Card',
-                style: AppTextStyle.body2(),
-              ),
-              const SizedBox(height: Dimens.paddingNano),
-              InputField(
-                controller: _cardController,
-                hintText: CheckoutStrings.ghanaCardNumberHint,
-                onChanged: (value) {
-                  state.onCardNumberChanged(value);
-                  // log('$runtimeType ${state.mobileNumber.value}');
-                },
-                inputType: TextInputType.number,
-                // autofocus: true,
-                hasFill: true,
-                focusBorderColor: Colors.transparent,
-              ),
-            ],
+                const SizedBox(height: Dimens.paddingDefault),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: Text(
+                      'A valid government-issued ID card is required to verify your account',
+                      // style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
+                      style: AppTextStyle.body2(),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: Dimens.paddingDefault),
+                Text(
+                  'Ghana Card',
+                  style: AppTextStyle.body2(),
+                ),
+                const SizedBox(height: Dimens.paddingNano),
+                InputField(
+                  controller: _cardController,
+                  hintText: CheckoutStrings.ghanaCardNumberHint,
+                  onChanged: (value) {
+                    state.onCardNumberChanged(value);
+                    // log('$runtimeType ${state.mobileNumber.value}');
+                  },
+                  inputType: TextInputType.number,
+                  // autofocus: true,
+                  hasFill: true,
+                  focusBorderColor: Colors.transparent,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -38,66 +38,68 @@ class _NewMandateIdScreenState extends State<NewMandateIdScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AppPage(
-      title: 'Mandate ID',
-      bottomNavigation: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(16),
-        child: ValueListenableBuilder(
-          valueListenable: state,
-          builder: (context, value, child) {
-            return CustomButton(
-              title: 'Continue'.toUpperCase(),
-              isEnabled: state.validated,
-              buttonAction: () => {_makeCheckoutPayment()},
-              isDisabledBgColor: HubtelColors.lighterGrey,
-              disabledTitleColor: HubtelColors.grey,
-              style: HubtelButtonStyle.solid,
-              isEnabledBgColor: ThemeConfig.themeColor,
-            );
-          },
+    return Scaffold(
+      body: AppPage(
+        title: 'Mandate ID',
+        bottomNavigation: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(16),
+          child: ValueListenableBuilder(
+            valueListenable: state,
+            builder: (context, value, child) {
+              return CustomButton(
+                title: 'Continue'.toUpperCase(),
+                isEnabled: state.validated,
+                buttonAction: () => {_makeCheckoutPayment()},
+                isDisabledBgColor: HubtelColors.lighterGrey,
+                disabledTitleColor: HubtelColors.grey,
+                style: HubtelButtonStyle.solid,
+                isEnabledBgColor: ThemeConfig.themeColor,
+              );
+            },
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(Dimens.paddingNano),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: Dimens.paddingDefault),
-              Text(
-                'Mandate ID',
-                style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(Dimens.paddingDefault),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: Dimens.paddingDefault),
+                  Text(
+                    'Mandate ID',
+                    style: AppTextStyle.body1(),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: Dimens.paddingDefault),
+                  InputField(
+                    controller: _mandateIdController,
+                    hintText: CheckoutStrings.mandateIdHint,
+                    onChanged: (value) {
+                      state.onIdChanged(value);
+                      // log('$runtimeType ${state.mobileNumber.value}');
+                    },
+                    inputType: TextInputType.number,
+                    // autofocus: true,
+                    hasFill: true,
+                    focusBorderColor: Colors.transparent,
+                  ),
+                  const SizedBox(height: Dimens.paddingDefault),
+                  Text(
+                    CheckoutStrings.gMoneyInstructionsHeading,
+                    style: AppTextStyle.body2()
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: Dimens.paddingDefault),
+                  Text(
+                    CheckoutStrings.gMoneySteps,
+                    style: AppTextStyle.body2(),
+                  ),
+                ],
               ),
-              const SizedBox(height: Dimens.paddingDefault),
-              InputField(
-                controller: _mandateIdController,
-                hintText: CheckoutStrings.mandateIdHint,
-                onChanged: (value) {
-                  state.onIdChanged(value);
-                  // log('$runtimeType ${state.mobileNumber.value}');
-                },
-                inputType: TextInputType.number,
-                // autofocus: true,
-                hasFill: true,
-                focusBorderColor: Colors.transparent,
-              ),
-              const SizedBox(height: Dimens.paddingDefault),
-              Text(
-                CheckoutStrings.gMoneyInstructionsHeading,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: Dimens.paddingDefault),
-              Text(
-                CheckoutStrings.gMoneySteps,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -108,6 +110,8 @@ class _NewMandateIdScreenState extends State<NewMandateIdScreen> {
     widget.showLoadingDialog(context: context, text: "Please Wait");
 
     widget.momoRequest.mandateId = state.value.id;
+
+    viewModel.prefManager.mandateId = state.value.id;
 
     final response = await viewModel.payWithMomo(req: widget.momoRequest);
 

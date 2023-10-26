@@ -36,7 +36,7 @@ class PaymentInfoCard extends StatelessWidget {
     return Container(
       width: double.maxFinite,
       margin: const EdgeInsets.symmetric(
-        horizontal: Dimens.paddingLarge,
+        horizontal: Dimens.paddingDefault,
         // vertical: AppDimens.paddingDefaultNormal,
       ),
       // decoration: BoxDecoration(border: Border.all(color: Colors.blue)),

@@ -17,9 +17,10 @@ import 'package:unified_checkout_sdk/resources/checkout_strings.dart';
 import '../resources/checkout_drawables.dart';
 
 class MobileMoneyExpansionTile extends StatefulWidget {
+
   static bool fetchFees = true;
 
-  const MobileMoneyExpansionTile({
+   MobileMoneyExpansionTile({
     super.key,
     required this.wallets,
     required this.providers,
@@ -31,6 +32,7 @@ class MobileMoneyExpansionTile extends StatefulWidget {
     required this.onExpansionChanged,
     required this.isSelected,
     required this.selectedProviderMessage,
+    required this.disableUserNumberInputInteraction
   });
 
   final List<Wallet> wallets;
@@ -43,6 +45,7 @@ class MobileMoneyExpansionTile extends StatefulWidget {
   final void Function(bool)? onExpansionChanged;
   final bool isSelected;
   final Widget selectedProviderMessage;
+  bool disableUserNumberInputInteraction;
 
   @override
   State<MobileMoneyExpansionTile> createState() =>
@@ -125,6 +128,7 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
                 onProviderSelected: widget.onProviderSelected,
                 wallets: widget.wallets,
                 hintText: CheckoutStrings.mobileNumber,
+                isReadOnly: widget.disableUserNumberInputInteraction,
               ),
             ),
             const SizedBox(height: Dimens.paddingDefault),

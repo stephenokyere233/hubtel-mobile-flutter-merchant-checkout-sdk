@@ -368,6 +368,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
                                               fetchFees();
                                             }
                                           },
+                                          disableUserNumberInputInteraction: viewModel.channelResponse?.isHubtelInternalMerchant ?? true,
                                         ),
 
                                         //
@@ -615,7 +616,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
     if (response.state == UiState.success) {
       setState(() {
         checkoutHomeScreenState.isLoadingFees.value = false;
-        checkoutHomeScreenState.checkoutFees.value = response.data?.fees;
+        checkoutHomeScreenState.checkoutFees.value = response.data?.fees.toDouble();
         totalAmountPayable = response.data?.amountPayable;
         _handleButtonActivation();
       });
@@ -646,7 +647,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen2> {
 
     if (response.state == UiState.success) {
       checkoutHomeScreenState.isLoadingFees.value = false;
-      checkoutHomeScreenState.checkoutFees.value = response.data?.fees;
+      checkoutHomeScreenState.checkoutFees.value = response.data?.fees.toDouble();
       totalAmountPayable = response.data?.amountPayable;
       _handleButtonActivation();
     } else {

@@ -143,6 +143,8 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
               const SizedBox(width: Dimens.paddingDefault),
               Expanded(
                 child: InputField(
+                  isPassword: true,
+                  maxLines: 1,
                   controller: widget.cardCvvInputController,
                   hasFill: true,
                   hintText: CheckoutStrings.cvv,

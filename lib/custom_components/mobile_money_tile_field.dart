@@ -22,7 +22,9 @@ class MobileMoneyTileField extends StatefulWidget {
       required this.onWalletSelected,
       required this.onProviderSelected,
       required this.hintText,
-      this.showWalletAdditionTile})
+      this.showWalletAdditionTile,
+      this.isReadOnly = true
+      })
       : super(key: key);
 
   final TextEditingController fieldController;
@@ -32,6 +34,7 @@ class MobileMoneyTileField extends StatefulWidget {
   final void Function(Wallet) onWalletSelected;
   final void Function(MomoProvider) onProviderSelected;
   bool? showWalletAdditionTile = true;
+  bool isReadOnly = true;
 
   @override
   State<MobileMoneyTileField> createState() => _MobileMoneyTileFieldState();
@@ -48,8 +51,8 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
           hasFill: true,
           hintText: widget.hintText,
           controller: widget.fieldController,
-          readOnly: true,
-          suffixWidget: Padding(
+          readOnly: widget.isReadOnly,
+          suffixWidget: widget.isReadOnly ? Padding(
             padding: const EdgeInsets.only(right: Dimens.paddingDefaultSmall),
             child: Icon(
               expandOptions == true
@@ -57,10 +60,12 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                   : FlutterRemix.arrow_down_s_line,
               color: HubtelColors.neutral.shade900,
             ),
-          ),
+          ) : null,
           onTap: () {
             setState(() {
-              expandOptions = !expandOptions;
+              if (widget.isReadOnly) {
+                expandOptions = !expandOptions;
+              }
             });
           },
           focusedBorder: OutlineInputBorder(

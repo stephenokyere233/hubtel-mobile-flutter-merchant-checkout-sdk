@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:unified_checkout_sdk/core_storage/checkout_pref_manager.dart';
 import 'package:unified_checkout_sdk/network_manager/api_core.dart';
 import 'package:unified_checkout_sdk/network_manager/checkout_endpoints.dart';
 import 'package:unified_checkout_sdk/network_manager/endpoints.dart';
@@ -15,6 +16,8 @@ import 'package:unified_checkout_sdk/platform/models/id_verification_request_bod
 import 'package:unified_checkout_sdk/platform/models/mobile_money_request.dart';
 import 'package:unified_checkout_sdk/platform/models/momo_provider.dart';
 import 'package:unified_checkout_sdk/platform/models/momo_response.dart';
+import 'package:unified_checkout_sdk/platform/models/preapproval_confirm_response.dart';
+import 'package:unified_checkout_sdk/platform/models/preapproval_req_params.dart';
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth%20_response.dart';
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth_request.dart';
 import 'package:unified_checkout_sdk/platform/models/verification_response.dart';
@@ -26,6 +29,8 @@ import '../../platform/models/checkout_type.dart';
 
 class CheckoutViewModel extends ChangeNotifier {
   final requester = Requester();
+
+  final prefManager = CheckoutPrefManager();
 
   ChannelFetchResponse? channelResponse;
 
@@ -39,29 +44,35 @@ class CheckoutViewModel extends ChangeNotifier {
 
   List<Wallet>? wallets;
 
+
+
   final List<MomoProvider> providers = [
     MomoProvider(
-        name: "MTN",
+        name: "MTN Mobile Money",
         logoUrl: "",
-        alias: "mtn-gh",
+        alias: "mtn",
         receiveMoneyPromptValue: "mtn-gh",
         preapprovalConfirmValue: "",
         directDebitValue: "mtn-gh-direct-debit"),
     MomoProvider(
-        name: "Vodafone",
+        name: "Vodafone Cash",
         logoUrl: "",
         alias: "vodafone",
         receiveMoneyPromptValue: "vodafone-gh",
         preapprovalConfirmValue: "",
         directDebitValue: "vodafone-gh-direct-debit"),
     MomoProvider(
-        name: "Airtel Tigo",
+        name: "AT Money",
         logoUrl: "",
         alias: "airtelTigo",
         receiveMoneyPromptValue: "tigo-gh",
         preapprovalConfirmValue: "",
         directDebitValue: "tigo-gh-direct-debit"),
   ];
+
+  Future<String?> getCustomerMandateId() async {
+    return await prefManager.getMandateId();
+  }
 
   late final CheckoutApi _checkoutApi = CheckoutApi(requester: requester);
 
@@ -249,4 +260,17 @@ class CheckoutViewModel extends ChangeNotifier {
     }
     return UiResult(state: UiState.error, message: result.response?.message ?? "", data: null);
   }
+
+  Future<UiResult<PreApprovalResponse>> makePreApprovalConfirm({required PreapprovalConfirm params}) async{
+
+    final result = await _checkoutApi.preApprovalConfirm(params: params);
+
+    if (result.apiResult == ApiResult.Success){
+      final data = result.response?.data;
+      return UiResult(state: UiState.success, message: "Success", data: data);
+    }
+    return UiResult(state: UiState.error, message: result.response?.message ?? "", data: null);
+
+  }
+
 }

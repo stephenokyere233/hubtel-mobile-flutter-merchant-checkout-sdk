@@ -109,7 +109,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
 
   // }
 
-  bool showHubtelWalletActions = false;
+  bool showHubtelWalletActions = true;
 
   bool showGmoneyWalletActions = false;
 

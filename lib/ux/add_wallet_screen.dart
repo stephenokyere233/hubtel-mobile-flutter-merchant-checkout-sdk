@@ -37,115 +37,119 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AppPage(
-      title: CheckoutStrings.addWalletScreenTitle,
-      titleStyle: AppTextStyle.headline3(),
-      elevation: 0.1,
-      bottomNavigation: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(16),
-        child: AnimatedBuilder(
-          animation: Listenable.merge([state]),
-          builder: (BuildContext context, Widget? child) {
-            return CustomButton(
-              title: 'CONTINUE'.toUpperCase(),
-              isEnabled: state.value.isButtonEnabled,
-              buttonAction: () => {_addMobileWallet()},
-              loading: state.value.isButtonLoading,
-              isDisabledBgColor: HubtelColors.lighterGrey,
-              disabledTitleColor: HubtelColors.grey,
-              style: HubtelButtonStyle.solid,
-              isEnabledBgColor: Theme.of(context).primaryColor,
-            );
-          },
+    return Scaffold(
+      body: AppPage(
+        title: CheckoutStrings.addWalletScreenTitle,
+        titleStyle: AppTextStyle.headline3(),
+        elevation: 0.1,
+        bottomNavigation: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(16),
+          child: AnimatedBuilder(
+            animation: Listenable.merge([state]),
+            builder: (BuildContext context, Widget? child) {
+              return CustomButton(
+                title: 'CONTINUE'.toUpperCase(),
+                isEnabled: state.value.isButtonEnabled,
+                buttonAction: () => {_addMobileWallet()},
+                loading: state.value.isButtonLoading,
+                isDisabledBgColor: HubtelColors.lighterGrey,
+                disabledTitleColor: HubtelColors.grey,
+                style: HubtelButtonStyle.solid,
+                isEnabledBgColor: ThemeConfig.themeColor,
+              );
+            },
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(Dimens.paddingDefault),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: Dimens.paddingLarge,
-            ),
-            Text(
-              CheckoutStrings.mobileMoneyNumber,
-              style: AppTextStyle.body2(),
-            ),
-            const SizedBox(
-              height: Dimens.paddingSmall,
-            ),
-            ValueListenableBuilder(
-              builder: (context, uiModel, child) {
-                return InputField(
-                  controller: _mobileNumberController,
-                  hintText: CheckoutStrings.addNumberHint,
-                  onChanged: (value) {
-                    state.onNumberChanged(value);
-                    // log('$runtimeType ${state.mobileNumber.value}');
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(Dimens.paddingDefault),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: Dimens.paddingLarge,
+                ),
+                Text(
+                  CheckoutStrings.mobileMoneyNumber,
+                  style: AppTextStyle.body2(),
+                ),
+                const SizedBox(
+                  height: Dimens.paddingSmall,
+                ),
+                ValueListenableBuilder(
+                  builder: (context, uiModel, child) {
+                    return InputField(
+                      controller: _mobileNumberController,
+                      hintText: CheckoutStrings.addNumberHint,
+                      onChanged: (value) {
+                        state.onNumberChanged(value);
+                        // log('$runtimeType ${state.mobileNumber.value}');
+                      },
+                      inputType: TextInputType.number,
+                      // autofocus: true,
+                      hasFill: true,
+                      focusBorderColor: Colors.transparent,
+                    );
                   },
-                  inputType: TextInputType.number,
-                  // autofocus: true,
-                  hasFill: true,
-                  focusBorderColor: Colors.transparent,
-                );
-              },
-              valueListenable: state,
-            ),
-            const SizedBox(
-              height: Dimens.paddingDefault,
-            ),
-            Text(
-              CheckoutStrings.selectNetwork,
-              style: AppTextStyle.body1(),
-            ),
-            const SizedBox(
-              height: Dimens.paddingSmall,
-            ),
-            SizedBox(
-              height: 140.0,
-              child: ValueListenableBuilder(
-                builder: (context, boolean, child) {
-                  return ListView.separated(
-                    shrinkWrap: false,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          CircleImage(
-                            imageProvider:
-                                AssetImage(state.providers[index].$2),
-                            borderColor: state.value.selectedIndex == index
-                                ? ThemeConfig.themeColor
-                                : Colors.transparent.withOpacity(0.1),
-                            onTap: () {
-                              state.value.selectedIndex = index;
-                              state.onProviderSelected(index);
-                              state.value.mobileNumber =
-                                  _mobileNumberController.value.text;
-                            },
-                          ),
-                          const SizedBox(height: Dimens.paddingMicro),
-                          Text(
-                            state.providers[index].$1,
-                            style: AppTextStyle.body1(),
-                          )
-                        ],
+                  valueListenable: state,
+                ),
+                const SizedBox(
+                  height: Dimens.paddingDefault,
+                ),
+                Text(
+                  CheckoutStrings.selectNetwork,
+                  style: AppTextStyle.body1(),
+                ),
+                const SizedBox(
+                  height: Dimens.paddingSmall,
+                ),
+                SizedBox(
+                  height: 140.0,
+                  child: ValueListenableBuilder(
+                    builder: (context, boolean, child) {
+                      return ListView.separated(
+                        shrinkWrap: false,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              CircleImage(
+                                imageProvider:
+                                    AssetImage(state.providers[index].$2),
+                                borderColor: state.value.selectedIndex == index
+                                    ? ThemeConfig.themeColor
+                                    : Colors.transparent.withOpacity(0.1),
+                                onTap: () {
+                                  state.value.selectedIndex = index;
+                                  state.onProviderSelected(index);
+                                  state.value.mobileNumber =
+                                      _mobileNumberController.value.text;
+                                },
+                              ),
+                              const SizedBox(height: Dimens.paddingMicro),
+                              Text(
+                                state.providers[index].$1,
+                                style: AppTextStyle.body1(),
+                              )
+                            ],
+                          );
+                        },
+                        itemCount: state.providers.length,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.0));
+                        },
+                        // padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       );
                     },
-                    itemCount: state.providers.length,
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0));
-                    },
-                    // padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  );
-                },
-                valueListenable: state,
-              ),
-            )
-          ],
+                    valueListenable: state,
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -15,5 +15,4 @@ class IDVerificationBody implements Serializable{
       "CardID" : idNumber
     };
   }
-
 }

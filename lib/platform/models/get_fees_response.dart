@@ -4,7 +4,7 @@ import 'package:unified_checkout_sdk/network_manager/serializable.dart';
 import 'package:unified_checkout_sdk/platform/models/checkout_type.dart';
 
 class NewGetFeesResponse implements Serializable {
-  final double fees;
+  final num fees;
   final double amountPayable;
   final String checkoutType;
 
@@ -25,7 +25,7 @@ class NewGetFeesResponse implements Serializable {
 
   factory NewGetFeesResponse.fromJson(Map<String, dynamic>? json) {
     return NewGetFeesResponse(
-      fees: json?['fees'] as double,
+      fees: json?['fees'] as num,
       amountPayable: json?['amountPayable'] as double,
       checkoutType: json?['checkoutType'] as String,
     );

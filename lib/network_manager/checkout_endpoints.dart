@@ -7,6 +7,7 @@ import 'package:unified_checkout_sdk/platform/models/add_mobile_wallet.dart';
 import 'package:unified_checkout_sdk/platform/models/id_verification_request_body.dart';
 import 'package:unified_checkout_sdk/platform/models/mobile_money_request.dart';
 import 'package:unified_checkout_sdk/platform/models/otp_verify_request_body.dart';
+import 'package:unified_checkout_sdk/platform/models/preapproval_req_params.dart';
 import 'package:unified_checkout_sdk/platform/models/setup_payer_auth_request.dart';
 import 'package:unified_checkout_sdk/utils/currency_formatter.dart';
 
@@ -51,12 +52,13 @@ class CheckoutEndPoint with EndPointCore {
   }
 
   Future<ApiEndPoint> getPreApprovalConfirmEndPoint(
-      MobileMoneyPaymentRequest request) {
+      PreapprovalConfirm request) {
     return createEndpoint(
         authority: _basePath,
-        path: "",
-        requestType: HttpVerb.POST,
-        body: request.toMap());
+        path: "api/v1/merchant/$merchantId/unifiedcheckout/preapprovalconfirm",
+        requestType: HttpVerb.GET,
+        body: request.toMap()
+    );
   }
 
   Future<ApiEndPoint> fetchChannels() {

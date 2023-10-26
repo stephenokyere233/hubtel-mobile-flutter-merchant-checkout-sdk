@@ -95,7 +95,7 @@ class _BankPayReceiptScreenState extends State<BankPayReceiptScreen> {
     widget.showLoadingDialog(context: context, text: "Downloading");
     Directory? appDocDir = await getApplicationDocumentsDirectory();
     final targetPath = appDocDir.path;
-    final targetFileName = "example-pdf";
+    final targetFileName = "${widget.businessDetails.businessName}_${widget.mobileMoneyResponse.customerName}_${DateTime.now()}";
 
     final generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(htmlContent, targetPath ?? "", targetFileName);
     print(generatedPdfFile);
