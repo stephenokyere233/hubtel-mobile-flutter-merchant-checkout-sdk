@@ -57,11 +57,7 @@ class CheckoutViewModel extends ChangeNotifier {
   }
 
   Future<List<BankCardData>?> getBankWallets() async {
-    return await prefManager.getCards();
-  }
-
-  printCards() async {
-    prefManager.printCards();
+    return await prefManager.getBankCards();
   }
 
   late final CheckoutApi _checkoutApi = CheckoutApi(requester: requester);

@@ -15,26 +15,24 @@ class CheckoutPrefManager extends BasePrefManager {
   }
 
   Future<void> saveBankWallet(BankCardData? card) async {
-    final List<Serializable> cards = List.unmodifiable([card]);
-    saveToSharedPrefObjectList(PrefConstants.BANK_CARD_ID_KEY, cards);
+    final savedCards = await getBankCards();
+    final found = savedCards?.firstWhere((element) => element.cardNumber == card?.cardNumber, orElse: () => BankCardData());
+    if (found?.cardNumber == card?.cardNumber) {
+      found?.cvv = card?.cvv;
+      found?.cardExpiryDate = card?.cardExpiryDate;
+      savedCards?.remove(found);
+      savedCards?.add(found!);
+    } else {
+      savedCards?.add(card!);
+    }
+    saveToSharedPrefObjectList(PrefConstants.BANK_CARD_ID_KEY, savedCards);
   }
 
-  Future<List<BankCardData>?> getBankCards() async {
-    final list = await getSharedPrefObjectList(PrefConstants.BANK_CARD_ID_KEY);
-    return list?.map((e) => BankCardData.fromJson(e)).toList();
-  }
-
-  Future<List<BankCardData>>? getCards() async {
+  Future<List<BankCardData>>? getBankCards() async {
     final parsedJson =
         await getSharedPrefObjectList(PrefConstants.BANK_CARD_ID_KEY);
     if (parsedJson == null) return [];
     return parsedJson.map((e) => BankCardData.fromJson(e)).toList();
   }
 
-  Future<void> printCards() async {
-    final list = await getSharedPrefObjectList(PrefConstants.BANK_CARD_ID_KEY);
-    list?.forEach((element) {
-      log('$element', name: '$runtimeType');
-    });
-  }
 }

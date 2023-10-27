@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:unified_checkout_sdk/src/extensions/widget_extensions.dart';
 import 'package:unified_checkout_sdk/src/ux/home/preapproval_confirm_success_screen.dart';
 
-import '../../network_manager/extensions/ui_state.dart';
+import '../../network_manager/network_manager.dart';
 import '../../platform/models/models.dart';
 import '../../resources/resources.dart';
 import '../../utils/utils.dart';
@@ -532,10 +532,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
         );
       });
     } else {
-      print('Else not droppppppinnnnng herer ererer');
       setState(() {
         selectedProvider = viewModel.providers[0];
-        print('${selectedProvider?.name}   selectedProvider');
         momoProviderController.text =
             CheckoutUtils.mapApiWalletProviderNameToKnowName(
                 providerName: selectedProvider?.alias ?? '');
@@ -569,22 +567,12 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
       bankCardExpansionController.collapse();
       otherPaymentWalletExpansionController.collapse();
       bankPayExpansionController.collapse();
-
-      // final channel = viewModel.getMomoChannelName(selectedProvider?.name);
-      // final feeSum = await computeCheckoutFeeSum(channel);
-      // final purchaseAmount =
-      //     widget.checkoutConfig.checkoutPurchase.instantServicePurchase?.amount ?? 0.00;
-
-      //   setState(() {
-      //     totalAmountPayable = purchaseAmount + feeSum;
-      //   });
     }
   }
 
   Future<void> onOtherTileExpansionChanged(bool value) async {
     if (value == true) {
       setState(() {
-        // isExpanded = true;
         walletType = WalletType.Hubtel;
       });
       mobileMoneyExpansionController.collapse();
@@ -593,14 +581,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
       bankPayExpansionController.collapse();
       selectedProvider = MomoProvider(alias: otherProviderString);
       fetchFees2();
-      // final channel = viewModel.getMomoChannelName(selectedProvider?.name);
-      // final feeSum = await computeCheckoutFeeSum(channel);
-      // final purchaseAmount =
-      //     widget.checkoutConfig.checkoutPurchase.instantServicePurchase?.amount ?? 0.00;
-
-      //   setState(() {
-      //     totalAmountPayable = purchaseAmount + feeSum;
-      //   });
     }
   }
 
@@ -617,7 +597,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   fetchWallets() async {
-    print(CheckoutViewModel.channelFetch?.isHubtelInternalMerchant);
+    log('${CheckoutViewModel.channelFetch?.isHubtelInternalMerchant}',
+        name: '$runtimeType');
     if ((CheckoutViewModel.channelFetch?.isHubtelInternalMerchant == true)) {
       final response = await viewModel.fetchWallets();
       if (response.state == UiState.success) {
@@ -627,7 +608,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
         });
         viewModel.notifyListeners();
       } else {
-        print(response.hasError);
+        log('${response.hasError}', name: '$runtimeType');
       }
     }
   }
@@ -650,11 +631,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   fetchFees() async {
-    // setState(() {
-    //   isLoadingFees = true;
-    //   isButtonEnabled = false;
-    // });
-
     if (walletType == WalletType.Card) {
       selectedProvider = MomoProvider(
           name: CheckoutStrings.BankCard,
@@ -725,7 +701,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   void changeWalletType(String channel) {
-    print(channel);
     switch (channel.toLowerCase()) {
       case 'hubtel-gh':
         walletType = WalletType.Hubtel;
@@ -818,7 +793,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           }
       }
     } else {
-      //TODO: Go and intake Ghana card Details.
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -838,11 +812,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
         savedCards = cards!;
       });
     }
-
-    log('Bank Cards', name: '$runtimeType');
-    cards?.forEach((element) {
-      log('${element}', name: '$runtimeType');
-    });
   }
 
   _setup() async {
@@ -851,10 +820,15 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
     final (String? savedCardExpiryMonth, String? savedCardExpiryYear) =
         bankCard?.cardExpiryDate?.getExpiryInfo() ?? (null, null);
 
-    viewModel.saveBankWallet(BankCardData(
-        cardNumber: newCardNumber,
-        cardExpiryDate: newCardExpiry,
-        cvv: newCardCvv));
+    if (shouldSaveCardForFuture == true) {
+      viewModel.saveBankWallet(
+        BankCardData(
+          cardNumber: newCardNumber,
+          cardExpiryDate: newCardExpiry,
+          cvv: newCardCvv,
+        ),
+      );
+    }
 
     final dsRequest = SetupPayerAuthRequest(
       amount: widget.checkoutPurchase.amount,
