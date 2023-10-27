@@ -1,4 +1,3 @@
-
 import '../platform/models/models.dart';
 import 'base_pref_manager.dart';
 import 'pref_constants.dart';

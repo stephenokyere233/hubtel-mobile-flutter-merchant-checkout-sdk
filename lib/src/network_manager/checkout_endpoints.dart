@@ -79,7 +79,7 @@ class CheckoutEndPoint with EndPointCore {
         path: 'api/v1/merchant/$merchantId/unifiedcheckout/feecalculation',
         requestType: HttpVerb.GET,
         body: {
-          'ChannelPassed': channel,
+          'Channel': channel,
           'amount': amount.formatDoubleToString()
         });
   }

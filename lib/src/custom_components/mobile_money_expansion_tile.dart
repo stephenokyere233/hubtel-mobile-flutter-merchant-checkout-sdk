@@ -51,14 +51,6 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
 
   @override
   Widget build(BuildContext context) {
-    // if(MobileMoneyExpansionTile.fetchFees == true) {
-    //   if (widget.isSelected) {
-    //     autoSelectFirstWallet();
-    //   }
-    // MobileMoneyExpansionTile.fetchFees = false;
-    // }
-    log("hereeeeee ${widget.wallets.length}",
-        time: DateTime.now(), name: runtimeType.toString());
     return Column(
       children: [
         if (widget.isSelected) const SizedBox(height: Dimens.paddingDefault),
