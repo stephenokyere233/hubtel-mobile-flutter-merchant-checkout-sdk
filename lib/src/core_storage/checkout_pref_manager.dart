@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import '../network_manager/network_manager.dart';
 import '../platform/models/models.dart';
 import 'base_pref_manager.dart';
 import 'pref_constants.dart';
