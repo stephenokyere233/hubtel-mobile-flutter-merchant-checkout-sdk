@@ -1,39 +1,110 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Hubtel Merchant Checkout SDK - Flutter
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+The Hubtel Flutter Checkout Package is a convenient and easy-to-use library that simplifies the process of implementing
+a checkout flow in your Flutter application.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+## Installation
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+The `Hubtel Checkout` package is available on GitHub for Flutter apps to integrate with their apps. It'll be available
+on `pub.dev` soon.
 
-## Features
+### github.com
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+1. Open your `pubspec.yaml` file.
+2. Add the following lines to your dependencies section:
 
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
-```dart
-const like = 'sample';
+```yaml
+  unified_checkout_sdk:
+    git:
+      url: https://github.com/hubtel/hubtel-mobile-flutter-merchant-checkout-sdk.git
+      ref: main
 ```
 
-## Additional information
+## Getting Started
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+_Objects needed_
+| Properties | Explanation |
+|--|--|
+|**`HubtelCheckoutConfiguration`**|is an object used for payment processing with Hubtel Checkout service. It enables
+merchants to set their identification, specify a callback URL for payment notifications, and secure transactions with a
+merchant API key.|
+| **`merchantId`** (required) |given to the merchant to use the sdk. This is one of three parameters to be passed
+the `configuration object`.|
+| **`merchantApiKey`** (required) | Base64 encoded string of the customer’s id and password. Also passed to
+the `configuration object`.|
+| **`callbackUrl`** (required)| A url provided by the merchant in order to be able to listen for callbacks from the
+payment api to know the status of payments. Also passed to the `configuration object`.|
+|**`PurchaseInfo`**|Information about the purchase to process. Details are given below.|
+| **`amount`** (required) | The price of the item or service the customer is trying to purchase from.|
+| **`customerPhoneNumber`** (required) | A required mobile number of the customer purchasing the item.|
+| **`purchaseDescription`** (required)| An optional description attached to the purchase.
+| **`ThemeConfig`**|Lets you pass a `primaryColor` that the checkout adopts.|
+
+## Integration
+
+1. Add the package to your app as described above.
+2. Import the package in the screen you want to implement the checkout.
+3. Create a `HubtelCheckoutConfiguration` object, like so:
+
+```dart
+
+final hubtelConfig = HubtelCheckoutConfiguration(
+  merchantApiKey: "QTN1akQ1SzpiM2IxMjA1NTEwZmI0NjYzYTdiY2ZmZmUyNmQ1YmIzZA==",
+  merchantID: "1122334",
+  callbackUrl: "www.sdfasd.com",
+  routeName: "/",
+);
+```
+
+4. Create a `PurchaseInfo` object, like so:
+
+```dart
+
+final purchaseInfo = PurchaseInfo(
+  amount: 0.1,
+  customerPhoneNumber: '0541234567',
+  clientReference: const Uuid().v4(),
+  purchaseDescription: 'Camera',
+);
+```
+
+Note that `Uuid().v4()` is agnostic of this package, it's given by the uuid package available on `pub.dev`.
+
+5. You may optionally create a `ThemeConfig` object like so:
+
+```dart
+
+final themeConfig = ThemeConfig(primaryColor: Colors.black);
+```
+
+6. On your pay button, for example, having all necessary configurations set, navigate to the `CheckoutScreen` like so:
+
+```dart@
+Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) {
+      return CheckoutScreen(
+        purchaseInfo: purchaseInfo,
+        configuration: hubtelConfig,
+        onCheckoutComplete: (status) => {},
+        themeConfig: themeConfig,
+      );
+    },
+  ),
+);
+```
+
+### PaymentStatus Cases
+
+The `PaymentStatus` is an enum displaying the status of payment. It contains the following cases:
+
+- `userCancelledPayment`: When the user closes the checkout page without performing any transaction.
+- `paymentFailed`: When the user performs a transaction but payment fails.
+- `paymentSuccessful`: When the user finally pays successfully.
+- `unknown`: When the user cancels transaction after payment attempt without checking status.
+
+```
+## Screenshots
+
+![Fig. 01](https://firebasestorage.googleapis.com/v0/b/newagent-b6906.appspot.com/o/hubtel-mobile-checkout-ios-sdk-image.png?alt=media&token=376d90ab-c416-42a0-8b99-69028378ff72)
