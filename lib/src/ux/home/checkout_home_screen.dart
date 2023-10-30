@@ -201,9 +201,9 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
             child: AnimatedBuilder(
               builder: (context, child) {
                 return CustomButton(
-                  title:
+                  title: !( walletType == WalletType.BankPay) ?
                       '${CheckoutStrings.pay} ${(totalAmountPayable ?? widget.checkoutPurchase.amount).formatMoney()}'
-                          .toUpperCase(),
+                          .toUpperCase() : "GENERATE INVOICE",
                   isEnabled: checkoutHomeScreenState.isButtonEnabled.value,
                   buttonAction: () {
                     checkout();
@@ -488,6 +488,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                     .collapse();
                                                 otherPaymentWalletExpansionController
                                                     .collapse();
+
                                                 // bankPayExpansionController
                                                 //     .collapse();
                                                 setState(() {
@@ -614,6 +615,10 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   _handleButtonActivation() {
+
+    if (walletType == WalletType.BankPay){
+
+    }
     if (feesFetched && mobileNumberController.text.trim().length >= 9) {
       checkoutHomeScreenState.isButtonEnabled.value = true;
       return;
@@ -628,6 +633,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
       checkoutHomeScreenState.isButtonEnabled.value = true;
       return;
     }
+
   }
 
   fetchFees() async {

@@ -194,7 +194,7 @@ class CheckoutViewModel extends ChangeNotifier {
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
-      return UiResult(state: UiState.success, message: "Success", data: data);
+      return UiResult(state: UiState.success, message: result.response?.message ?? "", data: data);
     }
     return UiResult(
         state: UiState.error,
