@@ -14,7 +14,7 @@ on `pub.dev` soon.
 2. Add the following lines to your dependencies section:
 
 ```yaml
-  unified_checkout_sdk:
+  hubtel_merchant_checkout_sdk:
     git:
       url: https://github.com/hubtel/hubtel-mobile-flutter-merchant-checkout-sdk.git
       ref: main
