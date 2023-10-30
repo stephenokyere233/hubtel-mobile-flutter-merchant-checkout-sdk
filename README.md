@@ -107,7 +107,5 @@ The `PaymentStatus` is an enum displaying the status of payment. It contains the
 - `paymentSuccessful`: When the user finally pays successfully.
 - `unknown`: When the user cancels transaction after payment attempt without checking status.
 
-```
 ## Screenshots
-
 ![Fig. 01](https://firebasestorage.googleapis.com/v0/b/newagent-b6906.appspot.com/o/hubtel-mobile-checkout-ios-sdk-image.png?alt=media&token=376d90ab-c416-42a0-8b99-69028378ff72)
