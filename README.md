@@ -5,7 +5,7 @@ a checkout flow in your Flutter application.
 
 ## Installation
 
-The `Hubtel Checkout` package is available on GitHub for Flutter apps to integrate with their apps. It'll be available
+The `Hubtel Merchat Checkout` package is available on GitHub for Flutter apps to integrate with their apps. It'll be available
 on `pub.dev` soon.
 
 ### github.com
@@ -43,7 +43,10 @@ payment api to know the status of payments. Also passed to the `configuration ob
 ## Integration
 
 1. Add the package to your app as described above.
-2. Import the package in the screen you want to implement the checkout.
+2. Import the package in the screen you want to implement the checkout like so:
+```dart
+import 'package:hubtel_merchant_checkout_sdk/hubtel_merchant_checkout_sdk.dart';
+```
 3. Create a `HubtelCheckoutConfiguration` object, like so:
 
 ```dart
