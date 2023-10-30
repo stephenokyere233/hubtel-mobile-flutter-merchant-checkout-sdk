@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:unified_checkout_sdk/src/core_ui/core_ui.dart';
-import 'package:unified_checkout_sdk/src/platform/models/models.dart';
+import '/src/core_ui/core_ui.dart';
+import '/src/platform/models/models.dart';
 
 import '../../resources/resources.dart';
 import 'info_entry.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core_ui/core_ui.dart';
+import '/src/core_ui/core_ui.dart';
 
 class BankCardTypeTab extends StatelessWidget {
   const BankCardTypeTab({

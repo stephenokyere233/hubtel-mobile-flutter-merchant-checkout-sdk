@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:unified_checkout_sdk/src/extensions/widget_extensions.dart';
+import '/src/extensions/widget_extensions.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../core_ui/core_ui.dart';

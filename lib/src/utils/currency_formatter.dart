@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:unified_checkout_sdk/src/utils/string_extensions.dart';
+import '/src/utils/string_extensions.dart';
 
 import 'helpers/ttriple.dart';
 

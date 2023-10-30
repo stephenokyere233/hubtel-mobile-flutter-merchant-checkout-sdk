@@ -1,12 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:unified_checkout_sdk/src/extensions/widget_extensions.dart';
-import 'package:unified_checkout_sdk/src/utils/utils.dart';
-import '../../network_manager/network_manager.dart';
-import '../../platform/models/models.dart';
-import '../../resources/resources.dart';
-import '../view_model/checkout_view_model.dart';
+import '/src/extensions/widget_extensions.dart';
+import '/src/utils/utils.dart';
+import '/src/network_manager/network_manager.dart';
+import '/src/platform/models/models.dart';
+import '/src/resources/resources.dart';
+import '/src/ux/view_model/checkout_view_model.dart';
 import '/src/core_ui/core_ui.dart';
 
 import '../../custom_components/circle_image.dart';

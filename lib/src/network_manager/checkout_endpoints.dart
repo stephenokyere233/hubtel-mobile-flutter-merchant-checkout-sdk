@@ -1,6 +1,6 @@
 
 
-import 'package:unified_checkout_sdk/src/utils/currency_formatter.dart';
+import 'package:hubtel_merchant_checkout_sdk/src/utils/currency_formatter.dart';
 
 import '../platform/models/models.dart';
 import 'api_core.dart';

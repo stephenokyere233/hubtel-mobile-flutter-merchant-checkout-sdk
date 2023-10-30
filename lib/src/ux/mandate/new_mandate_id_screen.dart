@@ -1,13 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:unified_checkout_sdk/src/extensions/widget_extensions.dart';
-import '../../network_manager/network_manager.dart';
-import '../../platform/models/models.dart';
-import '../home/check_status_screen.dart';
+import '/src/extensions/widget_extensions.dart';
+import '/src/network_manager/network_manager.dart';
+import '/src/platform/models/models.dart';
+import '/src/ux/home/check_status_screen.dart';
 import '/src/core_ui/core_ui.dart';
 import '/src/ux/view_model/checkout_view_model.dart';
-import '../../resources/checkout_strings.dart';
+import '/src/resources/checkout_strings.dart';
 
 class NewMandateIdScreen extends StatefulWidget {
   NewMandateIdScreen({required this.momoRequest, super.key});

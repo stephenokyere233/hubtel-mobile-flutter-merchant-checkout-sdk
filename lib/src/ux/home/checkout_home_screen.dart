@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:unified_checkout_sdk/src/extensions/widget_extensions.dart';
-import 'package:unified_checkout_sdk/src/ux/home/preapproval_confirm_success_screen.dart';
+import '/src/extensions/widget_extensions.dart';
+import '/src/ux/home/preapproval_confirm_success_screen.dart';
 
 import '../../network_manager/network_manager.dart';
 import '../../platform/models/models.dart';

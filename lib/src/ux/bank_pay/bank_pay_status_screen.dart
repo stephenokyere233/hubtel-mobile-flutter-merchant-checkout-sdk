@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:unified_checkout_sdk/src/core_ui/core_ui.dart';
+import '/src/core_ui/core_ui.dart';
 
 import '../../platform/models/models.dart';
 import '../../resources/checkout_drawables.dart';

@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
-import '../../core_storage/core_storage.dart';
-import '../../network_manager/network_manager.dart';
-import '../../platform/datasource/api/checkout_api.dart';
-import '../../platform/models/models.dart';
+import '/src/core_storage/core_storage.dart';
+import '/src/network_manager/network_manager.dart';
+import '/src/platform/datasource/api/checkout_api.dart';
+import '/src/platform/models/models.dart';
 
 class CheckoutViewModel extends ChangeNotifier {
   final requester = Requester();

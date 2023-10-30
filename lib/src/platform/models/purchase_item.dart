@@ -1,5 +1,5 @@
 
-import 'package:unified_checkout_sdk/src/extensions/string_extensions.dart';
+import '/src/extensions/string_extensions.dart';
 
 class PurchaseInfo {
   double amount;
