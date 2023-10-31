@@ -25,19 +25,14 @@ on [pub.dev](https://pub.dev) soon.
 _Objects needed_
 | Properties | Explanation |
 |--|--|
-|**`HubtelCheckoutConfiguration`**|is an object used for payment processing with Hubtel Checkout service. It enables
-merchants to set their identification, specify a callback URL for payment notifications, and secure transactions with a
-merchant API key.|
-| **`merchantId`** (required) |given to the merchant to use the sdk. This is one of three parameters to be passed
-the `configuration object`.|
-| **`merchantApiKey`** (required) | Base64 encoded string of the customer’s id and password. Also passed to
-the `configuration object`.|
-| **`callbackUrl`** (required)| A url provided by the merchant in order to be able to listen for callbacks from the
-payment api to know the status of payments. Also passed to the `configuration object`.|
+|**`HubtelCheckoutConfiguration`**|is an object used for payment processing with Hubtel Checkout service. It enables merchants to set their identification, specify a callback URL for payment notifications, and secure transations with a merchant API key.|
+| **`merchantId`** (required)|given to the merchant to use the sdk. This is one of three parameters to be passed to the `configuration` object.|
+| **`merchantApiKey`** (required)|Base64 encoded string of the customer’s id and password. Also passed to be passed to the `configuration` object.|
+| **`callbackUrl`** (required)| A url provided by the merchant in order to be able to listen for callbacks from the payment api to know the status of payments. Also passed to the `configuration object`.|
 |**`PurchaseInfo`**|Information about the purchase to process. Details are given below.|
 | **`amount`** (required) | The price of the item or service the customer is trying to purchase from.|
 | **`customerPhoneNumber`** (required) | A required mobile number of the customer purchasing the item.|
-| **`purchaseDescription`** (required)| An optional description attached to the purchase.
+| **`purchaseDescription`** (required)| An optional description attached to the purchase.|
 | **`ThemeConfig`**|Lets you pass a `primaryColor` that the checkout adopts.|
 
 ## Integration
