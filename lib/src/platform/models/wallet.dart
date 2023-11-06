@@ -1,4 +1,3 @@
-
 import '../../network_manager/network_manager.dart';
 
 class Wallet implements Serializable {
@@ -24,6 +23,19 @@ class Wallet implements Serializable {
     required this.type,
   });
 
+  String get providerName {
+    if (provider?.toLowerCase().contains('mtn') == true) {
+      return 'MTN Mobile Money';
+    }
+    if (provider?.toLowerCase().contains('vodafone') == true) {
+      return 'Vodafone Cash';
+    }
+    if (provider?.toLowerCase().contains('tigo') == true || provider?.toLowerCase().contains('airtel') == true) {
+      return 'AT Money';
+    }
+    return '$provider';
+  }
+
   factory Wallet.fromJson(Map<String, dynamic>? json) {
     return Wallet(
       id: json?['id'],
@@ -38,6 +50,7 @@ class Wallet implements Serializable {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
       'id': id,

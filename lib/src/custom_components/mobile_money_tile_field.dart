@@ -120,7 +120,7 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                                         widget.showWalletAdditionTile ?? true,
                                     child: Text(
                                       widget.showWalletAdditionTile ?? true
-                                          ? (e.provider ?? "").capitalize()
+                                          ? (e.providerName).capitalize()
                                           : "",
                                       style: AppTextStyle.body2().copyWith(
                                           color: HubtelColors.neutral.shade600),
