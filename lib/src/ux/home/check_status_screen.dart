@@ -16,11 +16,12 @@ class CheckStatusScreen extends StatefulWidget {
 
   Function(PaymentStatus) checkoutCompleted;
 
-  CheckStatusScreen(
-      {super.key,
-      required this.checkoutResponse,
-      required this.checkoutCompleted,
-      this.themeConfig});
+  CheckStatusScreen({
+    super.key,
+    required this.checkoutResponse,
+    required this.checkoutCompleted,
+    this.themeConfig,
+  });
 
   @override
   State<CheckStatusScreen> createState() => _CheckStatusScreenState();
@@ -114,25 +115,26 @@ class _CheckStatusScreenState extends State<CheckStatusScreen> {
               bottom: 13.0,
             ),
             child: CustomButton(
-                width: double.infinity,
-                title: switch (paymentStatus) {
-                  PaymentStatus.unspecified => CheckoutStrings.iHavePaid,
-                  PaymentStatus.paid => CheckoutStrings.done.toUpperCase(),
-                  PaymentStatus.unpaid => CheckoutStrings.done.toUpperCase(),
-                  PaymentStatus.expired => CheckoutStrings.done.toUpperCase(),
-                  PaymentStatus.failed => CheckoutStrings.done.toUpperCase(),
-                  PaymentStatus.pending => showPendingTimer
-                      ? CheckoutStrings.checkAgainTimeLeft(timeLeft: timeLeft)
-                          .toUpperCase()
-                      : CheckoutStrings.checkAgain.toUpperCase(),
-                },
-                buttonAction: onButtonClick,
-                isDisabledBgColor: const Color(0xFFF8F9FB),
-                disabledTitleColor: const Color(0xFF9CABB8),
-                style: HubtelButtonStyle.solid,
-                isEnabledBgColor: ThemeConfig.themeColor,
-                isEnabled:
-                    !showPendingTimer || paymentStatus == PaymentStatus.paid),
+              width: double.infinity,
+              title: switch (paymentStatus) {
+                PaymentStatus.unspecified => CheckoutStrings.iHavePaid,
+                PaymentStatus.paid => CheckoutStrings.done.toUpperCase(),
+                PaymentStatus.unpaid => CheckoutStrings.done.toUpperCase(),
+                PaymentStatus.expired => CheckoutStrings.done.toUpperCase(),
+                PaymentStatus.failed => CheckoutStrings.done.toUpperCase(),
+                PaymentStatus.pending => showPendingTimer
+                    ? CheckoutStrings.checkAgainTimeLeft(timeLeft: timeLeft)
+                        .toUpperCase()
+                    : CheckoutStrings.checkAgain.toUpperCase(),
+              },
+              buttonAction: onButtonClick,
+              isDisabledBgColor: const Color(0xFFF8F9FB),
+              disabledTitleColor: const Color(0xFF9CABB8),
+              style: HubtelButtonStyle.solid,
+              isEnabledBgColor: ThemeConfig.themeColor,
+              isEnabled:
+                  !showPendingTimer || paymentStatus == PaymentStatus.paid,
+            ),
           )
         ],
       ),
@@ -179,15 +181,21 @@ class _CheckStatusScreenState extends State<CheckStatusScreen> {
         paymentStatus == PaymentStatus.failed;
 
     if (paymentStatus == PaymentStatus.paid) {
-      Navigator.popUntil(
-          context, ModalRoute.withName(CheckoutRequirements.routeName));
+      // Navigator.popUntil(
+      //   context,
+      //   ModalRoute.withName(CheckoutRequirements.routeName),
+      // );
+      Navigator.of(context).popUntil((route) => route.isFirst);
       widget.checkoutCompleted.call(PaymentStatus.paid);
       return;
     }
 
     if (paymentStatus == PaymentStatus.failed) {
-      Navigator.popUntil(
-          context, ModalRoute.withName(CheckoutRequirements.routeName));
+      // Navigator.popUntil(
+      //   context,
+      //   ModalRoute.withName(CheckoutRequirements.routeName),
+      // );
+      Navigator.of(context).popUntil((route) => route.isFirst);
       widget.checkoutCompleted.call(paymentStatus);
       return;
     }
