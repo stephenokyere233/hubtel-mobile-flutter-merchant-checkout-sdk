@@ -39,12 +39,13 @@ class CheckoutHomeScreen extends StatefulWidget {
 
   Function(PaymentStatus) checkoutCompleted;
 
-  CheckoutHomeScreen(
-      {super.key,
-      required this.checkoutPurchase,
-      required this.businessInfo,
-      required this.checkoutCompleted,
-      this.themeConfig});
+  CheckoutHomeScreen({
+    super.key,
+    required this.checkoutPurchase,
+    required this.businessInfo,
+    required this.checkoutCompleted,
+    this.themeConfig,
+  });
 
   @override
   State<CheckoutHomeScreen> createState() => _CheckoutHomeScreenState2();
@@ -201,9 +202,10 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
             child: AnimatedBuilder(
               builder: (context, child) {
                 return CustomButton(
-                  title: !( walletType == WalletType.BankPay) ?
-                      '${CheckoutStrings.pay} ${(totalAmountPayable ?? widget.checkoutPurchase.amount).formatMoney()}'
-                          .toUpperCase() : "GENERATE INVOICE",
+                  title: !(walletType == WalletType.BankPay)
+                      ? '${CheckoutStrings.pay} ${(totalAmountPayable ?? widget.checkoutPurchase.amount).formatMoney()}'
+                          .toUpperCase()
+                      : "GENERATE INVOICE",
                   isEnabled: checkoutHomeScreenState.isButtonEnabled.value,
                   buttonAction: () {
                     checkout();
@@ -615,10 +617,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   _handleButtonActivation() {
-
-    if (walletType == WalletType.BankPay){
-
-    }
+    if (walletType == WalletType.BankPay) {}
     if (feesFetched && mobileNumberController.text.trim().length >= 9) {
       checkoutHomeScreenState.isButtonEnabled.value = true;
       return;
@@ -633,7 +632,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
       checkoutHomeScreenState.isButtonEnabled.value = true;
       return;
     }
-
   }
 
   fetchFees() async {
@@ -1063,7 +1061,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
             customerMsisdn: selectedWallet?.accountNo ?? '',
             channel: selectedProvider?.receiveMoneyPromptValue ?? '',
             amount: '${widget.checkoutPurchase?.amount ?? 0.00}',
-            primaryCallbackUrl: '',
+            primaryCallbackUrl: CheckoutRequirements.callbackUrl,
             description: '',
             clientReference: widget.checkoutPurchase.clientReference,
             mandateId: '');
@@ -1073,7 +1071,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
             customerMsisdn: selectedWallet?.accountNo ?? '',
             channel: selectedProvider?.directDebitValue ?? '',
             amount: '${widget.checkoutPurchase?.amount ?? 0.00}',
-            primaryCallbackUrl: '',
+            primaryCallbackUrl: CheckoutRequirements.callbackUrl,
             description: '',
             clientReference: widget.checkoutPurchase.clientReference,
             mandateId: '');
@@ -1086,7 +1084,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           customerMsisdn: hubtelWallet?.accountNo ?? '',
           channel: 'hubtel-gh',
           amount: '${widget.checkoutPurchase?.amount ?? 0.00}',
-          primaryCallbackUrl: '',
+          primaryCallbackUrl: CheckoutRequirements.callbackUrl,
           description: '',
           clientReference: widget.checkoutPurchase.clientReference,
           mandateId: '');
@@ -1096,7 +1094,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           customerMsisdn: selectedWallet?.accountNo ?? '',
           channel: 'g-money',
           amount: '${widget.checkoutPurchase?.amount ?? 0.00}',
-          primaryCallbackUrl: '',
+          primaryCallbackUrl: CheckoutRequirements.callbackUrl,
           description: '',
           clientReference: widget.checkoutPurchase.clientReference,
           mandateId: mandateId ?? '');

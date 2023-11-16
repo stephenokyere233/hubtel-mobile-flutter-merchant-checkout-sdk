@@ -70,8 +70,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
                   child: CircularProgressIndicator(
-                    color: ThemeConfig.themeColor,
-                  ));
+                color: ThemeConfig.themeColor,
+              ));
             } else {
               if (snapshot.hasData) {
                 final businessInfo = snapshot.data?.data?.getBusinessInfo() ??
@@ -84,18 +84,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   businessInfo: businessInfo,
                   checkoutCompleted: widget.onCheckoutComplete,
                   themeConfig: widget.themeConfig ??
-                      ThemeConfig(primaryColor: HubtelColors.teal),
+                      ThemeConfig(
+                        primaryColor: HubtelColors.teal,
+                      ),
                 );
               }
             }
             return Center(
               child: CircularProgressIndicator(
-                  color: ThemeConfig.themeColor, backgroundColor: Colors.teal[500]),
+                  color: ThemeConfig.themeColor,
+                  backgroundColor: Colors.teal[500]),
             );
           },
         ),
       ),
     );
   }
-
 }
