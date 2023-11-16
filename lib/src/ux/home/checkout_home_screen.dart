@@ -1054,6 +1054,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   MobileMoneyPaymentRequest getCheckoutRequest({String? mandateId}) {
+    log('Callback: ${CheckoutRequirements.callbackUrl}', name: '$runtimeType');
     if (walletType == WalletType.Momo) {
       if (CheckoutViewModel.checkoutType == CheckoutType.receivemoneyprompt) {
         return MobileMoneyPaymentRequest(

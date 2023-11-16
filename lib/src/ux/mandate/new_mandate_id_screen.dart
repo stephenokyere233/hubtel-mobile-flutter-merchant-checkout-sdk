@@ -79,7 +79,7 @@ class _NewMandateIdScreenState extends State<NewMandateIdScreen> {
                   Text(
                     CheckoutStrings.gMoneyInstructionsHeading,
                     style: AppTextStyle.body2()
-                        ?.copyWith(fontWeight: FontWeight.bold),
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: Dimens.paddingDefault),
                   Text(

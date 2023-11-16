@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import '/src/extensions/widget_extensions.dart';
 import '/src/utils/utils.dart';
