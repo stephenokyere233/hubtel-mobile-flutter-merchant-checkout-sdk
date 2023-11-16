@@ -40,6 +40,7 @@ class CheckoutScreen extends StatefulWidget {
     CheckoutRequirements.apiKey = configuration.merchantApiKey;
     CheckoutRequirements.merchantId = configuration.merchantID;
     CheckoutRequirements.routeName = configuration.routeName;
+    CheckoutRequirements.callbackUrl = configuration.callbackUrl;
   }
 
   @override
