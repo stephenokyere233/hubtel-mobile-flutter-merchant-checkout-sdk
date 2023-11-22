@@ -26,26 +26,26 @@ class CheckoutViewModel extends ChangeNotifier {
 
   final List<MomoProvider> providers = [
     MomoProvider(
-        name: "MTN Mobile Money",
-        logoUrl: "",
-        alias: "mtn",
-        receiveMoneyPromptValue: "mtn-gh",
-        preapprovalConfirmValue: "",
-        directDebitValue: "mtn-gh-direct-debit"),
+        name: 'MTN Mobile Money',
+        logoUrl: '',
+        alias: 'mtn',
+        receiveMoneyPromptValue: 'mtn-gh',
+        preapprovalConfirmValue: '',
+        directDebitValue: 'mtn-gh-direct-debit'),
     MomoProvider(
-        name: "Vodafone Cash",
-        logoUrl: "",
-        alias: "vodafone",
-        receiveMoneyPromptValue: "vodafone-gh",
-        preapprovalConfirmValue: "",
-        directDebitValue: "vodafone-gh-direct-debit"),
+        name: 'Vodafone Cash',
+        logoUrl: '',
+        alias: 'vodafone',
+        receiveMoneyPromptValue: 'vodafone-gh',
+        preapprovalConfirmValue: '',
+        directDebitValue: 'vodafone-gh-direct-debit'),
     MomoProvider(
-        name: "AT Money",
-        logoUrl: "",
-        alias: "airtelTigo",
-        receiveMoneyPromptValue: "tigo-gh",
-        preapprovalConfirmValue: "",
-        directDebitValue: "tigo-gh-direct-debit"),
+        name: 'AT Money',
+        logoUrl: '',
+        alias: 'airtelTigo',
+        receiveMoneyPromptValue: 'tigo-gh',
+        preapprovalConfirmValue: '',
+        directDebitValue: 'tigo-gh-direct-debit'),
   ];
 
   Future<String?> getCustomerMandateId() async {
@@ -62,7 +62,6 @@ class CheckoutViewModel extends ChangeNotifier {
 
   late final CheckoutApi _checkoutApi = CheckoutApi(requester: requester);
 
-  //TODO: fetch channels
   Future<UiResult<ChannelFetchResponse>> fetchChannels() async {
     final result = await _checkoutApi.fetchChannels();
 
@@ -75,36 +74,33 @@ class CheckoutViewModel extends ChangeNotifier {
       log('fetched channels ${channelResponse?.businessLogoUrl}',
           name: '$runtimeType');
       CheckoutViewModel.channelFetch = result.response?.data;
-      log('${channelResponse?.isHubtelInternalMerchant}', name: '$runtimeType');
       notifyListeners();
-      return UiResult(state: UiState.success, message: "Success", data: data);
+      return UiResult(state: UiState.success, message: 'Success', data: data);
     }
     return UiResult(
         state: UiState.error,
-        message: result.response?.message ?? "",
+        message: result.response?.message ?? '',
         data: null);
   }
 
-  //TODO: fetch wallets
-
+  // TODO: fetch wallets
   Future<UiResult<List<Wallet>>> fetchWallets() async {
-    log("called here");
     final result = await _checkoutApi.fetchWallets();
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
       wallets = result.response?.data;
-      log("wallets Count here ${wallets?.length}");
+    
       notifyListeners();
-      return UiResult(state: UiState.success, message: "Success", data: data);
+      return UiResult(state: UiState.success, message: 'Success', data: data);
     }
     return UiResult(
         state: UiState.error,
-        message: result.response?.message ?? "",
+        message: result.response?.message ?? '',
         data: null);
   }
 
-  //TODO: Fetch fees
+  // TODO: Fetch fees
   Future<UiResult<NewGetFeesResponse>> fetchFees(
       {required String channel, required double amount}) async {
     final result = await _checkoutApi.fetchFees(channel, amount);
@@ -113,11 +109,11 @@ class CheckoutViewModel extends ChangeNotifier {
       final data = result.response?.data;
       notifyListeners();
       CheckoutViewModel.checkoutType = result.response?.data?.getCheckoutType();
-      return UiResult(state: UiState.success, message: "Success", data: data);
+      return UiResult(state: UiState.success, message: 'Success', data: data);
     }
     return UiResult(
         state: UiState.error,
-        message: result.response?.message ?? "",
+        message: result.response?.message ?? '',
         data: null);
   }
 
@@ -128,21 +124,19 @@ class CheckoutViewModel extends ChangeNotifier {
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
-      print(result.response?.data?.amountCharged);
       return UiResult(
         state: UiState.success,
-        message: "Success",
+        message: 'Success',
         data: data,
       );
     }
     return UiResult(
         state: UiState.error,
-        message: result.response?.message ?? "",
+        message: result.response?.message ?? '',
         data: null);
   }
 
   //TODO: Check PaymentStatus here
-
   Future<UiResult<CheckoutOrderStatus>> checkStatus(
       {required String clientReference}) async {
     final result =
@@ -150,11 +144,11 @@ class CheckoutViewModel extends ChangeNotifier {
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
-      return UiResult(state: UiState.success, message: "Success", data: data);
+      return UiResult(state: UiState.success, message: 'Success', data: data);
     }
     return UiResult(
         state: UiState.error,
-        message: result.response?.message ?? "",
+        message: result.response?.message ?? '',
         data: null);
   }
 
@@ -165,11 +159,11 @@ class CheckoutViewModel extends ChangeNotifier {
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
-      return UiResult(state: UiState.success, message: "Success", data: data);
+      return UiResult(state: UiState.success, message: 'Success', data: data);
     }
     return UiResult(
         state: UiState.error,
-        message: result.response?.message ?? "",
+        message: result.response?.message ?? '',
         data: null);
   }
 
@@ -180,11 +174,11 @@ class CheckoutViewModel extends ChangeNotifier {
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
-      return UiResult(state: UiState.success, message: "Success", data: data);
+      return UiResult(state: UiState.success, message: 'Success', data: data);
     }
     return UiResult(
         state: UiState.error,
-        message: result.response?.message ?? "",
+        message: result.response?.message ?? '',
         data: null);
   }
 
@@ -194,16 +188,18 @@ class CheckoutViewModel extends ChangeNotifier {
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
-      return UiResult(state: UiState.success, message: result.response?.message ?? "", data: data);
+      return UiResult(
+          state: UiState.success,
+          message: result.response?.message ?? '',
+          data: data);
     }
     return UiResult(
         state: UiState.error,
-        message: result.response?.message ?? "",
+        message: result.response?.message ?? '',
         data: null);
   }
 
   //TODO: make call to check verification status of customer
-
   Future<UiResult<VerificationResponse>> checkVerificationStatus(
       {required String mobileNumber}) async {
     final result =
@@ -211,11 +207,11 @@ class CheckoutViewModel extends ChangeNotifier {
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
-      return UiResult(state: UiState.success, message: "Success", data: data);
+      return UiResult(state: UiState.success, message: 'Success', data: data);
     }
     return UiResult(
         state: UiState.error,
-        message: result.response?.message ?? "",
+        message: result.response?.message ?? '',
         data: null);
   }
 
@@ -226,11 +222,11 @@ class CheckoutViewModel extends ChangeNotifier {
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
-      return UiResult(state: UiState.success, message: "Success", data: data);
+      return UiResult(state: UiState.success, message: 'Success', data: data);
     }
     return UiResult(
         state: UiState.error,
-        message: result.response?.message ?? "",
+        message: result.response?.message ?? '',
         data: null);
   }
 
@@ -240,11 +236,11 @@ class CheckoutViewModel extends ChangeNotifier {
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
-      return UiResult(state: UiState.success, message: "Success", data: data);
+      return UiResult(state: UiState.success, message: 'Success', data: data);
     }
     return UiResult(
         state: UiState.error,
-        message: result.response?.message ?? "",
+        message: result.response?.message ?? '',
         data: null);
   }
 }

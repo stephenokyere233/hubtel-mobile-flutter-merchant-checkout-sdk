@@ -10,7 +10,7 @@ import '/src/core_ui/core_ui.dart';
 import '../../custom_components/circle_image.dart';
 
 class AddWalletScreen extends StatefulWidget {
-  AddWalletScreen({super.key});
+  const AddWalletScreen({super.key});
 
   @override
   State<AddWalletScreen> createState() => _AddWalletScreenState();

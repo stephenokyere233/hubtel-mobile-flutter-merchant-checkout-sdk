@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
@@ -6,7 +5,6 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:hubtel_merchant_checkout_sdk/src/network_manager/network_manager.dart';
 import '../resources/network_manager_strings.dart';
-
 
 class Response {
   ApiResult? apiResult;
@@ -30,7 +28,7 @@ class Requester {
 
     var headers = endPoint.headers;
 
-    log("${endPoint.requestType.toString()} Request Initiated : ${endPoint.address} \nParams: ${endPoint.body} \nHeaders $headers");
+    log('${endPoint.requestType.toString()} Request Initiated : ${endPoint.address} \nParams: ${endPoint.body} \nHeaders $headers');
 
     var timeOutDuration = const Duration(seconds: 60);
 
@@ -42,7 +40,7 @@ class Requester {
     }
 
     try {
-      log("Response with code : ${_response.statusCode} for ${endPoint.requestType.toString()} >> ${endPoint.address} with params ${endPoint.body} : \nResponse >> ${_response.body}");
+      log('Response with code : ${_response.statusCode} for ${endPoint.requestType.toString()} >> ${endPoint.address} with params ${endPoint.body} : \nResponse >> ${_response.body}');
 
       var jsonResponse = json.decode(_response.body);
 
@@ -62,9 +60,9 @@ class Requester {
   }
 
   Future<http.Response> runRequest(
-      ApiEndPoint request,
-      Map<String, String> headers,
-      ) {
+    ApiEndPoint request,
+    Map<String, String> headers,
+  ) {
     switch (request.requestType) {
       case HttpVerb.GET:
         return http.get(request.address, headers: headers);
