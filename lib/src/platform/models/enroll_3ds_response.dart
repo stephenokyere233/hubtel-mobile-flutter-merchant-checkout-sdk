@@ -8,6 +8,8 @@ class Enroll3dsResponse implements Serializable {
   double? charges;
   String? customData;
   String? jwt;
+  String? html;
+  String? processor;
 
   String? cardStatus;
 
@@ -20,6 +22,8 @@ class Enroll3dsResponse implements Serializable {
     this.customData,
     this.jwt,
     this.cardStatus,
+    this.html,
+    this.processor
   });
 
   Enroll3dsResponse.fromJson(Map<String, dynamic>? json) {
@@ -31,6 +35,9 @@ class Enroll3dsResponse implements Serializable {
     customData = json?['customData'];
     jwt = json?['jwt'];
     cardStatus = json?['cardStatus'];
+    html = json?['html'];
+    processor = json?['processor'];
+
   }
 
   @override

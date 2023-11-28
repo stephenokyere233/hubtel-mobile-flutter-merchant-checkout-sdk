@@ -5,6 +5,7 @@ enum CheckoutHtmlState {
   success, //meaning loading is successful
   loadingBegan, // means loading has began
   htmlLoadingFailed, // means htmlLoading failed
+  transactionComplete // means otp 3ds screen has been interacted with
 }
 
 class CheckoutStrings {

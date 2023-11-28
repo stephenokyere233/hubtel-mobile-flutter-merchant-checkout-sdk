@@ -167,10 +167,40 @@ class CheckoutViewModel extends ChangeNotifier {
         data: null);
   }
 
+  Future<UiResult<Setup3dsResponse>> setupAccessBank(
+      {required SetupPayerAuthRequest request}) async {
+    final result = await _checkoutApi.setupDeviceAccessBank(request: request);
+
+    if (result.apiResult == ApiResult.Success) {
+      final data = result.response?.data;
+      return UiResult(state: UiState.success, message: 'Success', data: data);
+    }
+    return UiResult(
+        state: UiState.error,
+        message: result.response?.message ?? '',
+        data: null);
+  }
+
+
+
   //TODO make enrollment request in sdk
   Future<UiResult<Enroll3dsResponse>> enroll(
       {required String transactionId}) async {
-    final result = await _checkoutApi.enroll(transactionId: transactionId);
+    final result = await _checkoutApi.enrollmentAccessBank(transactionId: transactionId);
+
+    if (result.apiResult == ApiResult.Success) {
+      final data = result.response?.data;
+      return UiResult(state: UiState.success, message: 'Success', data: data);
+    }
+    return UiResult(
+        state: UiState.error,
+        message: result.response?.message ?? '',
+        data: null);
+  }
+
+  Future<UiResult<Enroll3dsResponse>> enrollAccessBank(
+      {required String transactionId}) async {
+    final result = await _checkoutApi.enrollmentAccessBank(transactionId: transactionId);
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;

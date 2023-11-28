@@ -61,9 +61,27 @@ class CheckoutApi extends ApiCore {
     return BaseApiResponse(response: data, apiResult: result.apiResult);
   }
 
+  Future<ResultWrapper<Setup3dsResponse>> setupDeviceAccessBank({required SetupPayerAuthRequest request}) async {
+    final result = await requester.makeRequest(
+        apiEndPoint: endPoints.checkoutEndPoint.setupDeviceForBankPaymentAccessBank(requestBody: request)
+    );
+    final data = DataResponse<Setup3dsResponse>.fromJson(result.response, (x) => Setup3dsResponse.fromJson(x));
+
+    return BaseApiResponse(response: data, apiResult: result.apiResult);
+  }
+
   Future<ResultWrapper<Enroll3dsResponse>> enroll({required String transactionId}) async {
     final result = await requester.makeRequest(
         apiEndPoint: endPoints.checkoutEndPoint.makeEnrollment(transactionId: transactionId)
+    );
+    final data = DataResponse<Enroll3dsResponse>.fromJson(result.response, (x) => Enroll3dsResponse.fromJson(x));
+
+    return BaseApiResponse(response: data, apiResult: result.apiResult);
+  }
+
+  Future<ResultWrapper<Enroll3dsResponse>> enrollmentAccessBank({required String transactionId}) async {
+    final result = await requester.makeRequest(
+        apiEndPoint: endPoints.checkoutEndPoint.makeEnrollmentAccessBank(transactionId: transactionId)
     );
     final data = DataResponse<Enroll3dsResponse>.fromJson(result.response, (x) => Enroll3dsResponse.fromJson(x));
 

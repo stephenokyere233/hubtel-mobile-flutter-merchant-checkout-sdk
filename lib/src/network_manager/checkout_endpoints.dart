@@ -52,8 +52,7 @@ class CheckoutEndPoint with EndPointCore {
         authority: _basePath,
         path: 'api/v1/merchant/$merchantId/unifiedcheckout/preapprovalconfirm',
         requestType: HttpVerb.GET,
-        body: request.toMap()
-    );
+        body: request.toMap());
   }
 
   Future<ApiEndPoint> fetchChannels() {
@@ -78,10 +77,7 @@ class CheckoutEndPoint with EndPointCore {
         authority: _basePath,
         path: 'api/v1/merchant/$merchantId/unifiedcheckout/feecalculation',
         requestType: HttpVerb.GET,
-        body: {
-          'Channel': channel,
-          'amount': amount.formatDoubleToString()
-        });
+        body: {'Channel': channel, 'amount': amount.formatDoubleToString()});
   }
 
   Future<ApiEndPoint> checkStatus({required String clientReference}) {
@@ -107,6 +103,27 @@ class CheckoutEndPoint with EndPointCore {
         path:
             'api/v1/merchant/$merchantId/cardnotpresent/enroll-payerauth/$transactionId',
         requestType: HttpVerb.GET);
+  }
+
+  Future<ApiEndPoint> setupDeviceForBankPaymentAccessBank(
+      {required SetupPayerAuthRequest requestBody}) {
+    return createEndpoint(
+      authority: _basePath,
+      requestType: HttpVerb.POST,
+      path:
+          '/api/v1/merchant/$merchantId/cardnotpresentunified/initiate-authentication',
+      body: requestBody.toMap()
+    );
+  }
+
+  Future<ApiEndPoint> makeEnrollmentAccessBank(
+      {required String transactionId}) {
+    return createEndpoint(
+      authority: _basePath,
+      path:
+          '/api/v1/merchant/$merchantId/cardnotpresentunified/authenticate-payer/$transactionId',
+      requestType: HttpVerb.POST
+    );
   }
 
   Future<ApiEndPoint> addMobileWallet({required AddMobileWalletBody request}) {
@@ -147,7 +164,6 @@ class CheckoutEndPoint with EndPointCore {
         authority: _basePath,
         path: 'api/v1/merchant/$merchantId/unifiedcheckout/verifyotp',
         requestType: HttpVerb.POST,
-        body: request.toMap()
-    );
+        body: request.toMap());
   }
 }

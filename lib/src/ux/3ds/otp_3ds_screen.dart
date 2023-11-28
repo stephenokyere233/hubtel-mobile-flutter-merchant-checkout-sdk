@@ -9,13 +9,14 @@ import '../view_model/checkout_view_model.dart';
 
 class WebCheckoutPageData {
   String jwt, orderId, reference;
-  String? customData;
+  String? customData, html;
 
   WebCheckoutPageData({
     required this.jwt,
     required this.orderId,
     required this.reference,
     this.customData,
+    this.html
   });
 }
 
@@ -44,18 +45,13 @@ class _CheckoutWebViewWidgetState extends State<CheckoutWebViewWidget> {
 
     controller = WebViewController()
       ..loadHtmlString(
-        CheckoutStrings.continueCheckout(
-          widget.pageData.orderId,
-          widget.pageData.reference,
-          widget.pageData.jwt,
-          widget.pageData.customData,
-        ),
+        widget.pageData.html ?? ""
       )
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel(
-        'DeviceCollectionComplete',
+        'TransactionComplete',
         onMessageReceived: (message) {
-          if (message.message == CheckoutHtmlState.success.toString()) {
+          if (message.message == CheckoutHtmlState.transactionComplete.toString()) {
             // TODO : Go back and go to the check status screen
             Navigator.pop(context, true);
 
