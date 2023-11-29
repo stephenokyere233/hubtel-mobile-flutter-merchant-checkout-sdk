@@ -55,6 +55,7 @@ class _CheckoutWebViewWidgetState extends State<CheckoutWebViewWidget> {
             // TODO : Go back and go to the check status screen
             Navigator.pop(context, true);
 
+
           } else if (message.message == CheckoutHtmlState.htmlLoadingFailed) {
             if (!mounted) return;
            Navigator.pop(context);

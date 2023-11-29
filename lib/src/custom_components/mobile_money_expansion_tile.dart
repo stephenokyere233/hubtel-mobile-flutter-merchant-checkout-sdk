@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hubtel_merchant_checkout_sdk/src/utils/custom_expansion_widget.dart'
     as customExpansion;
 import 'package:flutter/scheduler.dart';
+import 'package:hubtel_merchant_checkout_sdk/src/ux/view_model/checkout_view_model.dart';
 
 import '../core_ui/core_ui.dart';
 import '../platform/models/models.dart';
@@ -76,28 +77,37 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AppImageWidget.local(
-                image: const AssetImage(CheckoutDrawables.mtnMomoLogo),
-                width: Dimens.iconMedium,
-                height: Dimens.iconSmall,
-                boxFit: BoxFit.contain,
-                borderRadius: 0,
+              Visibility(
+                visible: CheckoutViewModel.channelFetch?.channels?.contains("mtn-gh") ?? false,
+                child: AppImageWidget.local(
+                  image: const AssetImage(CheckoutDrawables.mtnMomoLogo),
+                  width: Dimens.iconMedium,
+                  height: Dimens.iconSmall,
+                  boxFit: BoxFit.contain,
+                  borderRadius: 0,
+                ),
               ),
               const SizedBox(width: Dimens.paddingDefaultSmall),
-              AppImageWidget.local(
-                image: const AssetImage(CheckoutDrawables.vodafoneCashLogo),
-                width: Dimens.iconSmall,
-                height: Dimens.iconSmall,
-                boxFit: BoxFit.contain,
-                borderRadius: 0,
+              Visibility(
+                visible: CheckoutViewModel.channelFetch?.channels?.contains("vodafone-gh") ?? false,
+                child: AppImageWidget.local(
+                  image: const AssetImage(CheckoutDrawables.vodafoneCashLogo),
+                  width: Dimens.iconSmall,
+                  height: Dimens.iconSmall,
+                  boxFit: BoxFit.contain,
+                  borderRadius: 0,
+                ),
               ),
               const SizedBox(width: Dimens.paddingDefaultSmall),
-              AppImageWidget.local(
-                image: const AssetImage(CheckoutDrawables.airtelTigoLogo),
-                width: Dimens.iconSmall,
-                height: Dimens.iconSmall,
-                boxFit: BoxFit.contain,
-                borderRadius: 0,
+              Visibility(
+                visible: CheckoutViewModel.channelFetch?.channels?.contains("tigo-gh") ?? false,
+                child: AppImageWidget.local(
+                  image: const AssetImage(CheckoutDrawables.airtelTigoLogo),
+                  width: Dimens.iconSmall,
+                  height: Dimens.iconSmall,
+                  boxFit: BoxFit.contain,
+                  borderRadius: 0,
+                ),
               ),
             ],
           ),

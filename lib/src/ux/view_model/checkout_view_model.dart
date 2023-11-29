@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:hubtel_merchant_checkout_sdk/src/platform/models/channel_change_ui_logic.dart';
 
 import '/src/core_storage/core_storage.dart';
 import '/src/network_manager/network_manager.dart';
@@ -23,6 +24,8 @@ class CheckoutViewModel extends ChangeNotifier {
   bool? merchantRequiresKyc;
 
   List<Wallet>? wallets;
+
+  late List<String>? channels;
 
   final List<MomoProvider> providers = [
     MomoProvider(
@@ -90,7 +93,7 @@ class CheckoutViewModel extends ChangeNotifier {
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
       wallets = result.response?.data;
-    
+
       notifyListeners();
       return UiResult(state: UiState.success, message: 'Success', data: data);
     }
@@ -181,12 +184,11 @@ class CheckoutViewModel extends ChangeNotifier {
         data: null);
   }
 
-
-
   //TODO make enrollment request in sdk
   Future<UiResult<Enroll3dsResponse>> enroll(
       {required String transactionId}) async {
-    final result = await _checkoutApi.enrollmentAccessBank(transactionId: transactionId);
+    final result =
+        await _checkoutApi.enrollmentAccessBank(transactionId: transactionId);
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
@@ -200,7 +202,8 @@ class CheckoutViewModel extends ChangeNotifier {
 
   Future<UiResult<Enroll3dsResponse>> enrollAccessBank(
       {required String transactionId}) async {
-    final result = await _checkoutApi.enrollmentAccessBank(transactionId: transactionId);
+    final result =
+        await _checkoutApi.enrollmentAccessBank(transactionId: transactionId);
 
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
@@ -272,5 +275,41 @@ class CheckoutViewModel extends ChangeNotifier {
         state: UiState.error,
         message: result.response?.message ?? '',
         data: null);
+  }
+
+  //TODO: Logo to show Momo Field
+  ChannelsUpdateObj getPaymentChannelsUI() {
+    final showMomoField = (CheckoutViewModel.channelFetch?.channels
+                ?.contains("mtn-gh") ??
+            false) ||
+        (CheckoutViewModel.channelFetch?.channels?.contains("vodafone-gh") ??
+            false) ||
+        (CheckoutViewModel.channelFetch?.channels?.contains("tigo-gh") ??
+            false);
+
+    final showBankField = (CheckoutViewModel.channelFetch?.channels
+                ?.contains("cardnotpresent-visa") ??
+            false) ||
+        (CheckoutViewModel.channelFetch?.channels
+                ?.contains("cardnotpresent-mastercard") ??
+            false);
+    final showOtherPaymentMethods =
+        (CheckoutViewModel.channelFetch?.channels?.contains("hubtel-gh") ??
+                false) ||
+            (CheckoutViewModel.channelFetch?.channels?.contains("zeepay") ??
+                false) ||
+            (CheckoutViewModel.channelFetch?.channels?.contains("g-money") ??
+                false);
+    ;
+
+    final showBankPayOptions =
+        (CheckoutViewModel.channelFetch?.channels?.contains("bankpay") ??
+            false);
+    return ChannelsUpdateObj(
+      showBankField: showBankField,
+      showBankPayField: showBankPayOptions,
+      showOtherPaymentsField: showOtherPaymentMethods,
+      showMomoField: showMomoField,
+    );
   }
 }
