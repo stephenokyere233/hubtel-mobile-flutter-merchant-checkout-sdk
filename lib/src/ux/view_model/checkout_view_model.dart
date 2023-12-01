@@ -2,6 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hubtel_merchant_checkout_sdk/src/platform/models/channel_change_ui_logic.dart';
+import 'package:hubtel_merchant_checkout_sdk/src/platform/models/otp_request_body.dart';
+import 'package:hubtel_merchant_checkout_sdk/src/platform/models/otp_request_response.dart';
+import 'package:hubtel_merchant_checkout_sdk/src/platform/models/otp_response_obj.dart';
+import 'package:hubtel_merchant_checkout_sdk/src/platform/models/verify_otp_response.dart';
 
 import '/src/core_storage/core_storage.dart';
 import '/src/network_manager/network_manager.dart';
@@ -26,6 +30,8 @@ class CheckoutViewModel extends ChangeNotifier {
   List<Wallet>? wallets;
 
   late List<String>? channels;
+
+  int verifyOtpAttempts = 0;
 
   final List<MomoProvider> providers = [
     MomoProvider(
@@ -200,6 +206,7 @@ class CheckoutViewModel extends ChangeNotifier {
         data: null);
   }
 
+  //TODO: Make enrollment with access bank endpoint
   Future<UiResult<Enroll3dsResponse>> enrollAccessBank(
       {required String transactionId}) async {
     final result =
@@ -276,6 +283,21 @@ class CheckoutViewModel extends ChangeNotifier {
         message: result.response?.message ?? '',
         data: null);
   }
+  
+  //TODO: Make otpRequest
+  Future<UiResult<OtpResponse>> verifyOtp(
+      {required OtpBodyRequest request}) async {
+    final result = await _checkoutApi.verifyOtp(otpRequest: request);
+
+    if (result.apiResult == ApiResult.Success) {
+      final data = result.response?.data;
+      return UiResult(state: UiState.success, message: 'Success', data: data);
+    }
+    return UiResult(
+        state: UiState.error,
+        message: result.response?.message ?? '',
+        data: null);
+  }
 
   //TODO: Logo to show Momo Field
   ChannelsUpdateObj getPaymentChannelsUI() {
@@ -300,16 +322,96 @@ class CheckoutViewModel extends ChangeNotifier {
                 false) ||
             (CheckoutViewModel.channelFetch?.channels?.contains("g-money") ??
                 false);
-    ;
 
     final showBankPayOptions =
         (CheckoutViewModel.channelFetch?.channels?.contains("bankpay") ??
             false);
+    print('bankPayOption - $showBankPayOptions');
+
     return ChannelsUpdateObj(
       showBankField: showBankField,
       showBankPayField: showBankPayOptions,
       showOtherPaymentsField: showOtherPaymentMethods,
       showMomoField: showMomoField,
     );
+  }
+
+  //TODO: Get OTP
+  Future<UiResult<OtpRequestResponse>> getOtp({required OtpRequestBody requestBody}) async {
+    final result = await _checkoutApi.getOtp(requestBody: requestBody);
+
+    if (result.apiResult == ApiResult.Success){
+      return UiResult(state: UiState.success, message:"Success", data: result.response?.data );
+    }
+    return UiResult(
+        state: UiState.error,
+        message: result.response?.message ?? '',
+        data: null);
+  }
+
+  //TODO: VerifyOtp
+  Future<UiResult<OtpRequestResponse>> verifyMomoOtp({required VerifyOtpBody requestBody}) async {
+    final result = await _checkoutApi.verifyMomoOtp(requestBody: requestBody);
+    if (result.apiResult == ApiResult.Success){
+      return UiResult(state: UiState.success, message: "Success", data: result.response?.data);
+    }
+
+    return UiResult(state: UiState.error, message: result.response?.message ?? "", data:  null);
+
+  }
+
+  Wallet? showHubtelActionString() {
+    if (CheckoutViewModel.channelFetch?.channels?.contains("hubtel-gh") ??
+        false) {
+      return Wallet(
+          externalId: "0011",
+          accountNo: "",
+          accountName: "Hubtel",
+          providerId: "providerId",
+          provider: "hubtel-gh",
+          type: "type");
+    }
+    return null;
+  }
+
+  Wallet? showZeePayActionsString() {
+    if (CheckoutViewModel.channelFetch?.channels?.contains("zeepay") ?? false) {
+      return Wallet(
+          externalId: "0011",
+          accountNo: "0556236739",
+          accountName: "Zeepay",
+          providerId: "providerId",
+          provider: "zeepay",
+          type: "type");
+    }
+    return null;
+  }
+
+  Wallet? showGmoneyActionsString() {
+    if (CheckoutViewModel.channelFetch?.channels?.contains("g-money") ??
+        false) {
+      return Wallet(
+          externalId: "",
+          accountNo: "",
+          accountName: "GMoney",
+          providerId: "providerId",
+          provider: "g-money",
+          type: "type");
+    }
+
+    return null;
+  }
+
+  List<Wallet> getPaymentTypes() {
+    final walletTypes = [
+      showHubtelActionString(),
+      showZeePayActionsString(),
+      showGmoneyActionsString()
+    ];
+    final List<Wallet> nonNullList = walletTypes
+        .where((walletType) => walletType != null)
+        .map<Wallet>((e) => e!)
+        .toList();
+    return nonNullList;
   }
 }

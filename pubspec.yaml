@@ -23,6 +23,7 @@ dependencies:
   open_filex: ^4.3.2
   flutter_html_to_pdf: ^0.7.0
   shared_preferences: ^2.2.1
+  url_launcher: ^6.0.12
 
 dev_dependencies:
   flutter_test:

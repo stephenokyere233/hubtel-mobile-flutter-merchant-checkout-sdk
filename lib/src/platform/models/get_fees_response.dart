@@ -2,14 +2,14 @@ import '../../network_manager/network_manager.dart';
 import 'checkout_type.dart';
 
 class NewGetFeesResponse implements Serializable {
-  final num fees;
-  final double amountPayable;
-  final String checkoutType;
+  final num? fees;
+  final double? amountPayable;
+  final String? checkoutType;
 
   NewGetFeesResponse({
-    required this.fees,
-    required this.amountPayable,
-    required this.checkoutType,
+     this.fees,
+     this.amountPayable,
+     this.checkoutType,
   });
 
   @override
@@ -23,14 +23,14 @@ class NewGetFeesResponse implements Serializable {
 
   factory NewGetFeesResponse.fromJson(Map<String, dynamic>? json) {
     return NewGetFeesResponse(
-      fees: json?['fees'] as num,
-      amountPayable: json?['amountPayable'] as double,
-      checkoutType: json?['checkoutType'] as String,
+      fees: json?['fees'],
+      amountPayable: json?['amountPayable'],
+      checkoutType: json?['checkoutType'],
     );
   }
 
   CheckoutType getCheckoutType() {
-    switch (checkoutType.toLowerCase()) {
+    switch (checkoutType?.toLowerCase()) {
       case "receivemoneyprompt":
         return CheckoutType.receivemoneyprompt;
       case "preapprovalconfirm":

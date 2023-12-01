@@ -75,6 +75,23 @@ extension WidgetExtension on StatefulWidget {
       ),
     );
   }
+
+  showInfoDialog({
+    required BuildContext context,
+    required String message,
+    Color? textColor,
+    VoidCallback? onTap,
+  }) {
+    showAppDialog(context, text: message, textColor: textColor, actions: [
+      TextButton(
+        onPressed: onTap ?? () => Navigator.pop(context),
+        child: Text(
+          "okay".toUpperCase(),
+          style: AppTextStyle.body2().copyWith(fontWeight: FontWeight.bold),
+        ),
+      ),
+    ]);
+  }
 }
 
 extension HelperWigetExtension on StatelessWidget {
@@ -95,6 +112,7 @@ extension HelperWigetExtension on StatelessWidget {
       ),
     );
   }
+
 
   showErrorDialog({
     required BuildContext context,
@@ -149,4 +167,30 @@ extension HelperWigetExtension on StatelessWidget {
       ),
     );
   }
+}
+
+Future showAppDialog(BuildContext context,
+    {required String text, List<Widget>? actions, Color? textColor}) {
+  return showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(7.0)),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const SizedBox(height: 15),
+          Text(
+            text,
+            style: AppTextStyle.body1().copyWith(
+              color: textColor,
+            ),
+          ),
+        ],
+      ),
+      actions: actions,
+    ),
+  );
 }

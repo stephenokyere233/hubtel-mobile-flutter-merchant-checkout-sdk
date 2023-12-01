@@ -9,6 +9,7 @@ class ChannelFetchResponse  extends Serializable{
   String? businessLogoUrl;
   bool? requireNationalID;
   bool? isHubtelInternalMerchant;
+  bool? requireMobileMoneyOTP;
 
   // Computed property (getter) equivalent
   bool get merchantRequiresKyc => true;
@@ -20,6 +21,7 @@ class ChannelFetchResponse  extends Serializable{
     this.businessLogoUrl,
     this.requireNationalID,
     this.isHubtelInternalMerchant,
+    this.requireMobileMoneyOTP
   });
 
   factory ChannelFetchResponse.fromJson(Map<String, dynamic>? json) {
@@ -30,6 +32,7 @@ class ChannelFetchResponse  extends Serializable{
       businessLogoUrl: json?['businessLogoUrl'] as String?,
       requireNationalID: json?['requireNationalID'] as bool?,
       isHubtelInternalMerchant: json?['isHubtelInternalMerchant'] as bool?,
+      requireMobileMoneyOTP: json?['requireMobileMoneyOTP'] as bool?
     );
   }
 

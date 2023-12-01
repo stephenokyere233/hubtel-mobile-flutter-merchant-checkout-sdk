@@ -24,9 +24,11 @@ class OtherPaymentExpansionTile extends StatefulWidget {
   Function(String) onChannelChanged;
 
   // Function(bool) onMandateTap;
+  List<Wallet> providers;
 
   ValueChanged<bool> onMandateTap;
 
+  String initSelectedProvider;
 
 
   List<Wallet> wallets;
@@ -41,7 +43,11 @@ class OtherPaymentExpansionTile extends StatefulWidget {
       required this.onWalletSelected,
       required this.anotherEditingController,
       required this.onChannelChanged,
-      required this.onMandateTap})
+      required this.onMandateTap,
+      required this.selectedAccount,
+        required this.providers,
+        required this.initSelectedProvider
+      })
       : super(key: key);
 
   final customExpansion.ExpansionTileController controller;
@@ -56,26 +62,19 @@ class OtherPaymentExpansionTile extends StatefulWidget {
 }
 
 class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
-  bool showHubtelWalletActions = true;
+  late bool showHubtelWalletActions = widget.initSelectedProvider.toLowerCase() == "hubtel";
 
-  bool showGmoneyWalletActions = false;
+  late bool showGmoneyWalletActions = widget.initSelectedProvider.toLowerCase() == "gmoney";
 
-  bool showZeePayWalletActions = false;
+  late bool showZeePayWalletActions = widget.initSelectedProvider.toLowerCase() == "zeepay";
 
   bool checkMarkSelected = false;
 
-  late List<Wallet?> walletTypes = [
-    showHubtelActionString(),
-    showZeePayActionsString(),
-    showGmoneyActionsString()
-  ];
+  bool openedInitially = false;
+
 
   @override
   Widget build(BuildContext context) {
-    log("ZeePay $showZeePayWalletActions");
-    log("GMoney $showGmoneyWalletActions");
-    log("Hubtel $showHubtelWalletActions");
-    log("isSelected ${widget.isSelected}");
     return customExpansion.ExpansionTile(
       controller: widget.controller,
       headerBackgroundColor: widget.isSelected
@@ -144,14 +143,14 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
         MobileMoneyTileField(
             showWalletAdditionTile: false,
             fieldController: widget.editingController,
-            wallets: getPaymentTypes(),
+            wallets: widget.providers,
             onWalletSelected: (wallet) {
               _onPaymentTypeChanged(selectedAccount: wallet.accountName ?? "");
             },
             onProviderSelected: (provider) {
               log('$provider', name: '$runtimeType');
             },
-            hintText: "Hubtel"),
+            hintText: "Provider"),
         Visibility(
             visible: showHubtelWalletActions,
             child: Container(
@@ -177,7 +176,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
                   onProviderSelected: (provider) {
                     print(provider);
                   },
-                  hintText: "Hinting"),
+                  hintText: "Select Mobile Wallet"),
             )),
         Visibility(
           visible: showGmoneyWalletActions,
@@ -275,56 +274,5 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
     }
   }
 
-  Wallet? showHubtelActionString() {
-    if (CheckoutViewModel.channelFetch?.channels?.contains("hubtel-gh") ??
-        false) {
-      return Wallet(
-          externalId: "0011",
-          accountNo: "",
-          accountName: "Hubtel",
-          providerId: "providerId",
-          provider: "provider",
-          type: "type");
-    }
-    return null;
-  }
 
-  Wallet? showZeePayActionsString(){
-    if (CheckoutViewModel.channelFetch?.channels?.contains("zeepay") ??
-        false) {
-      return Wallet(
-          externalId: "0011",
-          accountNo: "0556236739",
-          accountName: "Zeepay",
-          providerId: "providerId",
-          provider: "provider",
-          type: "type");
-    }
-    return null;
-  }
-
-  Wallet? showGmoneyActionsString(){
-    if (CheckoutViewModel.channelFetch?.channels?.contains("g-money") ??
-        false) {
-     return Wallet(
-          externalId: "",
-          accountNo: "",
-          accountName: "GMoney",
-          providerId: "providerId",
-          provider: "provider",
-          type: "type");
-    }
-
-    return null;
-  }
-
-  List<Wallet> getPaymentTypes(){
-    final walletTypes  = [
-      showHubtelActionString(),
-      showZeePayActionsString(),
-      showGmoneyActionsString()
-    ];
-    final List<Wallet> nonNullList  = walletTypes .where((walletType) => walletType != null).map<Wallet>((e) => e!).toList();
-    return nonNullList;
-  }
 }

@@ -373,5 +373,9 @@ class CheckoutStrings {
       'Your account has been verified successfully';
 
   static const other = "Others";
+  static const selectOption =  " Select ";
+  static const shortCode =  " *713# ";
+  static const seeCode =  " to see code. ";
+  static const option_5 =  " Option 5 ";
 
 }

@@ -1,5 +1,5 @@
-
-
+import 'package:hubtel_merchant_checkout_sdk/src/platform/models/otp_request_body.dart';
+import 'package:hubtel_merchant_checkout_sdk/src/platform/models/verify_otp_response.dart';
 import 'package:hubtel_merchant_checkout_sdk/src/utils/currency_formatter.dart';
 
 import '../platform/models/models.dart';
@@ -108,22 +108,20 @@ class CheckoutEndPoint with EndPointCore {
   Future<ApiEndPoint> setupDeviceForBankPaymentAccessBank(
       {required SetupPayerAuthRequest requestBody}) {
     return createEndpoint(
-      authority: _basePath,
-      requestType: HttpVerb.POST,
-      path:
-          '/api/v1/merchant/$merchantId/cardnotpresentunified/initiate-authentication',
-      body: requestBody.toMap()
-    );
+        authority: _basePath,
+        requestType: HttpVerb.POST,
+        path:
+            '/api/v1/merchant/$merchantId/cardnotpresentunified/initiate-authentication',
+        body: requestBody.toMap());
   }
 
   Future<ApiEndPoint> makeEnrollmentAccessBank(
       {required String transactionId}) {
     return createEndpoint(
-      authority: _basePath,
-      path:
-          '/api/v1/merchant/$merchantId/cardnotpresentunified/authenticate-payer/$transactionId',
-      requestType: HttpVerb.POST
-    );
+        authority: _basePath,
+        path:
+            '/api/v1/merchant/$merchantId/cardnotpresentunified/authenticate-payer/$transactionId',
+        requestType: HttpVerb.POST);
   }
 
   Future<ApiEndPoint> addMobileWallet({required AddMobileWalletBody request}) {
@@ -165,5 +163,22 @@ class CheckoutEndPoint with EndPointCore {
         path: 'api/v1/merchant/$merchantId/unifiedcheckout/verifyotp',
         requestType: HttpVerb.POST,
         body: request.toMap());
+  }
+
+  Future<ApiEndPoint> getOtp({required OtpRequestBody requestBody}) {
+    return createEndpoint(
+        authority: _basePath,
+        path: 'api/v1/merchant/$merchantId/unifiedcheckout/payment-otp',
+        requestType: HttpVerb.POST,
+        body: requestBody.toMap());
+  }
+
+  Future<ApiEndPoint> verifyOtp({required VerifyOtpBody request}) {
+    return createEndpoint(
+      authority: _basePath,
+      path: '/api/v1/merchant/$merchantId/unifiedcheckout/verify-payment-otp',
+      requestType: HttpVerb.POST,
+      body: request.toMap(),
+    );
   }
 }
