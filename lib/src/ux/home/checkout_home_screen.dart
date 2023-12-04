@@ -194,7 +194,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           actions: [
             IconButton(
               onPressed: () {
-                final checkoutStatus = CheckoutCompletionStatus(status: "${UnifiedCheckoutPaymentStatus.userCancelledPayment}", transactionId: "");
+                final checkoutStatus = CheckoutCompletionStatus(status: UnifiedCheckoutPaymentStatus.userCancelledPayment, transactionId: "");
                 Navigator.pop(context, checkoutStatus);
               },
               icon: Icon(

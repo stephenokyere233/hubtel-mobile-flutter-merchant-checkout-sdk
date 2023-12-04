@@ -8,7 +8,7 @@ enum UnifiedCheckoutPaymentStatus {
 }
 
 class CheckoutCompletionStatus {
-  String status;
+  UnifiedCheckoutPaymentStatus status;
   String transactionId;
 
   CheckoutCompletionStatus({required this.status, required this.transactionId});

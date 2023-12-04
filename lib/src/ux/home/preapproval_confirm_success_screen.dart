@@ -30,7 +30,7 @@ class PreApprovalConfirmSuccessScreen extends StatelessWidget {
           title: 'AGREE AND CONTINUE',
           isEnabled: true,
           buttonAction: () {
-            final checkoutCompletion = CheckoutCompletionStatus(status: "${UnifiedCheckoutPaymentStatus.paymentSuccess}", transactionId: "");
+            final checkoutCompletion = CheckoutCompletionStatus(status: UnifiedCheckoutPaymentStatus.paymentSuccess, transactionId: "");
            Navigator.pop(context);
            Navigator.pop(context, checkoutCompletion);
           },

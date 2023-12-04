@@ -98,7 +98,7 @@ class BankPayStatusScreen extends StatelessWidget {
     print(CheckoutRequirements.routeName);
     Navigator.pop(context);
     Navigator.pop(context);
-    final checkoutStatus = CheckoutCompletionStatus(status: "${UnifiedCheckoutPaymentStatus.pending}", transactionId: "");
+    final checkoutStatus = CheckoutCompletionStatus(status: UnifiedCheckoutPaymentStatus.pending, transactionId: "");
     Navigator.pop(context, checkoutStatus);
 
   }

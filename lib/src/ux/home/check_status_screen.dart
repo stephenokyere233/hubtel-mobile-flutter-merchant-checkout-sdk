@@ -180,14 +180,14 @@ class _CheckStatusScreenState extends State<CheckStatusScreen> {
       print('payment Status $paymentStatus');
 
     if (paymentStatus == PaymentStatus.paid) {
-      final checkoutPaymentStatus = CheckoutCompletionStatus(status: "${UnifiedCheckoutPaymentStatus.paymentSuccess}", transactionId: widget.checkoutResponse.transactionId ?? "");
+      final checkoutPaymentStatus = CheckoutCompletionStatus(status: UnifiedCheckoutPaymentStatus.paymentSuccess, transactionId: widget.checkoutResponse.transactionId ?? "");
       Navigator.pop(context);
       Navigator.pop(context, checkoutPaymentStatus);
       return;
     }
 
     if (paymentStatus == PaymentStatus.failed) {
-      final checkoutPaymentStatus = CheckoutCompletionStatus(status: "${UnifiedCheckoutPaymentStatus.paymentFailed}", transactionId: widget.checkoutResponse.transactionId ?? "");
+      final checkoutPaymentStatus = CheckoutCompletionStatus(status: UnifiedCheckoutPaymentStatus.paymentFailed, transactionId: widget.checkoutResponse.transactionId ?? "");
       Navigator.pop(context);
       Navigator.pop(context, checkoutPaymentStatus);
       return;
