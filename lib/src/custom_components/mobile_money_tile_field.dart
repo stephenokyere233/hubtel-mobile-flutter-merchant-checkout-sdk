@@ -112,7 +112,7 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                               widget.showWalletAdditionTile ?? true
                                   ? e.accountNo ?? ""
                                   : e.accountName ?? "",
-                              style: AppTextStyle.body2(),
+                              style: AppTextStyle.body2().copyWith(color: Colors.black),
                             ),
                             subtitle: widget.showWalletAdditionTile ?? true
                                 ? Visibility(
@@ -152,6 +152,7 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                               CheckoutStrings.addMobileMoneyWallet,
                               style: AppTextStyle.body2().copyWith(
                                 fontWeight: FontWeight.bold,
+                                color: Colors.black
                               ),
                             ),
                             minLeadingWidth: Dimens.paddingNano,
@@ -171,7 +172,7 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                                 },
                                 title: Text(
                                   e.name ?? "",
-                                  style: AppTextStyle.body2(),
+                                  style: AppTextStyle.body2().copyWith(color: Colors.black),
                                 ),
                                 dense: true,
                                 minVerticalPadding: 0,

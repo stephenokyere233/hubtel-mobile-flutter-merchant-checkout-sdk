@@ -93,7 +93,7 @@ class _BankTileDropdownState extends State<BankTileDropdown> {
                                   widget.onCardSelected(e);
                                 },
                                 title: Text(BankCardHelper.formatCardNumber(
-                                    e.cardNumber ?? "")),
+                                    e.cardNumber ?? ""), style: AppTextStyle.body2(),),
                                 subtitle: AppRichText(
                                   text: BankCardHelper.getCardType(
                                       e.cardNumber ?? ""),

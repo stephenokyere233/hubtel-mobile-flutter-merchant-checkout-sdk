@@ -410,7 +410,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                           if (value == true) {
                                             setState(() {
                                               isMobileMoneyExpanded = false;
-                                              selectedWallet = null;
+                                              // selectedWallet = null;
                                               walletType = WalletType.Card;
                                               checkoutHomeScreenState
                                                   .isButtonEnabled
@@ -1127,7 +1127,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
   void payWithMomo({String? mandateId, bool otpDone = false}) async {
     if (CheckoutViewModel.channelFetch?.requireMobileMoneyOTP == true &&
-        !otpDone) {
+        !otpDone && walletType == WalletType.Momo) {
       final request =
           OtpRequestBody(customerMsisdn: selectedWallet?.accountNo ?? "");
       makeGetOtpRequest(requestBody: request);
