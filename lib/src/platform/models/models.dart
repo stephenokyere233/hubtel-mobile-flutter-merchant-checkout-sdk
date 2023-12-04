@@ -26,3 +26,4 @@ export 'verification_response.dart';
 export 'wallet.dart';
 export 'wallet_type.dart';
 export 'other_account_type.dart';
+export 'checkout_completion_status.dart';

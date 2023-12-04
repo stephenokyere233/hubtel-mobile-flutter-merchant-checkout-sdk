@@ -115,8 +115,7 @@ class _NewMandateIdScreenState extends State<NewMandateIdScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => CheckStatusScreen(
-              checkoutResponse: data ?? MomoResponse(),
-              checkoutCompleted: (status) => {}),
+              checkoutResponse: data ?? MomoResponse()),
         ),
       );
     } else {

@@ -50,7 +50,6 @@ final hubtelConfig = HubtelCheckoutConfiguration(
   merchantApiKey: "QTN1akQ1SzpiM2IxMjA1NTEwZmI0NjYzYTdiY2ZmZmUyNmQ1YmIzZA==",
   merchantID: "1122334",
   callbackUrl: "www.sdfasd.com",
-  routeName: "/",
 );
 ```
 
@@ -78,29 +77,33 @@ final themeConfig = ThemeConfig(primaryColor: Colors.black);
 6. On your pay button, for example, having all necessary configurations set, navigate to the `CheckoutScreen` like so:
 
 ```dart@
-Navigator.push(
+final onCheckoutCompleted = Navigator.push(
   context,
   MaterialPageRoute(
     builder: (context) {
       return CheckoutScreen(
         purchaseInfo: purchaseInfo,
         configuration: hubtelConfig,
-        onCheckoutComplete: (status) => {},
         themeConfig: themeConfig,
       );
     },
   ),
 );
+
+if (onCheckoutCompleted is CheckoutCompletionStatus){
+    //Your activity after checkout Completion.
+}
 ```
 
 ### PaymentStatus Cases
 
-The `PaymentStatus` is an enum displaying the status of payment. It contains the following cases:
+The `UnifiedCheckoutPaymentStatus` is an enum displaying the status of payment. It contains the following cases:
 
 - `userCancelledPayment`: When the user closes the checkout page without performing any transaction.
 - `paymentFailed`: When the user performs a transaction but payment fails.
 - `paymentSuccessful`: When the user finally pays successfully.
 - `unknown`: When the user cancels transaction after payment attempt without checking status.
+- `pending`: when the user performs a bank pay transaction and receipt is successfully downloaded.
 
 ## Screenshots
 ![Fig. 01](https://firebasestorage.googleapis.com/v0/b/newagent-b6906.appspot.com/o/hubtel-mobile-checkout-ios-sdk-image.png?alt=media&token=376d90ab-c416-42a0-8b99-69028378ff72)

@@ -14,12 +14,10 @@ class CheckStatusScreen extends StatefulWidget {
   final viewModel = CheckoutViewModel();
   late final ThemeConfig? themeConfig;
 
-  Function(PaymentStatus) checkoutCompleted;
 
   CheckStatusScreen({
     super.key,
     required this.checkoutResponse,
-    required this.checkoutCompleted,
     this.themeConfig,
   });
 
@@ -179,24 +177,19 @@ class _CheckStatusScreenState extends State<CheckStatusScreen> {
   onButtonClick() async {
     final isPaymentStatusPaidOrFailed = paymentStatus == PaymentStatus.paid ||
         paymentStatus == PaymentStatus.failed;
+      print('payment Status $paymentStatus');
 
     if (paymentStatus == PaymentStatus.paid) {
-      // Navigator.popUntil(
-      //   context,
-      //   ModalRoute.withName(CheckoutRequirements.routeName),
-      // );
-      Navigator.of(context).popUntil((route) => route.isFirst);
-      widget.checkoutCompleted.call(PaymentStatus.paid);
+      final checkoutPaymentStatus = CheckoutCompletionStatus(status: "${UnifiedCheckoutPaymentStatus.paymentSuccess}", transactionId: widget.checkoutResponse.transactionId ?? "");
+      Navigator.pop(context);
+      Navigator.pop(context, checkoutPaymentStatus);
       return;
     }
 
     if (paymentStatus == PaymentStatus.failed) {
-      // Navigator.popUntil(
-      //   context,
-      //   ModalRoute.withName(CheckoutRequirements.routeName),
-      // );
-      Navigator.of(context).popUntil((route) => route.isFirst);
-      widget.checkoutCompleted.call(paymentStatus);
+      final checkoutPaymentStatus = CheckoutCompletionStatus(status: "${UnifiedCheckoutPaymentStatus.paymentFailed}", transactionId: widget.checkoutResponse.transactionId ?? "");
+      Navigator.pop(context);
+      Navigator.pop(context, checkoutPaymentStatus);
       return;
     }
 
