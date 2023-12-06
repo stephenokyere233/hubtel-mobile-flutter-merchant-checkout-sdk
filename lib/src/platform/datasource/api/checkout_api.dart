@@ -14,6 +14,7 @@ class CheckoutApi extends ApiCore {
       apiEndPoint: endPoints.checkoutEndPoint.fetchChannels(),
     );
 
+    print(response);
     final data = DataResponse<ChannelFetchResponse>.fromJson(
         response.response, (x) => ChannelFetchResponse.fromJson(x));
 

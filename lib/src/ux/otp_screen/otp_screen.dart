@@ -85,7 +85,7 @@ class _VerifyOtpState extends State<VerifyOtp> with ValidatorMixin {
                       children: [
                         const SizedBox(height: Dimens.paddingLarge),
                         Center(
-                          child: SvgPicture.asset(CheckoutDrawables.hubtelImage),
+                          child: AppImageWidget.local(image: AssetImage(CheckoutDrawables.otpPng), width: 58, height: 53,),
                         ),
                         const SizedBox(height: Dimens.paddingLarge),
                         Center(

@@ -34,5 +34,8 @@ final class CheckoutDrawables {
   static const String bankPay = "$_baseUrl/bank_pay.png";
   static String hubtelImage = "$_baseUrl/hubtel_icon.svg";
   static String ghanaFlag = "$_baseUrl/ghana_flag.png";
+  static String otpImage = "$_baseUrl/otp_icon.png";
+  static String otpImageSvg = "$_baseUrl/otp_icon1.svg";
+  static String otpPng = "$_baseUrl/otp_icon_png.png";
 
 }
