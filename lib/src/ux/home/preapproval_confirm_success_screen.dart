@@ -10,13 +10,13 @@ class PreApprovalConfirmSuccessScreen extends StatelessWidget {
 
   double amount;
 
-  Function(PaymentStatus) checkoutCompleted;
+
 
   PreApprovalConfirmSuccessScreen(
       {Key? key,
       required this.walletName,
       required this.amount,
-      required this.checkoutCompleted})
+ })
       : super(key: key);
 
   @override
@@ -30,9 +30,9 @@ class PreApprovalConfirmSuccessScreen extends StatelessWidget {
           title: 'AGREE AND CONTINUE',
           isEnabled: true,
           buttonAction: () {
-            Navigator.popUntil(
-                context, ModalRoute.withName(CheckoutRequirements.routeName));
-            checkoutCompleted.call(PaymentStatus.paid);
+            final checkoutCompletion = CheckoutCompletionStatus(status: UnifiedCheckoutPaymentStatus.paymentSuccess, transactionId: "");
+           Navigator.pop(context);
+           Navigator.pop(context, checkoutCompletion);
           },
           style: HubtelButtonStyle.solid,
           isEnabledBgColor: ThemeConfig.themeColor,

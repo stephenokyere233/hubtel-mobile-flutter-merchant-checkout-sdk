@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hubtel_merchant_checkout_sdk/hubtel_merchant_checkout_sdk.dart';
 import 'package:hubtel_merchant_checkout_sdk/src/platform/models/otp_request_body.dart';
 import 'package:hubtel_merchant_checkout_sdk/src/ux/otp_screen/otp_screen.dart';
 import 'package:provider/provider.dart';
@@ -40,13 +41,11 @@ class CheckoutHomeScreen extends StatefulWidget {
 
   late final Setup3dsResponse? threeDsResponse;
 
-  Function(PaymentStatus) checkoutCompleted;
 
   CheckoutHomeScreen({
     super.key,
     required this.checkoutPurchase,
     required this.businessInfo,
-    required this.checkoutCompleted,
     this.themeConfig,
   });
 
@@ -195,7 +194,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                final checkoutStatus = CheckoutCompletionStatus(status: UnifiedCheckoutPaymentStatus.userCancelledPayment, transactionId: "");
+                Navigator.pop(context, checkoutStatus);
               },
               icon: Icon(
                 CupertinoIcons.xmark_circle_fill,
@@ -955,8 +955,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                     checkoutResponse: MomoResponse(
                         transactionId: widget.threeDsResponse?.transactionId,
                         clientReference:
-                            widget.threeDsResponse?.clientReference),
-                    checkoutCompleted: widget.checkoutCompleted)));
+                            widget.threeDsResponse?.clientReference))));
       }
     } else {
       Navigator.pop(context);
@@ -1002,7 +1001,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                 MaterialPageRoute(
                   builder: (context) => CheckStatusScreen(
                     checkoutResponse: momoResponse ?? MomoResponse(),
-                    checkoutCompleted: widget.checkoutCompleted,
                     themeConfig: widget.themeConfig,
                   ),
                 ),
@@ -1014,7 +1012,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           MaterialPageRoute(
             builder: (context) => CheckStatusScreen(
               checkoutResponse: momoResponse ?? MomoResponse(),
-              checkoutCompleted: widget.checkoutCompleted,
               themeConfig: widget.themeConfig,
             ),
           ),
@@ -1044,7 +1041,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
         MaterialPageRoute(
           builder: (context) => CheckStatusScreen(
             checkoutResponse: momoResponse ?? MomoResponse(),
-            checkoutCompleted: widget.checkoutCompleted,
             themeConfig: widget.themeConfig,
           ),
         ),
@@ -1110,7 +1106,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
               builder: (context) => PreApprovalConfirmSuccessScreen(
                 walletName: 'mobile wallet',
                 amount: widget.checkoutPurchase.amount,
-                checkoutCompleted: widget.checkoutCompleted,
               ),
             ),
           );

@@ -14,7 +14,7 @@ enum CheckoutPaymentStatus { success, cancelled }
 class CheckoutScreen extends StatefulWidget {
   final String? accessToken = '';
 
-  late final Function(CheckoutPaymentStatus)? checkoutCompleted;
+  // late final Function(CheckoutPaymentStatus)? checkoutCompleted;
 
   late final PurchaseInfo purchaseInfo;
 
@@ -24,7 +24,7 @@ class CheckoutScreen extends StatefulWidget {
 
   late final viewModel = CheckoutViewModel();
 
-  late final Function(PaymentStatus) onCheckoutComplete;
+  // late final Function(PaymentStatus) onCheckoutComplete;
 
   Color? _primaryColor;
 
@@ -32,14 +32,13 @@ class CheckoutScreen extends StatefulWidget {
     Key? key,
     required this.purchaseInfo,
     required this.configuration,
-    this.checkoutCompleted,
-    required this.onCheckoutComplete,
+    // this.checkoutCompleted,
+    // required this.onCheckoutComplete,
     this.themeConfig,
   }) : super(key: key) {
     CheckoutRequirements.customerMsisdn = purchaseInfo.customerMsisdn;
     CheckoutRequirements.apiKey = configuration.merchantApiKey;
     CheckoutRequirements.merchantId = configuration.merchantID;
-    CheckoutRequirements.routeName = configuration.routeName;
     CheckoutRequirements.callbackUrl = configuration.callbackUrl;
   }
 
@@ -82,7 +81,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 return CheckoutHomeScreen(
                   checkoutPurchase: widget.purchaseInfo,
                   businessInfo: businessInfo,
-                  checkoutCompleted: widget.onCheckoutComplete,
                   themeConfig: widget.themeConfig ??
                       ThemeConfig(
                         primaryColor: HubtelColors.teal,

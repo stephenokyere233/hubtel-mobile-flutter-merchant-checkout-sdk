@@ -12,6 +12,7 @@ extension WidgetExtension on StatefulWidget {
     required VoidCallback buttonAction,
   }) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => HBPromptDialog(
         title: title,

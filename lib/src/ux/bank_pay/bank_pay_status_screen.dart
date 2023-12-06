@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hubtel_merchant_checkout_sdk/src/platform/models/checkout_completion_status.dart';
 import '/src/core_ui/core_ui.dart';
 
 import '../../platform/models/models.dart';
@@ -94,8 +95,11 @@ class BankPayStatusScreen extends StatelessWidget {
   }
 
   onOkayButtonClicked(BuildContext context) async {
-    Navigator.popUntil(
-        context, ModalRoute.withName(CheckoutRequirements.routeName));
+    print(CheckoutRequirements.routeName);
+    Navigator.pop(context);
+    Navigator.pop(context);
+    final checkoutStatus = CheckoutCompletionStatus(status: UnifiedCheckoutPaymentStatus.pending, transactionId: "");
+    Navigator.pop(context, checkoutStatus);
 
   }
 }
