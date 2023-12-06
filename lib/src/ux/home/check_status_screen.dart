@@ -49,6 +49,7 @@ class _CheckStatusScreenState extends State<CheckStatusScreen> {
         TextButton(
           onPressed: () async {
             Navigator.pop(context);
+            Navigator.pop(context);
           },
           child: Text(
             CheckoutStrings.cancel,
