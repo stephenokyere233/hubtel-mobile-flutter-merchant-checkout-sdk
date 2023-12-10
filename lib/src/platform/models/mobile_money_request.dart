@@ -9,6 +9,7 @@ class MobileMoneyPaymentRequest implements Serializable {
   String? description;
   String? clientReference;
   String? mandateId;
+  String? integrationChannel;
 
   MobileMoneyPaymentRequest({
     this.customerName,
@@ -19,6 +20,7 @@ class MobileMoneyPaymentRequest implements Serializable {
     this.description,
     this.clientReference,
     this.mandateId,
+    this.integrationChannel = "UnifiedCheckout-Flutter"
   });
 
   factory MobileMoneyPaymentRequest.fromJson(Map<String, dynamic> json) {
@@ -45,6 +47,7 @@ class MobileMoneyPaymentRequest implements Serializable {
       'description': description,
       'clientReference': clientReference,
       'mandateId': mandateId,
+      'integrationChannel': integrationChannel
     };
   }
 }

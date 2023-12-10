@@ -11,6 +11,7 @@ class SetupPayerAuthRequest implements Serializable {
   final String description;
   final String clientReference;
   final String callbackUrl;
+  final String integrationChannel;
 
   SetupPayerAuthRequest({
     required this.amount,
@@ -23,6 +24,7 @@ class SetupPayerAuthRequest implements Serializable {
     required this.description,
     required this.clientReference,
     required this.callbackUrl,
+    this.integrationChannel = "UnifiedCheckout-Flutter"
   });
 
   @override
@@ -38,6 +40,7 @@ class SetupPayerAuthRequest implements Serializable {
       'description': description,
       'clientReference': clientReference,
       'callbackUrl': callbackUrl,
+      'integrationChannel': integrationChannel
     };
   }
 
