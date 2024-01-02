@@ -134,6 +134,9 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
   bool didPreselectWalletType = false;
 
+  bool isWalletFetched = false;
+
+
   late final paymentOptionsAvailable = viewModel.getPaymentChannelsUI();
 
   @override
@@ -148,7 +151,12 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
     momoProviderController = TextEditingController();
 
     savedCardNumberFieldController = TextEditingController();
-    fetchWallets();
+    if ((CheckoutViewModel.channelFetch?.isHubtelInternalMerchant == true)){
+      fetchWallets().then((value) => _handleWalletFetchCompletion(response: value));
+    }else{
+      isWalletFetched = true;
+    }
+
     getBankCards();
     controller = WebViewController()
       ..loadHtmlString("<h1>mimi</h1>")
@@ -233,7 +241,10 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
               ]),
             ),
           ),
-          body: Column(
+          body: !isWalletFetched ? Center(
+              child: CircularProgressIndicator(
+                color: ThemeConfig.themeColor,
+              )):  Column(
             children: [
               SizedBox(
                   height: Dimens.zero,
@@ -337,7 +348,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                           );
                                           if (value) {
                                             autoSelectProviderFromSelectedWallet();
-                                            log('${selectedWallet?.accountNo}');
+                                            log('here ${selectedWallet?.accountNo}');
                                             fetchFees2();
                                           }
                                         },
@@ -420,10 +431,12 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                 .expand();
                                             mobileMoneyExpansionController
                                                 .collapse();
-                                            otherPaymentWalletExpansionController
-                                                .collapse();
-                                            bankPayExpansionController
-                                                .collapse();
+                                            if (paymentOptionsAvailable.showOtherPaymentsField){
+                                              otherPaymentWalletExpansionController.collapse();
+                                            }
+                                            if (paymentOptionsAvailable.showBankPayField) {
+                                              bankPayExpansionController.collapse();
+                                            }
 
                                             // onNewCardInputComplete();
                                           }
@@ -519,8 +532,10 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                 .collapse();
                                             mobileMoneyExpansionController
                                                 .collapse();
-                                            otherPaymentWalletExpansionController
-                                                .collapse();
+                                            if (paymentOptionsAvailable.showOtherPaymentsField){
+                                              otherPaymentWalletExpansionController.collapse();
+                                            }
+
 
                                             // bankPayExpansionController
                                             //     .collapse();
@@ -600,8 +615,14 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
       });
       mobileMoneyExpansionController.expand();
       bankCardExpansionController.collapse();
-      otherPaymentWalletExpansionController.collapse();
-      bankPayExpansionController.collapse();
+
+
+      if (paymentOptionsAvailable.showOtherPaymentsField){
+        otherPaymentWalletExpansionController.collapse();
+      }
+      if (paymentOptionsAvailable.showBankPayField) {
+        bankPayExpansionController.collapse();
+      }
     }
   }
 
@@ -614,7 +635,9 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
       mobileMoneyExpansionController.collapse();
       bankCardExpansionController.collapse();
       otherPaymentWalletExpansionController.expand();
-      bankPayExpansionController.collapse();
+      if (paymentOptionsAvailable.showBankPayField) {
+        bankPayExpansionController.collapse();
+      }
       selectedProvider = MomoProvider(alias: otherProviderString);
       fetchFees2();
     }
@@ -635,21 +658,25 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
     });
   }
 
-  fetchWallets() async {
+  Future<UiResult<List<Wallet>>> fetchWallets() async {
     log('${CheckoutViewModel.channelFetch?.isHubtelInternalMerchant}',
         name: '$runtimeType');
-    if ((CheckoutViewModel.channelFetch?.isHubtelInternalMerchant == true)) {
-      final response = await viewModel.fetchWallets();
+    final response = await viewModel.fetchWallets();
+    return response;
+
+  }
+
+  _handleWalletFetchCompletion({required UiResult<List<Wallet>> response}){
       if (response.state == UiState.success) {
         viewModel.wallets = response.data;
         setState(() {
+          isWalletFetched = true;
           wallets = response.data ?? [];
         });
-        viewModel.notifyListeners();
+        // viewModel.notifyListeners();
       } else {
-        log('${response.hasError}', name: '$runtimeType');
+        widget.showErrorDialog(context: context, message: "Unable to fetch wallets for business");
       }
-    }
   }
 
   _handleButtonActivation() {
@@ -850,7 +877,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
   void getBankCards() async {
     final cards = await viewModel.getBankWallets();
-
     if (cards?.isNotEmpty == true) {
       setState(() {
         savedCards = cards!;

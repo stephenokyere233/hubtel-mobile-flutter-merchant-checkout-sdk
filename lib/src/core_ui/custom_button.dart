@@ -83,33 +83,35 @@ class _CustomButtonState extends State<CustomButton> {
   }
 
   Widget _buildSolidButton() {
-    return TextButton(
-      onPressed: widget.isEnabled ? () => widget.buttonAction() : null,
-      style: TextButton.styleFrom(
-        backgroundColor: widget.isEnabled
-            ? widget.isEnabledBgColor
-            : widget.isDisabledBgColor,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    return SafeArea(
+      child: TextButton(
+        onPressed: widget.isEnabled ? () => widget.buttonAction() : null,
+        style: TextButton.styleFrom(
+          backgroundColor: widget.isEnabled
+              ? widget.isEnabledBgColor
+              : widget.isDisabledBgColor,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        child: widget.loading
+            ? const SizedBox(
+                height: Dimens.paddingDefault,
+                width: Dimens.paddingDefault,
+                child: LoadingIndicator(
+                  loaderColor: HubtelColors.white,
+                  strokeWidth: Dimens.two,
+                ),
+              )
+            : Text(
+                widget.title,
+                style: AppTextStyle.body1().copyWith(
+                  color: widget.isEnabled
+                      ? widget.enabledTitleColor ?? HubtelColors.neutral.shade100
+                      : widget.disabledTitleColor ?? HubtelColors.neutral,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
       ),
-      child: widget.loading
-          ? const SizedBox(
-              height: Dimens.paddingDefault,
-              width: Dimens.paddingDefault,
-              child: LoadingIndicator(
-                loaderColor: HubtelColors.white,
-                strokeWidth: Dimens.two,
-              ),
-            )
-          : Text(
-              widget.title,
-              style: AppTextStyle.body1().copyWith(
-                color: widget.isEnabled
-                    ? widget.enabledTitleColor ?? HubtelColors.neutral.shade100
-                    : widget.disabledTitleColor ?? HubtelColors.neutral,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
     );
   }
 

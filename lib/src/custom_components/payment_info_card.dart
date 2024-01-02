@@ -151,35 +151,33 @@ class PaymentInfoCard extends StatelessWidget {
                   ValueListenableBuilder(
                     valueListenable: state.isLessDetails,
                     builder: (ctx, boolean, child) {
-                      if (state.isLessDetails.value) {
-                        return Container();
-                      } else {
+
                         return PaymentCardHorizontalInfo(
                           detail: CheckoutStrings.fees,
                           value: checkoutFees,
                         );
-                      }
+
                     },
                   ),
 
                   const SizedBox(height: Dimens.paddingDefault),
 
-                  ValueListenableBuilder(
-                    valueListenable: state.isLessDetails,
-                    builder: (ctx, value, child) {
-                      return CustomButton(
-                        width: 100.0,
-                        title: state.isLessDetails.value
-                            ? 'View Fees'
-                            : 'Less Details',
-                        buttonAction: state.toggleIsLess,
-                        style: HubtelButtonStyle.solid,
-                        isDisabledBgColor: Colors.transparent,
-                        isEnabledBgColor: Colors.transparent,
-                        enabledTitleColor: ThemeConfig.themeColor,
-                      );
-                    },
-                  )
+                  // ValueListenableBuilder(
+                  //   valueListenable: state.isLessDetails,
+                  //   builder: (ctx, value, child) {
+                  //     return CustomButton(
+                  //       width: 100.0,
+                  //       title: state.isLessDetails.value
+                  //           ? 'View Fees'
+                  //           : 'Less Details',
+                  //       buttonAction: state.toggleIsLess,
+                  //       style: HubtelButtonStyle.solid,
+                  //       isDisabledBgColor: Colors.transparent,
+                  //       isEnabledBgColor: Colors.transparent,
+                  //       enabledTitleColor: ThemeConfig.themeColor,
+                  //     );
+                  //   },
+                  // )
                 ],
               ),
             ),
