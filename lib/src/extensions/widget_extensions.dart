@@ -26,6 +26,7 @@ extension WidgetExtension on StatefulWidget {
   showErrorDialog({
     required BuildContext context,
     required String message,
+    VoidCallback? onOkayTap
   }) {
     showDialog(
       context: context,
@@ -61,7 +62,10 @@ extension WidgetExtension on StatefulWidget {
               Align(
                 alignment: Alignment.bottomRight,
                 child: InkWell(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () {
+                    Navigator.pop(context);
+                    onOkayTap?.call();
+                  },
                   child: Text(
                     CheckoutStrings.okay.toUpperCase(),
                     style: AppTextStyle.body2().copyWith(

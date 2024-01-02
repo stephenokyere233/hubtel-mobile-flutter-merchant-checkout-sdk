@@ -95,7 +95,7 @@ class CheckoutViewModel extends ChangeNotifier {
   // TODO: fetch wallets
   Future<UiResult<List<Wallet>>> fetchWallets() async {
     final result = await _checkoutApi.fetchWallets();
-
+    try{
     if (result.apiResult == ApiResult.Success) {
       final data = result.response?.data;
       wallets = result.response?.data;
@@ -107,6 +107,13 @@ class CheckoutViewModel extends ChangeNotifier {
         state: UiState.error,
         message: result.response?.message ?? '',
         data: null);
+    }catch(e){
+      return UiResult(
+          state: UiState.error,
+          message: "Something happened while trying to fetch wallets",
+          data: null);
+    }
+
   }
 
   // TODO: Fetch fees
@@ -283,7 +290,7 @@ class CheckoutViewModel extends ChangeNotifier {
         message: result.response?.message ?? '',
         data: null);
   }
-  
+
   //TODO: Make otpRequest
   Future<UiResult<OtpResponse>> verifyOtp(
       {required OtpBodyRequest request}) async {

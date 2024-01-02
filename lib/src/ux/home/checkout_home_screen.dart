@@ -675,7 +675,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
         });
         // viewModel.notifyListeners();
       } else {
-        widget.showErrorDialog(context: context, message: "Unable to fetch wallets for business");
+        widget.showErrorDialog(context: context, message: response.message, onOkayTap: ()=>{Navigator.pop(context)});
       }
   }
 
