@@ -5,17 +5,19 @@ class PreapprovalConfirm implements Serializable {
   String amount;
   String clientReference;
   String customerMsisdn;
+  String description;
 
   PreapprovalConfirm.create(
-      this.channel, this.amount, this.clientReference, this.customerMsisdn);
+      this.channel, this.amount, this.clientReference, this.customerMsisdn, this.description);
 
   @override
   Map<String, dynamic> toMap() {
     return {
-      "ChannelPassed": channel,
-      "Amount": amount,
-      "ClientReference": clientReference,
-      "CustomerMsisdn": customerMsisdn
+      "channel": channel,
+      "amount": amount,
+      "clientReference": clientReference,
+      "customerMsisdn": customerMsisdn,
+      "description": description
     };
   }
 }
