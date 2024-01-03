@@ -51,7 +51,7 @@ class CheckoutEndPoint with EndPointCore {
     return createEndpoint(
         authority: _basePath,
         path: 'api/v1/merchant/$merchantId/unifiedcheckout/preapprovalconfirm',
-        requestType: HttpVerb.GET,
+        requestType: HttpVerb.POST,
         body: request.toMap());
   }
 
