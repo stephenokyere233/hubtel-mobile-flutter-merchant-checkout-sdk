@@ -28,6 +28,7 @@ class MobileMoneyExpansionTile extends StatefulWidget {
       required this.onExpansionChanged,
       required this.isSelected,
       required this.selectedProviderMessage,
+      this.walletAdditionComplete,
       required this.disableUserNumberInputInteraction});
 
   final List<Wallet> wallets;
@@ -40,6 +41,7 @@ class MobileMoneyExpansionTile extends StatefulWidget {
   final void Function(bool)? onExpansionChanged;
   final bool isSelected;
   final Widget selectedProviderMessage;
+  VoidCallback? walletAdditionComplete;
   bool disableUserNumberInputInteraction;
 
   @override
@@ -78,7 +80,9 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Visibility(
-                visible: CheckoutViewModel.channelFetch?.channels?.contains("mtn-gh") ?? false,
+                visible: CheckoutViewModel.channelFetch?.channels
+                        ?.contains("mtn-gh") ??
+                    false,
                 child: AppImageWidget.local(
                   image: const AssetImage(CheckoutDrawables.mtnMomoLogo),
                   width: Dimens.iconMedium,
@@ -89,7 +93,9 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
               ),
               const SizedBox(width: Dimens.paddingDefaultSmall),
               Visibility(
-                visible: CheckoutViewModel.channelFetch?.channels?.contains("vodafone-gh") ?? false,
+                visible: CheckoutViewModel.channelFetch?.channels
+                        ?.contains("vodafone-gh") ??
+                    false,
                 child: AppImageWidget.local(
                   image: const AssetImage(CheckoutDrawables.vodafoneCashLogo),
                   width: Dimens.iconSmall,
@@ -100,7 +106,9 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
               ),
               const SizedBox(width: Dimens.paddingDefaultSmall),
               Visibility(
-                visible: CheckoutViewModel.channelFetch?.channels?.contains("tigo-gh") ?? false,
+                visible: CheckoutViewModel.channelFetch?.channels
+                        ?.contains("tigo-gh") ??
+                    false,
                 child: AppImageWidget.local(
                   image: const AssetImage(CheckoutDrawables.airtelTigoLogo),
                   width: Dimens.iconSmall,
@@ -124,6 +132,9 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
               wallets: widget.wallets,
               hintText: CheckoutStrings.mobileNumber,
               isReadOnly: widget.disableUserNumberInputInteraction,
+              onWalletUpdateComplete: () {
+                widget.walletAdditionComplete?.call();
+              },
             ),
             const SizedBox(height: Dimens.paddingDefault),
             MobileMoneyTileField(

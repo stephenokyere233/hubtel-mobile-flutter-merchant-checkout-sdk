@@ -16,6 +16,7 @@ class MobileMoneyTileField extends StatefulWidget {
       required this.onWalletSelected,
       required this.onProviderSelected,
       required this.hintText,
+      this.onWalletUpdateComplete,
       this.showWalletAdditionTile,
       this.isReadOnly = true})
       : super(key: key);
@@ -26,6 +27,7 @@ class MobileMoneyTileField extends StatefulWidget {
   final String hintText;
   final void Function(Wallet) onWalletSelected;
   final void Function(MomoProvider) onProviderSelected;
+  VoidCallback? onWalletUpdateComplete;
   bool? showWalletAdditionTile = true;
   bool isReadOnly = true;
 
@@ -112,7 +114,8 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                               widget.showWalletAdditionTile ?? true
                                   ? e.accountNo ?? ""
                                   : e.accountName ?? "",
-                              style: AppTextStyle.body2().copyWith(color: Colors.black),
+                              style: AppTextStyle.body2()
+                                  .copyWith(color: Colors.black),
                             ),
                             subtitle: widget.showWalletAdditionTile ?? true
                                 ? Visibility(
@@ -136,12 +139,7 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                               setState(() {
                                 expandOptions = false;
                               });
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AddWalletScreen(),
-                                ),
-                              );
+                              _onWalletAdditionCompleted();
                             },
                             leading: Icon(
                               Icons.add_circle_outline_rounded,
@@ -151,9 +149,8 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                             title: Text(
                               CheckoutStrings.addMobileMoneyWallet,
                               style: AppTextStyle.body2().copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black
-                              ),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             ),
                             minLeadingWidth: Dimens.paddingNano,
                           ),
@@ -172,7 +169,8 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                                 },
                                 title: Text(
                                   e.name ?? "",
-                                  style: AppTextStyle.body2().copyWith(color: Colors.black),
+                                  style: AppTextStyle.body2()
+                                      .copyWith(color: Colors.black),
                                 ),
                                 dense: true,
                                 minVerticalPadding: 0,
@@ -186,5 +184,18 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
         )
       ],
     );
+  }
+
+  _onWalletAdditionCompleted() async{
+    final onWalletAdded = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddWalletScreen(),
+      ),
+    );
+
+    if (onWalletAdded == true){
+      widget.onWalletUpdateComplete?.call();
+    }
   }
 }
