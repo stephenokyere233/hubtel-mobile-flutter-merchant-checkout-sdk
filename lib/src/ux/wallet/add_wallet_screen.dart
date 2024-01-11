@@ -162,7 +162,7 @@ class _AddWalletScreenState extends State<AddWalletScreen> {
           context: context,
           title: "Success",
           subtitle: response.message,
-          buttonAction: () => {Navigator.pop(context), Navigator.pop(context)},
+          buttonAction: () => {Navigator.pop(context), Navigator.pop(context, true)},
           buttonTitle: "OKAY");
     } else {
       widget.showErrorDialog(context: context, message: response.message);

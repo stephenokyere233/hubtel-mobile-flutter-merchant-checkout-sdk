@@ -360,6 +360,9 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                   fetchFees2();
                                                 }
                                               },
+                                              walletAdditionComplete: (){
+                                                    _updateWallets();
+                                              },
                                               disableUserNumberInputInteraction:
                                                   (CheckoutViewModel
                                                               .channelFetch
@@ -691,6 +694,11 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
         name: '$runtimeType');
     final response = await viewModel.fetchWallets();
     return response;
+  }
+
+  _updateWallets() async{
+    final wallets = await fetchWallets();
+    _handleWalletFetchCompletion(response: wallets);
   }
 
   _handleWalletFetchCompletion({required UiResult<List<Wallet>> response}) {
