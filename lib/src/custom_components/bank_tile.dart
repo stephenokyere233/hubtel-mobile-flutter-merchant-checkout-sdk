@@ -98,7 +98,7 @@ class _BankTileDropdownState extends State<BankTileDropdown> {
                                   text: BankCardHelper.getCardType(
                                       e.cardNumber ?? ""),
                                   fontSize: Dimens.caption,
-                                  color: HubtelColors.neutral.shade200,
+                                  color: Colors.black,
                                 ),
                               );
                             }),

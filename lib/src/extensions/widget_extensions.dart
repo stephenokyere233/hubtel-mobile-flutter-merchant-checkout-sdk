@@ -31,45 +31,88 @@ extension WidgetExtension on StatefulWidget {
     showDialog(
       context: context,
       builder: (context) => HBRoundedDialog(
-        padding: const EdgeInsets.all(Dimens.paddingDefault),
+        padding: const EdgeInsets.all(0),
         borderRadius: Dimens.defaultBorderRadius,
         widget: SizedBox(
-          width: 100,
+          width: Dimens.xlgImageSize,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Error',
-                style: AppTextStyle.headline3(),
+              Container(
+                height: Dimens.fifty,
+                width: Dimens.fifty,
+                padding: const EdgeInsets.symmetric(
+                  vertical: Dimens.paddingSmall,
+                ),
+                margin: const EdgeInsets.only(
+                  top: Dimens.paddingDefault,
+                ),
+                decoration: BoxDecoration(
+                  color: HubtelColors.dialogIconColor,
+                  borderRadius: BorderRadius.circular(Dimens.fifty),
+                ),
+                child: Column(
+                  //Exclamation
+                  children: [
+                    Expanded(
+                      child: Container(
+                        width: Dimens.paddingMicro,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                          BorderRadius.circular(Dimens.lgBorderRadius),
+                          color: HubtelColors.crimson,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: Dimens.paddingMicro,
+                    ),
+                    Container(
+                      height: Dimens.paddingMicro,
+                      width: Dimens.paddingMicro,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.circular(Dimens.paddingMicro / 2),
+                        color: HubtelColors.crimson,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(
-                height: Dimens.paddingNano,
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: Dimens.paddingNano,
+                ),
+                child: Text(
+                  CheckoutStrings.errorText,
+                  style: AppTextStyle.headline4(),
+                ),
               ),
               Align(
                 alignment: Alignment.center,
                 child: Text(
                   message,
-                  style: AppTextStyle.body2().copyWith(
-                    color: ThemeConfig.themeColor,
-                  ),
+                  style: AppTextStyle.body2(),
                 ),
               ),
-              const SizedBox(
-                height: Dimens.paddingNano,
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    onOkayTap?.call();
-                  },
-                  child: Text(
-                    CheckoutStrings.okay.toUpperCase(),
-                    style: AppTextStyle.body2().copyWith(
-                      fontWeight: FontWeight.bold,
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.only(
+                  bottom: Dimens.paddingNano,
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: InkWell(
+                    onTap: () => Navigator.pop(context),
+                    child: SizedBox(
+                      width: Dimens.xlgImageSize,
+                      child: Text(CheckoutStrings.okay.toUpperCase(),
+                          style: AppTextStyle.body2().copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                 ),
@@ -196,6 +239,101 @@ Future showAppDialog(BuildContext context,
         ],
       ),
       actions: actions,
+    ),
+  );
+}
+
+Widget getErrorDialog({required String message, required BuildContext context}){
+  return HBRoundedDialog(
+    padding: const EdgeInsets.all(0),
+    borderRadius: Dimens.defaultBorderRadius,
+    widget: SizedBox(
+      width: Dimens.xlgImageSize,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: Dimens.fifty,
+            width: Dimens.fifty,
+            padding: const EdgeInsets.symmetric(
+              vertical: Dimens.paddingSmall,
+            ),
+            margin: const EdgeInsets.only(
+              top: Dimens.paddingDefault,
+            ),
+            decoration: BoxDecoration(
+              color: HubtelColors.dialogIconColor,
+              borderRadius: BorderRadius.circular(Dimens.fifty),
+            ),
+            child: Column(
+              //Exclamation
+              children: [
+                Expanded(
+                  child: Container(
+                    width: Dimens.paddingMicro,
+                    decoration: BoxDecoration(
+                      borderRadius:
+                      BorderRadius.circular(Dimens.lgBorderRadius),
+                      color: HubtelColors.crimson,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: Dimens.paddingMicro,
+                ),
+                Container(
+                  height: Dimens.paddingMicro,
+                  width: Dimens.paddingMicro,
+                  decoration: BoxDecoration(
+                    borderRadius:
+                    BorderRadius.circular(Dimens.paddingMicro / 2),
+                    color: HubtelColors.crimson,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: Dimens.paddingNano,
+            ),
+            child: Text(
+              CheckoutStrings.errorText,
+              style: AppTextStyle.headline4(),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              message,
+              style: AppTextStyle.body2(),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const Divider(),
+          Padding(
+            padding: const EdgeInsets.only(
+              bottom: Dimens.paddingNano,
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: InkWell(
+                onTap: () => Navigator.pop(context),
+                child: SizedBox(
+                  width: Dimens.xlgImageSize,
+                  child: Text(CheckoutStrings.okay.toUpperCase(),
+                      style: AppTextStyle.body2().copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }

@@ -10,15 +10,21 @@ class CheckoutApi extends ApiCore {
   CheckoutApi({required super.requester});
 
   Future<ResultWrapper<ChannelFetchResponse>> fetchChannels() async {
-    final response = await requester.makeRequest(
-      apiEndPoint: endPoints.checkoutEndPoint.fetchChannels(),
-    );
+    print("Linting here");
+    try {
+      final response = await requester.makeRequest(
+        apiEndPoint: endPoints.checkoutEndPoint.fetchChannels(),
+      );
 
-    print(response);
-    final data = DataResponse<ChannelFetchResponse>.fromJson(
-        response.response, (x) => ChannelFetchResponse.fromJson(x));
+      print(response);
+      final data = DataResponse<ChannelFetchResponse>.fromJson(
+          response.response, (x) => ChannelFetchResponse.fromJson(x));
 
-    return BaseApiResponse(response: data, apiResult: response.apiResult);
+      return BaseApiResponse(response: data, apiResult: response.apiResult);
+    } catch (e) {
+      print("catching error $e");
+      return BaseApiResponse(response: null, apiResult: ApiResult.Error);
+    }
   }
 
   Future<ListResultWrapper<Wallet>> fetchWallets() async {
@@ -176,10 +182,13 @@ class CheckoutApi extends ApiCore {
     return BaseApiResponse(response: data, apiResult: result.apiResult);
   }
 
-  Future<ResultWrapper<OtpRequestResponse>> verifyMomoOtp({required VerifyOtpBody requestBody}) async{
-    final  result = await requester.makeRequest(apiEndPoint: endPoints.checkoutEndPoint.verifyOtp(request: requestBody));
-    final data = DataResponse<OtpRequestResponse>.fromJson(result.response, (x) => OtpRequestResponse.fromJson(x));
+  Future<ResultWrapper<OtpRequestResponse>> verifyMomoOtp(
+      {required VerifyOtpBody requestBody}) async {
+    final result = await requester.makeRequest(
+        apiEndPoint:
+            endPoints.checkoutEndPoint.verifyOtp(request: requestBody));
+    final data = DataResponse<OtpRequestResponse>.fromJson(
+        result.response, (x) => OtpRequestResponse.fromJson(x));
     return BaseApiResponse(response: data, apiResult: result.apiResult);
   }
-
 }

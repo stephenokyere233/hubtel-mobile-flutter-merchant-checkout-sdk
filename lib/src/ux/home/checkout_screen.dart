@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:hubtel_merchant_checkout_sdk/src/extensions/widget_extensions.dart';
+import 'package:hubtel_merchant_checkout_sdk/src/resources/checkout_strings.dart';
 import 'package:provider/provider.dart';
 
 import '../../core_ui/core_ui.dart';
@@ -24,6 +26,8 @@ class CheckoutScreen extends StatefulWidget {
 
   late final viewModel = CheckoutViewModel();
 
+  late final List<BankCardData>? savedBankCards;
+
   // late final Function(PaymentStatus) onCheckoutComplete;
 
   Color? _primaryColor;
@@ -32,8 +36,7 @@ class CheckoutScreen extends StatefulWidget {
     Key? key,
     required this.purchaseInfo,
     required this.configuration,
-    // this.checkoutCompleted,
-    // required this.onCheckoutComplete,
+    this.savedBankCards,
     this.themeConfig,
   }) : super(key: key) {
     CheckoutRequirements.customerMsisdn = purchaseInfo.customerMsisdn;
@@ -73,19 +76,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ));
             } else {
               if (snapshot.hasData) {
+                print("Here ${snapshot.data?.state}");
                 final businessInfo = snapshot.data?.data?.getBusinessInfo() ??
                     BusinessInfo(
                       businessName: 'businessName',
                       businessImageUrl: 'businessImageUrl',
                     );
-                return CheckoutHomeScreen(
-                  checkoutPurchase: widget.purchaseInfo,
-                  businessInfo: businessInfo,
-                  themeConfig: widget.themeConfig ??
-                      ThemeConfig(
-                        primaryColor: HubtelColors.teal,
-                      ),
-                );
+                if (snapshot.data?.state == UiState.success){
+                  return CheckoutHomeScreen(
+                    checkoutPurchase: widget.purchaseInfo,
+                    businessInfo: businessInfo,
+                    themeConfig: widget.themeConfig ??
+                        ThemeConfig(
+                          primaryColor: HubtelColors.teal,
+                        ),
+                    savedBankCards: widget.savedBankCards,
+                  );
+                }else{
+                  return getErrorDialog(message: "Something went wrong while configuring business", context: context);
+                }
+
+
               }
             }
             return Center(
@@ -98,4 +109,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
     );
   }
+
+
 }

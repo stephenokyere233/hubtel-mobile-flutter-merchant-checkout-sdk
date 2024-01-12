@@ -246,4 +246,5 @@ final class HubtelColors {
   static const greyHint = Color(0xFFb3bac1);
   static const errorColor = Color(0xFFFF3344);
   static const logoutTextColor = Color(0xFFFF3B30);
+  static const dialogIconColor = Color(0xFFFBEBD9);
 }
