@@ -36,7 +36,7 @@ class CheckoutHomeScreen extends StatefulWidget {
 
   late final BusinessInfo businessInfo;
   late final ThemeConfig? themeConfig;
-
+  final List<BankCardData>? savedBankCards;
   String accessToken = '';
 
   late final Setup3dsResponse? threeDsResponse;
@@ -46,6 +46,7 @@ class CheckoutHomeScreen extends StatefulWidget {
     required this.checkoutPurchase,
     required this.businessInfo,
     this.themeConfig,
+    this.savedBankCards
   });
 
   @override
@@ -913,11 +914,14 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
   void getBankCards() async {
     final cards = await viewModel.getBankWallets();
-    if (cards?.isNotEmpty == true) {
-      setState(() {
-        savedCards = cards!;
-      });
+    if (widget.savedBankCards?.isNotEmpty ?? false){
+      savedCards = widget.savedBankCards ?? [];
     }
+
+    if (cards?.isNotEmpty == true) {
+        savedCards = cards! + (widget.savedBankCards ?? []);
+    }
+    setState(() {});
   }
 
   _setup() async {

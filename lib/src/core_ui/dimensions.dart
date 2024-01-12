@@ -185,6 +185,7 @@ class Dimens {
 
   static const seventyFive = 75.00;
 
+  static const xlgImageSize = 100.0;
 
   static const BorderRadiusGeometry borderRadius12 = BorderRadius.all(
     Radius.circular(

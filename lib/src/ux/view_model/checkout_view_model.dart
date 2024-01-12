@@ -72,24 +72,33 @@ class CheckoutViewModel extends ChangeNotifier {
   late final CheckoutApi _checkoutApi = CheckoutApi(requester: requester);
 
   Future<UiResult<ChannelFetchResponse>> fetchChannels() async {
-    final result = await _checkoutApi.fetchChannels();
 
-    if (result.apiResult == ApiResult.Success) {
-      final data = result.response?.data;
-      channelResponse = result.response?.data;
+    try {
+      final result = await _checkoutApi.fetchChannels();
 
-      merchantRequiresKyc = result.response?.data?.requireNationalID;
+      if (result.apiResult == ApiResult.Success) {
+        final data = result.response?.data;
+        channelResponse = result.response?.data;
 
-      log('fetched channels ${channelResponse?.businessLogoUrl}',
-          name: '$runtimeType');
-      CheckoutViewModel.channelFetch = result.response?.data;
-      notifyListeners();
-      return UiResult(state: UiState.success, message: 'Success', data: data);
+        merchantRequiresKyc = result.response?.data?.requireNationalID;
+
+        log('fetched channels ${channelResponse?.businessLogoUrl}',
+            name: '$runtimeType');
+        CheckoutViewModel.channelFetch = result.response?.data;
+        notifyListeners();
+        return UiResult(state: UiState.success, message: 'Success', data: data);
+      }
+      return UiResult(
+          state: UiState.error,
+          message: result.response?.message ?? '',
+          data: null);
+    }catch(e){
+      print("here $e");
+      return UiResult(
+          state: UiState.error,
+          message: "",
+          data: null);
     }
-    return UiResult(
-        state: UiState.error,
-        message: result.response?.message ?? '',
-        data: null);
   }
 
   // TODO: fetch wallets
