@@ -1043,7 +1043,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                     phoneNumber: "",
                     requestId: '',
                     prefix: momoResponse?.otpPrefix ?? "",
-                    amount: 10,
+                    amount: momoResponse?.amount ?? 0.00,
                     clientReference: momoResponse?.clientReference ?? "",
                     hubtelPreApprovalId:
                         momoResponse?.hubtelPreapprovalId ?? "",
