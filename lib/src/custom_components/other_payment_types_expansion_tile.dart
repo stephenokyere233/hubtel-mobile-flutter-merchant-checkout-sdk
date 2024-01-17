@@ -158,7 +158,7 @@ class _OtherPaymentExpansionTileState extends State<OtherPaymentExpansionTile> {
               child: const Padding(
                 padding: EdgeInsets.only(top: 8),
                 child: Text(
-                  "Your balance Hubtel will be debited immediately you confirm. \n\nNo authorzation prompt will be sent to you",
+                  "Your balance on Hubtel will be debited immediately you confirm. \n\nNo authorzation prompt will be sent to you",
                   textAlign: TextAlign.start,
                 ),
               ),
