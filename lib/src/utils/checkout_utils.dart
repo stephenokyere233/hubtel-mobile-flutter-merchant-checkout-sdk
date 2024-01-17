@@ -1,38 +1,57 @@
-
 import '../platform/models/models.dart';
 import '../resources/resources.dart';
 
 class CheckoutUtils {
   static String mapApiWalletProviderNameToKnowName(
       {required String providerName}) {
-    switch (providerName) {
-      case CheckoutStrings.mtn:
-        return CheckoutStrings.mtnMobileMoney;
-      case CheckoutStrings.vodafone:
-        return CheckoutStrings.vodafoneCash;
-      case CheckoutStrings.airtelTigo: case CheckoutStrings.atMoney: case CheckoutStrings.airtel:
+    final nameOfProvider = providerName.toLowerCase();
+    if (nameOfProvider.contains(CheckoutStrings.mtn)) {
+      return CheckoutStrings.mtnMobileMoney;
+    } else if (nameOfProvider.contains(CheckoutStrings.vodafone) ||
+        nameOfProvider.contains("voda")) {
+      return CheckoutStrings.vodafoneCash;
+    } else if (nameOfProvider.contains(CheckoutStrings.airtelTigo) ||
+        nameOfProvider.contains(CheckoutStrings.atMoney) ||
+        nameOfProvider.contains(CheckoutStrings.airtel) ||
+        nameOfProvider.contains("tigo")) {
       return CheckoutStrings.airtelTigoMoney;
-      default:
-        return "";
+    } else {
+      return CheckoutStrings.mtnMobileMoney;
     }
-
   }
 
-  static MomoProvider getProvider({required String providerString}){
-      if (providerString.contains("mtn")){
-        return MomoProvider(name: "MTN", logoUrl: "", alias: "mtn-gh", receiveMoneyPromptValue: "mtn-gh", preapprovalConfirmValue: "", directDebitValue:"mtn-gh-direct-debit" );
-      }
+  static MomoProvider getProvider({required String providerString}) {
+    if (providerString.toLowerCase().contains("mtn")) {
+      return MomoProvider(
+          name: "MTN",
+          logoUrl: "",
+          alias: "mtn-gh",
+          receiveMoneyPromptValue: "mtn-gh",
+          preapprovalConfirmValue: "",
+          directDebitValue: "mtn-gh-direct-debit");
+    }
 
-      if (providerString.contains("airtel")){
-       return MomoProvider(name: "Airtel Tigo", logoUrl: "", alias: "airtelTigo", receiveMoneyPromptValue: "tigo-gh", preapprovalConfirmValue: "", directDebitValue:"tigo-gh-direct-debit");
-      }
+    if (providerString.toLowerCase().contains("airtel")) {
+      return MomoProvider(
+          name: "Airtel Tigo",
+          logoUrl: "",
+          alias: "airtelTigo",
+          receiveMoneyPromptValue: "tigo-gh",
+          preapprovalConfirmValue: "",
+          directDebitValue: "tigo-gh-direct-debit");
+    }
 
-      if (providerString.contains("voda")){
-        return MomoProvider(name: "Vodafone", logoUrl: "", alias: "vodafone", receiveMoneyPromptValue: "vodafone-gh", preapprovalConfirmValue: "", directDebitValue:"vodafone-gh-direct-debit");
-      }
+    if (providerString.toLowerCase().contains("voda")) {
+      return MomoProvider(
+          name: "Vodafone",
+          logoUrl: "",
+          alias: "vodafone",
+          receiveMoneyPromptValue: "vodafone-gh",
+          preapprovalConfirmValue: "",
+          directDebitValue: "vodafone-gh-direct-debit");
+    }
 
-
-      return MomoProvider();
+    return MomoProvider();
   }
 
   static String mapProviderNameToShortName({required String providerName}) {
@@ -47,5 +66,4 @@ class CheckoutUtils {
         return "";
     }
   }
-
 }

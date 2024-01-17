@@ -674,6 +674,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   void autoSelectProviderFromSelectedWallet() {
+
+    print("****\n\n\n ${selectedWallet?.provider} \n\n\n****");
     setState(() {
       if (wallets.isNotEmpty) {
         momoProviderController.text =
