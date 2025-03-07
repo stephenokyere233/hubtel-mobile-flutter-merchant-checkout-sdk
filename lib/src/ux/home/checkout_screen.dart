@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hubtel_merchant_checkout_sdk/src/extensions/widget_extensions.dart';
-import 'package:hubtel_merchant_checkout_sdk/src/resources/checkout_strings.dart';
 import 'package:provider/provider.dart';
 
 import '../../core_ui/core_ui.dart';
@@ -24,13 +23,11 @@ class CheckoutScreen extends StatefulWidget {
 
   late final ThemeConfig? themeConfig;
 
-  late final viewModel = CheckoutViewModel();
-
   late final List<BankCardData>? savedBankCards;
 
   // late final Function(PaymentStatus) onCheckoutComplete;
 
-  Color? _primaryColor;
+  // Color? _primaryColor;
 
   CheckoutScreen({
     Key? key,
@@ -50,9 +47,18 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
+  late final CheckoutViewModel _viewModel;
+
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    _viewModel = CheckoutViewModel();
+  }
+
+  @override
+  void dispose() {
+    _viewModel.dispose();
+    super.dispose();
   }
 
   void onNewCardInputComplete() async {}
@@ -62,11 +68,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     log('${widget.themeConfig!.primaryColor}', name: '$runtimeType');
     ThemeConfig.themeColor = widget.themeConfig!.primaryColor;
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => CheckoutViewModel())],
+      providers: [ChangeNotifierProvider.value(value: _viewModel)],
       child: Container(
         color: Colors.white,
         child: FutureBuilder<UiResult<ChannelFetchResponse>>(
-          future: widget.viewModel.fetchChannels(),
+          future: _viewModel.fetchChannels(),
           builder: (context,
               AsyncSnapshot<UiResult<ChannelFetchResponse>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -82,7 +88,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       businessName: 'businessName',
                       businessImageUrl: 'businessImageUrl',
                     );
-                if (snapshot.data?.state == UiState.success){
+                if (snapshot.data?.state == UiState.success) {
                   return CheckoutHomeScreen(
                     checkoutPurchase: widget.purchaseInfo,
                     businessInfo: businessInfo,
@@ -92,11 +98,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ),
                     savedBankCards: widget.savedBankCards,
                   );
-                }else{
-                  return getErrorDialog(message: "Something went wrong while configuring business", context: context);
+                } else {
+                  return getErrorDialog(
+                      message:
+                          "Something went wrong while configuring business",
+                      context: context);
                 }
-
-
               }
             }
             return Center(
@@ -109,6 +116,4 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
     );
   }
-
-
 }
