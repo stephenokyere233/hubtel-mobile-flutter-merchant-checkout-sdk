@@ -1,15 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
 
-// import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
+import 'package:flutter/material.dart';
+import 'package:html_to_pdf_plus/html_to_pdf_plus.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-
-import '/src/core_ui/core_ui.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '/src/core_ui/core_ui.dart';
 import '../../platform/models/models.dart';
 import '../../resources/html_strings.dart';
 import 'bank_pay_status_screen.dart';
@@ -89,8 +87,12 @@ class _BankPayReceiptScreenState extends State<BankPayReceiptScreen> {
     final targetFileName =
         "${widget.businessDetails.businessName}_${widget.mobileMoneyResponse.customerName}_${DateTime.now()}";
 
-    final generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
-        htmlContent, targetPath ?? "", targetFileName);
+    final generatedPdfFile = await HtmlToPdf.convertFromHtmlContent(
+        htmlContent: htmlContent,
+        configuration: PdfConfiguration(
+          targetDirectory: targetPath,
+          targetName: targetFileName,
+        ));
     log('$generatedPdfFile', name: '$runtimeType');
 
     final openFile = await OpenFilex.open(generatedPdfFile.path);
@@ -99,12 +101,7 @@ class _BankPayReceiptScreenState extends State<BankPayReceiptScreen> {
 
     Navigator.pop(context);
 
-    if (openFile != null) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const BankPayStatusScreen()));
-    }
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const BankPayStatusScreen()));
   }
-
-
-
 }
