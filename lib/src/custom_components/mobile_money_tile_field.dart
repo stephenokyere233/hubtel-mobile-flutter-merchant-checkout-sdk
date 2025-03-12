@@ -43,6 +43,7 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
     return Column(
       children: [
         InputField(
+          key: UniqueKey(),
           hasFill: true,
           hintText: widget.hintText,
           controller: widget.fieldController,
@@ -186,15 +187,15 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
     );
   }
 
-  _onWalletAdditionCompleted() async{
+  _onWalletAdditionCompleted() async {
     final onWalletAdded = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddWalletScreen(),
+        builder: (context) => const AddWalletScreen(),
       ),
     );
 
-    if (onWalletAdded == true){
+    if (onWalletAdded == true) {
       widget.onWalletUpdateComplete?.call();
     }
   }

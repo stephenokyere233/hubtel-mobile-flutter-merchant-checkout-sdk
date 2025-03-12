@@ -76,6 +76,9 @@ class _InputFieldState extends State<InputField> {
       readOnly: widget.readOnly,
       inputFormatters: widget.inputFormatters,
       obscureText: widget.isPassword ?? false,
+      onFieldSubmitted: (_) {},
+      textInputAction: TextInputAction.none,
+      onEditingComplete: () {},
       decoration: InputDecoration(
         contentPadding: widget.contentPadding,
         hintText: widget.hintText,
