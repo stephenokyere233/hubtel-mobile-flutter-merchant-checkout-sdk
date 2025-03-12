@@ -48,6 +48,9 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
           hintText: widget.hintText,
           controller: widget.fieldController,
           readOnly: widget.isReadOnly,
+          onChanged: (_) {
+            // No-op to prevent form submission
+          },
           suffixWidget: widget.isReadOnly
               ? Padding(
                   padding:

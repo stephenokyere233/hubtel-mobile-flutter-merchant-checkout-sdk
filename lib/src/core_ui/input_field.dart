@@ -62,6 +62,7 @@ class _InputFieldState extends State<InputField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      key: widget.key ?? UniqueKey(),
       onChanged: widget.onChanged,
       validator: widget.validator,
       keyboardType: widget.inputType,
