@@ -205,6 +205,64 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
     mobileNumberController.addListener(() {
       onMobileNumberKeyed();
     });
+
+    // Configure focus nodes to ensure keyboard stays visible
+    _configureFocusNodes();
+
+    // Ensure keyboard is visible after a short delay
+    Future.delayed(Duration(milliseconds: 500), () {
+      // Request focus for the mobile number field to show keyboard
+      if (!mobileNumberFocusNode.hasFocus && !cardNumberFocusNode.hasFocus) {
+        FocusScope.of(context).requestFocus(mobileNumberFocusNode);
+      }
+    });
+  }
+
+  // Configure focus nodes to ensure keyboard stays visible
+  void _configureFocusNodes() {
+    // Configure mobile number focus node
+    mobileNumberFocusNode.addListener(() {
+      if (mobileNumberFocusNode.hasFocus) {
+        _ensureKeyboardVisible();
+      }
+    });
+
+    // Configure card number focus node
+    cardNumberFocusNode.addListener(() {
+      if (cardNumberFocusNode.hasFocus) {
+        _ensureKeyboardVisible();
+      }
+    });
+
+    // Configure card date focus node
+    cardDateFocusNode.addListener(() {
+      if (cardDateFocusNode.hasFocus) {
+        _ensureKeyboardVisible();
+      }
+    });
+
+    // Configure card CVV focus node
+    cardCvvFocusNode.addListener(() {
+      if (cardCvvFocusNode.hasFocus) {
+        _ensureKeyboardVisible();
+      }
+    });
+  }
+
+  // Ensure keyboard is visible
+  void _ensureKeyboardVisible() {
+    // This forces the keyboard to stay visible by ensuring a focus node has focus
+    if (!FocusScope.of(context).hasPrimaryFocus) {
+      if (mobileNumberFocusNode.hasFocus) {
+        FocusScope.of(context).requestFocus(mobileNumberFocusNode);
+      } else if (cardNumberFocusNode.hasFocus) {
+        FocusScope.of(context).requestFocus(cardNumberFocusNode);
+      } else if (cardDateFocusNode.hasFocus) {
+        FocusScope.of(context).requestFocus(cardDateFocusNode);
+      } else if (cardCvvFocusNode.hasFocus) {
+        FocusScope.of(context).requestFocus(cardCvvFocusNode);
+      }
+    }
   }
 
   @override
@@ -283,15 +341,9 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                           child: WebViewWidget(controller: controller)),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () {
-                            // Only unfocus when tapping outside of input fields
-                            // Don't unfocus on every tap as it dismisses the keyboard
-                            // when users try to interact with input fields
-                            final currentFocus = FocusScope.of(context);
-                            if (!currentFocus.hasPrimaryFocus) {
-                              currentFocus.unfocus();
-                            }
-                          },
+                          // Disable the gesture detector's tap handling completely
+                          // to prevent it from interfering with input field focus
+                          onTap: null,
                           child: Form(
                             key: _formKey,
                             // Don't auto-validate as it can cause keyboard dismissal
@@ -929,10 +981,15 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   void checkout() async {
-    // Only unfocus if we're actually proceeding with checkout
+    // Only unfocus if we're actually proceeding with checkout AND the button is enabled
     // This prevents keyboard dismissal during normal form interaction
     if (checkoutHomeScreenState.isButtonEnabled.value) {
+      // Use a delay to ensure the button press is registered before unfocusing
+      await Future.delayed(Duration(milliseconds: 100));
       FocusScope.of(context).unfocus();
+    } else {
+      // If the button is not enabled, don't unfocus - let the user continue typing
+      return;
     }
 
     if (!(CheckoutViewModel.channelFetch?.isHubtelInternalMerchant ?? false) &&
@@ -1432,6 +1489,17 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
     }
 
     _previousCardFormValid = isCurrentlyValid;
+
+    // Ensure focus is maintained on the appropriate field
+    Future.microtask(() {
+      if (!isCardNumberInputComplete) {
+        FocusScope.of(context).requestFocus(cardNumberFocusNode);
+      } else if (!isCardDateInputComplete) {
+        FocusScope.of(context).requestFocus(cardDateFocusNode);
+      } else if (!isCardCvvInputComplete) {
+        FocusScope.of(context).requestFocus(cardCvvFocusNode);
+      }
+    });
   }
 
   void onMobileNumberKeyed() {
@@ -1449,6 +1517,12 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
       } else {
         checkoutHomeScreenState.isButtonEnabled.value = false;
       }
+    }
+
+    // Ensure the focus is maintained on the mobile number field
+    if (!mobileNumberFocusNode.hasFocus) {
+      Future.microtask(
+          () => FocusScope.of(context).requestFocus(mobileNumberFocusNode));
     }
   }
 

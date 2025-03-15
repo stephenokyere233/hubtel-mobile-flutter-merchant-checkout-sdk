@@ -60,6 +60,7 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
             controller: widget.cardNumberInputController,
             focusNode: widget.cardNumberFocusNode,
             hasFill: true,
+            autofocus: true,
             validator: (value) {
               if (value == null || value.isEmpty || value.length < 16) {
                 return CheckoutStrings.invalidCardNumber;
@@ -121,6 +122,12 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                   controller: widget.cardDateInputController,
                   focusNode: widget.cardDateFocusNode,
                   hasFill: true,
+                  onTap: () {
+                    if (widget.cardDateFocusNode != null) {
+                      FocusScope.of(context)
+                          .requestFocus(widget.cardDateFocusNode);
+                    }
+                  },
                   hintText: CheckoutStrings.monthAndYearBankHint,
                   inputType: TextInputType.number,
                   inputFormatters: [
@@ -151,6 +158,12 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                   controller: widget.cardCvvInputController,
                   focusNode: widget.cardCvvFocusNode,
                   hasFill: true,
+                  onTap: () {
+                    if (widget.cardCvvFocusNode != null) {
+                      FocusScope.of(context)
+                          .requestFocus(widget.cardCvvFocusNode);
+                    }
+                  },
                   hintText: CheckoutStrings.cvv,
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(3),

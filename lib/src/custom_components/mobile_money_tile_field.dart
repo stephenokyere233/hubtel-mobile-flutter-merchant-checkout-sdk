@@ -43,47 +43,53 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        InputField(
-          key: UniqueKey(),
-          hasFill: true,
-          hintText: widget.hintText,
-          controller: widget.fieldController,
-          readOnly: widget.isReadOnly,
-          focusNode: widget.focusNode,
-          onChanged: (value) {
-            // Allow text changes when not in read-only mode
-            if (!widget.isReadOnly) {
-              // Let the parent know about changes if needed
-            }
-          },
-          suffixWidget: widget.isReadOnly
-              ? Padding(
-                  padding:
-                      const EdgeInsets.only(right: Dimens.paddingDefaultSmall),
-                  child: Icon(
-                    expandOptions == true
-                        ? FlutterRemix.arrow_up_s_line
-                        : FlutterRemix.arrow_down_s_line,
-                    color: HubtelColors.neutral.shade900,
-                  ),
-                )
-              : null,
+        GestureDetector(
           onTap: () {
-            // Only toggle dropdown when in read-only mode
-            // This prevents keyboard dismissal when trying to type
-            if (widget.isReadOnly) {
-              setState(() {
-                expandOptions = !expandOptions;
-              });
+            if (!widget.isReadOnly && widget.focusNode != null) {
+              FocusScope.of(context).requestFocus(widget.focusNode);
             }
           },
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(Dimens.inputBorderRadius),
+          child: InputField(
+            key: UniqueKey(),
+            hasFill: true,
+            hintText: widget.hintText,
+            controller: widget.fieldController,
+            readOnly: widget.isReadOnly,
+            focusNode: widget.focusNode,
+            autofocus: !widget.isReadOnly,
+            onChanged: (value) {
+              if (!widget.isReadOnly) {
+                // Let the parent know about changes if needed
+              }
+            },
+            suffixWidget: widget.isReadOnly
+                ? Padding(
+                    padding: const EdgeInsets.only(
+                        right: Dimens.paddingDefaultSmall),
+                    child: Icon(
+                      expandOptions == true
+                          ? FlutterRemix.arrow_up_s_line
+                          : FlutterRemix.arrow_down_s_line,
+                      color: HubtelColors.neutral.shade900,
+                    ),
+                  )
+                : null,
+            onTap: () {
+              if (widget.isReadOnly) {
+                setState(() {
+                  expandOptions = !expandOptions;
+                });
+              } else {
+                if (widget.focusNode != null) {
+                  FocusScope.of(context).requestFocus(widget.focusNode);
+                }
+              }
+            },
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(Dimens.inputBorderRadius),
+            ),
           ),
-          // contentPadding: symmetricPad(
-          //   horizontal: AppDimens.paddingDefault,
-          // ),
         ),
         Visibility(
           visible: expandOptions,

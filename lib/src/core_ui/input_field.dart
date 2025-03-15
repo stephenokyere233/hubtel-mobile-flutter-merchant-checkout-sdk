@@ -165,8 +165,12 @@ class _InputFieldState extends State<InputField> {
       inputFormatters: widget.inputFormatters,
       obscureText: widget.isPassword ?? false,
       textInputAction: TextInputAction.next,
-      onEditingComplete: null,
-      onFieldSubmitted: null,
+      onEditingComplete: () {
+        // Do nothing to prevent keyboard dismissal
+      },
+      onFieldSubmitted: (_) {
+        // Do nothing to prevent keyboard dismissal
+      },
       decoration: _cachedDecoration,
     );
   }
