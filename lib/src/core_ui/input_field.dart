@@ -29,7 +29,10 @@ class InputField extends StatefulWidget {
       this.focusedBorder,
       this.focusBorderColor,
       this.focusNode,
-      this.isPassword = false});
+      this.isPassword = false,
+      this.onEditingComplete,
+      this.onFieldSubmitted,
+      this.textInputAction = TextInputAction.next});
 
   final String hintText;
   final TextEditingController? controller;
@@ -55,6 +58,9 @@ class InputField extends StatefulWidget {
   final Color? focusBorderColor;
   final FocusNode? focusNode;
   final bool? isPassword;
+  final VoidCallback? onEditingComplete;
+  final Function(String)? onFieldSubmitted;
+  final TextInputAction? textInputAction;
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -63,11 +69,23 @@ class InputField extends StatefulWidget {
 class _InputFieldState extends State<InputField> {
   // Cache the decoration to prevent rebuilds
   late InputDecoration _cachedDecoration;
+  FocusNode? _internalFocusNode;
+
+  FocusNode get _effectiveFocusNode => widget.focusNode ?? _internalFocusNode!;
 
   @override
   void initState() {
     super.initState();
+    if (widget.focusNode == null) {
+      _internalFocusNode = FocusNode();
+    }
     _updateCachedDecoration();
+  }
+
+  @override
+  void dispose() {
+    _internalFocusNode?.dispose();
+    super.dispose();
   }
 
   @override
@@ -159,17 +177,30 @@ class _InputFieldState extends State<InputField> {
       enabled: widget.enabled,
       autofocus: widget.autofocus,
       controller: widget.controller,
-      focusNode: widget.focusNode,
-      onTap: widget.onTap,
+      focusNode: _effectiveFocusNode,
+      onTap: () {
+        // Ensure focus is maintained when tapped
+        if (!widget.readOnly) {
+          FocusScope.of(context).requestFocus(_effectiveFocusNode);
+        }
+        if (widget.onTap != null) {
+          widget.onTap!();
+        }
+      },
       readOnly: widget.readOnly,
       inputFormatters: widget.inputFormatters,
       obscureText: widget.isPassword ?? false,
-      textInputAction: TextInputAction.next,
-      onEditingComplete: () {
-        // Do nothing to prevent keyboard dismissal
-      },
-      onFieldSubmitted: (_) {
-        // Do nothing to prevent keyboard dismissal
+      textInputAction: widget.textInputAction ?? TextInputAction.next,
+      onEditingComplete: widget.onEditingComplete ??
+          () {
+            // Prevent default keyboard dismissal by doing nothing
+          },
+      onFieldSubmitted: (value) {
+        if (widget.onFieldSubmitted != null) {
+          widget.onFieldSubmitted!(value);
+        } else {
+          // Prevent default keyboard dismissal by doing nothing
+        }
       },
       decoration: _cachedDecoration,
     );

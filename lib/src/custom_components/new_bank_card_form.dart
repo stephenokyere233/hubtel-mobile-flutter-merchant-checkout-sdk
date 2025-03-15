@@ -45,9 +45,72 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
   bool saveCardForFuture = false;
   String cardNumber = "";
 
+  // Create internal focus nodes if not provided
+  FocusNode? _internalCardNumberFocusNode;
+  FocusNode? _internalCardDateFocusNode;
+  FocusNode? _internalCardCvvFocusNode;
+
+  FocusNode get _effectiveCardNumberFocusNode =>
+      widget.cardNumberFocusNode ?? _internalCardNumberFocusNode!;
+
+  FocusNode get _effectiveCardDateFocusNode =>
+      widget.cardDateFocusNode ?? _internalCardDateFocusNode!;
+
+  FocusNode get _effectiveCardCvvFocusNode =>
+      widget.cardCvvFocusNode ?? _internalCardCvvFocusNode!;
+
   @override
   void initState() {
     super.initState();
+
+    // Initialize internal focus nodes if needed
+    if (widget.cardNumberFocusNode == null) {
+      _internalCardNumberFocusNode = FocusNode();
+    }
+
+    if (widget.cardDateFocusNode == null) {
+      _internalCardDateFocusNode = FocusNode();
+    }
+
+    if (widget.cardCvvFocusNode == null) {
+      _internalCardCvvFocusNode = FocusNode();
+    }
+
+    // Add listeners to move focus when fields are complete
+    widget.cardNumberInputController.addListener(_handleCardNumberChange);
+    widget.cardDateInputController.addListener(_handleCardDateChange);
+  }
+
+  @override
+  void dispose() {
+    // Remove listeners
+    widget.cardNumberInputController.removeListener(_handleCardNumberChange);
+    widget.cardDateInputController.removeListener(_handleCardDateChange);
+
+    // Dispose internal focus nodes
+    _internalCardNumberFocusNode?.dispose();
+    _internalCardDateFocusNode?.dispose();
+    _internalCardCvvFocusNode?.dispose();
+
+    super.dispose();
+  }
+
+  void _handleCardNumberChange() {
+    // If card number is complete (16 digits + 3 spaces = 19 chars), move to date field
+    if (widget.cardNumberInputController.text.length == 19) {
+      Future.microtask(() {
+        FocusScope.of(context).requestFocus(_effectiveCardDateFocusNode);
+      });
+    }
+  }
+
+  void _handleCardDateChange() {
+    // If date is complete (MM/YY = 5 chars), move to CVV field
+    if (widget.cardDateInputController.text.length == 5) {
+      Future.microtask(() {
+        FocusScope.of(context).requestFocus(_effectiveCardCvvFocusNode);
+      });
+    }
   }
 
   @override
@@ -58,7 +121,7 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
         children: [
           InputField(
             controller: widget.cardNumberInputController,
-            focusNode: widget.cardNumberFocusNode,
+            focusNode: _effectiveCardNumberFocusNode,
             hasFill: true,
             autofocus: true,
             validator: (value) {
@@ -83,6 +146,26 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
               decimal: false,
               signed: false,
             ),
+            onEditingComplete: () {
+              // Prevent keyboard dismissal
+              if (widget.cardNumberInputController.text.length < 19) {
+                FocusScope.of(context)
+                    .requestFocus(_effectiveCardNumberFocusNode);
+              } else {
+                FocusScope.of(context)
+                    .requestFocus(_effectiveCardDateFocusNode);
+              }
+            },
+            onFieldSubmitted: (_) {
+              // Prevent keyboard dismissal
+              if (widget.cardNumberInputController.text.length < 19) {
+                FocusScope.of(context)
+                    .requestFocus(_effectiveCardNumberFocusNode);
+              } else {
+                FocusScope.of(context)
+                    .requestFocus(_effectiveCardDateFocusNode);
+              }
+            },
             suffixWidget: (cardNumber.startsWith("4") && cardNumber.length >= 3)
                 ? CContainer(
                     padding: onlySidePad(right: Dimens.paddingDefault),
@@ -120,13 +203,11 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
               Expanded(
                 child: InputField(
                   controller: widget.cardDateInputController,
-                  focusNode: widget.cardDateFocusNode,
+                  focusNode: _effectiveCardDateFocusNode,
                   hasFill: true,
                   onTap: () {
-                    if (widget.cardDateFocusNode != null) {
-                      FocusScope.of(context)
-                          .requestFocus(widget.cardDateFocusNode);
-                    }
+                    FocusScope.of(context)
+                        .requestFocus(_effectiveCardDateFocusNode);
                   },
                   hintText: CheckoutStrings.monthAndYearBankHint,
                   inputType: TextInputType.number,
@@ -135,6 +216,26 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                     CardExpiryFormatter(),
                   ],
                   onChanged: widget.onNewCardDateChanged,
+                  onEditingComplete: () {
+                    // Prevent keyboard dismissal
+                    if (widget.cardDateInputController.text.length < 5) {
+                      FocusScope.of(context)
+                          .requestFocus(_effectiveCardDateFocusNode);
+                    } else {
+                      FocusScope.of(context)
+                          .requestFocus(_effectiveCardCvvFocusNode);
+                    }
+                  },
+                  onFieldSubmitted: (_) {
+                    // Prevent keyboard dismissal
+                    if (widget.cardDateInputController.text.length < 5) {
+                      FocusScope.of(context)
+                          .requestFocus(_effectiveCardDateFocusNode);
+                    } else {
+                      FocusScope.of(context)
+                          .requestFocus(_effectiveCardCvvFocusNode);
+                    }
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty || value.length < 5)
                       return CheckoutStrings.invalidDateFormat;
@@ -156,13 +257,11 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                   isPassword: true,
                   maxLines: 1,
                   controller: widget.cardCvvInputController,
-                  focusNode: widget.cardCvvFocusNode,
+                  focusNode: _effectiveCardCvvFocusNode,
                   hasFill: true,
                   onTap: () {
-                    if (widget.cardCvvFocusNode != null) {
-                      FocusScope.of(context)
-                          .requestFocus(widget.cardCvvFocusNode);
-                    }
+                    FocusScope.of(context)
+                        .requestFocus(_effectiveCardCvvFocusNode);
                   },
                   hintText: CheckoutStrings.cvv,
                   inputFormatters: [
@@ -174,6 +273,16 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                     decimal: false,
                   ),
                   onChanged: widget.onNewCardCvvChanged,
+                  onEditingComplete: () {
+                    // Prevent keyboard dismissal by maintaining focus
+                    FocusScope.of(context)
+                        .requestFocus(_effectiveCardCvvFocusNode);
+                  },
+                  onFieldSubmitted: (_) {
+                    // Prevent keyboard dismissal by maintaining focus
+                    FocusScope.of(context)
+                        .requestFocus(_effectiveCardCvvFocusNode);
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty || value.length < 3) {
                       return CheckoutStrings.invalidCardCvv;

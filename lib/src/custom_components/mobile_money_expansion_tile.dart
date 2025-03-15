@@ -158,24 +158,4 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
       ],
     );
   }
-
-  // void autoSelectFirstWallet() {
-  //   SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-  //     var firstWallet = widget.wallets.firstOrNull;
-  //
-  //     if (firstWallet != null) {
-  //       widget.onWalletSelected.call(firstWallet);
-  //       widget.mobileNumberController.text = "${firstWallet.accountNo} i" ?? "";
-  //       var provider = widget.providers
-  //           .where((p) =>
-  //               p.alias?.toLowerCase() == firstWallet.provider?.toLowerCase())
-  //           .toList()
-  //           .firstOrNull;
-  //       if (provider != null) {
-  //         widget.onProviderSelected.call(provider);
-  //         widget.providerController.text = provider.name ?? "";
-  //       }
-  //     }
-  //   });
-  // }
 }

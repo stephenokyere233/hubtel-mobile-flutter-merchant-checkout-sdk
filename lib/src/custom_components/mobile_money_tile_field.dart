@@ -38,6 +38,32 @@ class MobileMoneyTileField extends StatefulWidget {
 
 class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
   bool expandOptions = false;
+  FocusNode? _internalFocusNode;
+
+  FocusNode get _effectiveFocusNode => widget.focusNode ?? _internalFocusNode!;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.focusNode == null) {
+      _internalFocusNode = FocusNode();
+    }
+  }
+
+  @override
+  void dispose() {
+    _internalFocusNode?.dispose();
+    super.dispose();
+  }
+
+  void _ensureKeyboardVisible() {
+    if (!widget.isReadOnly) {
+      // Use a microtask to avoid interrupting the current build cycle
+      Future.microtask(() {
+        FocusScope.of(context).requestFocus(_effectiveFocusNode);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +71,12 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
       children: [
         GestureDetector(
           onTap: () {
-            if (!widget.isReadOnly && widget.focusNode != null) {
-              FocusScope.of(context).requestFocus(widget.focusNode);
+            if (!widget.isReadOnly) {
+              _ensureKeyboardVisible();
+            } else if (widget.isReadOnly) {
+              setState(() {
+                expandOptions = !expandOptions;
+              });
             }
           },
           child: InputField(
@@ -55,7 +85,7 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
             hintText: widget.hintText,
             controller: widget.fieldController,
             readOnly: widget.isReadOnly,
-            focusNode: widget.focusNode,
+            focusNode: _effectiveFocusNode,
             autofocus: !widget.isReadOnly,
             onChanged: (value) {
               if (!widget.isReadOnly) {
@@ -80,9 +110,19 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                   expandOptions = !expandOptions;
                 });
               } else {
-                if (widget.focusNode != null) {
-                  FocusScope.of(context).requestFocus(widget.focusNode);
-                }
+                _ensureKeyboardVisible();
+              }
+            },
+            onEditingComplete: () {
+              // Prevent keyboard dismissal
+              if (!widget.isReadOnly) {
+                _ensureKeyboardVisible();
+              }
+            },
+            onFieldSubmitted: (_) {
+              // Prevent keyboard dismissal
+              if (!widget.isReadOnly) {
+                _ensureKeyboardVisible();
               }
             },
             focusedBorder: OutlineInputBorder(
@@ -123,9 +163,14 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                                     widget.showWalletAdditionTile ?? true
                                         ? e.accountNo ?? ""
                                         : e.accountName ?? "";
+                                expandOptions = false;
                               });
-                              expandOptions = false;
                               widget.onWalletSelected(e);
+
+                              // Ensure keyboard is visible if not readonly
+                              if (!widget.isReadOnly) {
+                                _ensureKeyboardVisible();
+                              }
                             },
                             title: Text(
                               widget.showWalletAdditionTile ?? true
@@ -180,9 +225,14 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                                 onTap: () {
                                   setState(() {
                                     widget.fieldController.text = e.name ?? "";
+                                    expandOptions = false;
                                   });
-                                  expandOptions = false;
                                   widget.onProviderSelected(e);
+
+                                  // Ensure keyboard is visible if not readonly
+                                  if (!widget.isReadOnly) {
+                                    _ensureKeyboardVisible();
+                                  }
                                 },
                                 title: Text(
                                   e.name ?? "",
