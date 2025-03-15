@@ -137,6 +137,9 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   // Add a form key for the main form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  // Store the card validation state to avoid unnecessary fetches
+  bool _previousCardFormValid = false;
+
   @override
   initState() {
     super.initState();
@@ -367,7 +370,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                     onWalletSelected: (wallet) {
                                                       selectedWallet = wallet;
                                                       autoSelectProviderFromSelectedWallet();
-                                                      fetchFees2();
+                                                      fetchFees();
                                                     },
                                                     onProviderSelected:
                                                         (provider) {
@@ -375,7 +378,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                         log('selecting provider here ${provider.alias}');
                                                         selectedProvider =
                                                             provider;
-                                                        fetchFees2();
+                                                        fetchFees();
                                                       });
                                                     },
                                                     onExpansionChanged:
@@ -386,7 +389,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                       if (value) {
                                                         autoSelectProviderFromSelectedWallet();
                                                         log('here ${selectedWallet?.accountNo}');
-                                                        fetchFees2();
+                                                        fetchFees();
                                                       }
                                                     },
                                                     walletAdditionComplete: () {
@@ -424,16 +427,22 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                     savedCards: savedCards,
                                                     onSavedCardCvvChanged:
                                                         (value) {
-                                                      setState(() {
-                                                        savedCardCvv = value;
-                                                      });
+                                                      if (savedCardCvv !=
+                                                          value) {
+                                                        setState(() {
+                                                          savedCardCvv = value;
+                                                        });
+                                                      }
                                                     },
                                                     onUseNewCardSelected:
                                                         (value) {
-                                                      setState(() {
-                                                        useNewCard =
-                                                            value ?? true;
-                                                      });
+                                                      if (useNewCard !=
+                                                          (value ?? true)) {
+                                                        setState(() {
+                                                          useNewCard =
+                                                              value ?? true;
+                                                        });
+                                                      }
                                                     },
                                                     onSavedCardSelected:
                                                         (savedCard) {
@@ -445,7 +454,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                         log('BankCard $bankCard',
                                                             name:
                                                                 '$runtimeType');
-                                                        fetchFees2(
+                                                        fetchFees(
                                                             cardNumber: savedCard
                                                                 .cardNumber);
                                                       });
@@ -462,17 +471,23 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                     },
                                                     onNewCardDateChanged:
                                                         (value) {
-                                                      setState(() {
-                                                        newCardExpiry =
-                                                            value.replaceAll(
-                                                                ' ', '');
-                                                      });
+                                                      final newValue = value
+                                                          .replaceAll(' ', '');
+                                                      if (newCardExpiry !=
+                                                          newValue) {
+                                                        setState(() {
+                                                          newCardExpiry =
+                                                              newValue;
+                                                        });
+                                                      }
                                                     },
                                                     onNewCardCvvChanged:
                                                         (value) {
-                                                      setState(() {
-                                                        newCardCvv = value;
-                                                      });
+                                                      if (newCardCvv != value) {
+                                                        setState(() {
+                                                          newCardCvv = value;
+                                                        });
+                                                      }
                                                     },
                                                     onExpansionChanged:
                                                         (value) {
@@ -573,7 +588,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                         momoSelectorController,
                                                     onWalletSelected: (wallet) {
                                                       selectedWallet = wallet;
-                                                      fetchFees2();
+                                                      fetchFees();
                                                     },
                                                     wallets: wallets,
                                                     anotherEditingController:
@@ -590,7 +605,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                               alias: provider);
                                                       changeWalletType(
                                                           provider);
-                                                      fetchFees2();
+                                                      fetchFees();
                                                       log('onChannelChanged - provider {$provider}',
                                                           name: '$runtimeType');
                                                     },
@@ -635,7 +650,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                                   .BankPay;
                                                         });
 
-                                                        fetchFees2();
+                                                        fetchFees();
                                                       }
                                                     },
                                                     isSelected: walletType ==
@@ -733,7 +748,7 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
         bankPayExpansionController.collapse();
       }
       selectedProvider = MomoProvider(alias: otherProviderString);
-      fetchFees2();
+      fetchFees();
     }
   }
 
@@ -769,12 +784,19 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
   _handleWalletFetchCompletion({required UiResult<List<Wallet>> response}) {
     if (response.state == UiState.success) {
-      viewModel.wallets = response.data;
-      setState(() {
+      // Only update state if there's an actual change
+      final newWallets = response.data ?? [];
+      final hasWalletsChanged = wallets.isEmpty ||
+          wallets.length != newWallets.length ||
+          !isWalletFetched;
+
+      if (hasWalletsChanged) {
+        viewModel.wallets = newWallets;
+        wallets = newWallets;
         isWalletFetched = true;
-        wallets = response.data ?? [];
-      });
-      // viewModel.notifyListeners();
+        // Force a rebuild only when necessary
+        setState(() {});
+      }
     } else {
       widget.showErrorDialog(
           context: context,
@@ -801,46 +823,15 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
     }
   }
 
-  fetchFees() async {
+  fetchFees({String? cardNumber}) async {
+    // Set loading state only once at the beginning
+    checkoutHomeScreenState.isLoadingFees.value = true;
+
     if (walletType == WalletType.Card) {
       selectedProvider = MomoProvider(
           name: CheckoutStrings.BankCard,
           alias: CheckoutStrings.getChannelNameForBankPayment(
-              cardNumberInputController.text));
-    }
-
-    final response = await viewModel.fetchFees(
-        channel: selectedProvider?.receiveMoneyPromptValue ??
-            selectedProvider?.alias ??
-            '',
-        amount: widget.checkoutPurchase.amount);
-
-    if (!mounted) return;
-
-    if (response.state == UiState.success) {
-      setState(() {
-        checkoutHomeScreenState.isLoadingFees.value = false;
-        checkoutHomeScreenState.checkoutFees.value =
-            response.data?.fees?.toDouble();
-        totalAmountPayable = response.data?.amountPayable;
-        _handleButtonActivation();
-      });
-    } else {
-      checkoutHomeScreenState.isLoadingFees.value = false;
-      widget.showErrorDialog(context: context, message: response.message);
-    }
-  }
-
-  fetchFees2({String? cardNumber}) async {
-    checkoutHomeScreenState.isLoadingFees.value = true;
-    checkoutHomeScreenState.isButtonEnabled.value = false;
-
-    if (walletType == WalletType.Card) {
-      selectedProvider = MomoProvider(
-        name: CheckoutStrings.BankCard,
-        alias: CheckoutStrings.getChannelNameForBankPayment(
-            cardNumber ?? cardNumberInputController.text),
-      );
+              cardNumber ?? cardNumberInputController.text));
     }
 
     if (walletType == WalletType.BankPay) {
@@ -848,7 +839,6 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           name: CheckoutStrings.bankPay, alias: CheckoutStrings.bankPay);
     }
 
-    print("here ${selectedProvider?.receiveMoneyPromptValue}");
     final response = await viewModel.fetchFees(
         channel: selectedProvider?.receiveMoneyPromptValue ??
             selectedProvider?.alias ??
@@ -857,17 +847,28 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
     if (!mounted) return;
 
+    // Always set loading to false regardless of response
+    checkoutHomeScreenState.isLoadingFees.value = false;
+
     if (response.state == UiState.success) {
-      setState(() {
-        feesFetched = true;
-      });
-      checkoutHomeScreenState.isLoadingFees.value = false;
-      checkoutHomeScreenState.checkoutFees.value =
-          response.data?.fees?.toDouble();
-      totalAmountPayable = response.data?.amountPayable;
-      _handleButtonActivation();
+      // Batch state updates together to minimize rebuilds
+      final newFees = response.data?.fees?.toDouble();
+      final newAmountPayable = response.data?.amountPayable;
+
+      // Only update if values have changed
+      if (checkoutHomeScreenState.checkoutFees.value != newFees ||
+          totalAmountPayable != newAmountPayable) {
+        checkoutHomeScreenState.checkoutFees.value = newFees;
+        totalAmountPayable = newAmountPayable;
+
+        // Set feesFetched flag to true only if it wasn't already
+        if (!feesFetched) {
+          feesFetched = true;
+        }
+
+        _handleButtonActivation();
+      }
     } else {
-      checkoutHomeScreenState.isLoadingFees.value = false;
       widget.showErrorDialog(context: context, message: response.message);
     }
   }
@@ -1373,23 +1374,32 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
         cardCvvInputController.text.trim().isNotEmpty &&
             cardCvvInputController.text.length == 3;
 
-    if (isCardNumberInputComplete &&
+    final isCurrentlyValid = isCardNumberInputComplete &&
         isCardDateInputComplete &&
-        isCardCvvInputComplete) {
+        isCardCvvInputComplete;
+
+    // Only fetch fees if the form just became valid and wasn't valid before
+    if (isCurrentlyValid && !_previousCardFormValid) {
       fetchFees();
     }
+
+    _previousCardFormValid = isCurrentlyValid;
   }
 
   void onMobileNumberKeyed() {
-    log(mobileNumberController.text, name: '$runtimeType');
-    if (mobileNumberController.text.trim().length >= 9) {
-      setState(() {
+    // Avoid logging in methods that are called frequently
+    // log(mobileNumberController.text, name: '$runtimeType');
+
+    final isValid = mobileNumberController.text.trim().length >= 9;
+    final currentButtonState = checkoutHomeScreenState.isButtonEnabled.value;
+
+    // Only update state if there's an actual change in the button state
+    if (isValid != currentButtonState) {
+      if (isValid) {
         _handleButtonActivation();
-      });
-    } else {
-      setState(() {
+      } else {
         checkoutHomeScreenState.isButtonEnabled.value = false;
-      });
+      }
     }
   }
 }

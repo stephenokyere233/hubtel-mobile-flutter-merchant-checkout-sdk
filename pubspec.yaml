@@ -3,17 +3,16 @@ description: A new Flutter package project.
 version: 0.0.1
 
 environment:
-  sdk: ">=3.1.0 <4.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.18.1
+  intl: ^0.20.2
   flutter_remix: ^0.0.3
   provider: ^6.0.0
   cached_network_image: ^3.2.3
-  animated_toggle_switch: ^0.7.0
+  animated_toggle_switch: ^0.8.4
   flutter_svg: ^2.0.7
   webview_flutter: ^4.2.4
   pdf: ^3.4.0
@@ -26,7 +25,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   assets:

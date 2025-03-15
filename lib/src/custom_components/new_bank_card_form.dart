@@ -182,7 +182,6 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
               children: [
                 Text(CheckoutStrings.saveCardForFuture,
                     style: AppTextStyle.body2()),
-
                 CContainer(
                   padding: symmetricPad(
                     horizontal: Dimens.paddingDefaultMini,
@@ -204,20 +203,6 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                         Dimens.defaultIconNormal,
                         Dimens.defaultIconNormal,
                       ),
-                      dif: 0,
-                      borderColor: Colors.transparent,
-                      innerColor: Colors.transparent,
-                      indicatorColor: HubtelColors.neutral.shade50,
-                      iconRadius: 60,
-                      // customIconBuilder: (context, local, global) => CContainer(
-                      //       color: AppColors.white,
-                      //       // shape: BoxShape.circle,
-                      //       // width: 40,
-                      //       // height: 40,
-                      //     ),
-                      indicatorBorderRadius: BorderRadius.circular(
-                        Dimens.defaultStoreItemCardWidth,
-                      ),
                       onChanged: (value) {
                         setState(() {
                           saveCardForFuture = value;
@@ -225,15 +210,6 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                         });
                       }),
                 ),
-                // Checkbox(
-                //   value: saveCardForFuture,
-                //   onChanged: (value) {
-                //     setState(() {
-                //       saveCardForFuture = value ?? false;
-                //       widget.onCardSaveChecked(value);
-                //     });
-                //   },
-                // ),
               ],
             ),
           )

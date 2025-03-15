@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hubtel_merchant_checkout_sdk/src/extensions/widget_extensions.dart';
 import 'package:provider/provider.dart';
@@ -14,15 +12,10 @@ enum CheckoutPaymentStatus { success, cancelled }
 
 class CheckoutScreen extends StatefulWidget {
   final String? accessToken = '';
-
   // late final Function(CheckoutPaymentStatus)? checkoutCompleted;
-
   late final PurchaseInfo purchaseInfo;
-
   late final HubtelCheckoutConfiguration configuration;
-
   late final ThemeConfig? themeConfig;
-
   late final List<BankCardData>? savedBankCards;
 
   // late final Function(PaymentStatus) onCheckoutComplete;
@@ -30,12 +23,12 @@ class CheckoutScreen extends StatefulWidget {
   // Color? _primaryColor;
 
   CheckoutScreen({
-    Key? key,
+    super.key,
     required this.purchaseInfo,
     required this.configuration,
     this.savedBankCards,
     this.themeConfig,
-  }) : super(key: key) {
+  }) {
     CheckoutRequirements.customerMsisdn = purchaseInfo.customerMsisdn;
     CheckoutRequirements.apiKey = configuration.merchantApiKey;
     CheckoutRequirements.merchantId = configuration.merchantID;
@@ -48,11 +41,20 @@ class CheckoutScreen extends StatefulWidget {
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   late final CheckoutViewModel _viewModel;
+  // Store the fetch channels future to avoid recreating it on every build
+  late final Future<UiResult<ChannelFetchResponse>> _fetchChannelsFuture;
 
   @override
   void initState() {
     super.initState();
     _viewModel = CheckoutViewModel();
+    // Initialize the future once in initState
+    _fetchChannelsFuture = _viewModel.fetchChannels();
+
+    // Set theme color once
+    if (widget.themeConfig != null) {
+      ThemeConfig.themeColor = widget.themeConfig!.primaryColor;
+    }
   }
 
   @override
@@ -65,14 +67,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log('${widget.themeConfig!.primaryColor}', name: '$runtimeType');
-    ThemeConfig.themeColor = widget.themeConfig!.primaryColor;
+    // Avoid logging in build method as it can trigger rebuilds
+    // log('${widget.themeConfig!.primaryColor}', name: '$runtimeType');
+
     return MultiProvider(
       providers: [ChangeNotifierProvider.value(value: _viewModel)],
       child: Container(
         color: Colors.white,
         child: FutureBuilder<UiResult<ChannelFetchResponse>>(
-          future: _viewModel.fetchChannels(),
+          // Use the stored future to prevent recreation on rebuild
+          future: _fetchChannelsFuture,
           builder: (context,
               AsyncSnapshot<UiResult<ChannelFetchResponse>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -82,7 +86,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ));
             } else {
               if (snapshot.hasData) {
-                print("Here ${snapshot.data?.state}");
+                // Use const for debug prints to avoid triggering rebuilds
+                // print("Here ${snapshot.data?.state}");
                 final businessInfo = snapshot.data?.data?.getBusinessInfo() ??
                     BusinessInfo(
                       businessName: 'businessName',
