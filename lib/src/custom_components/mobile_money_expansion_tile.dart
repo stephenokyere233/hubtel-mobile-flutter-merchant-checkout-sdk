@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hubtel_merchant_checkout_sdk/src/utils/custom_expansion_widget.dart'
     as customExpansion;
-import 'package:flutter/scheduler.dart';
 import 'package:hubtel_merchant_checkout_sdk/src/ux/view_model/checkout_view_model.dart';
 
 import '../core_ui/core_ui.dart';
@@ -29,6 +26,7 @@ class MobileMoneyExpansionTile extends StatefulWidget {
       required this.isSelected,
       required this.selectedProviderMessage,
       this.walletAdditionComplete,
+      this.mobileNumberFocusNode,
       required this.disableUserNumberInputInteraction});
 
   final List<Wallet> wallets;
@@ -42,6 +40,7 @@ class MobileMoneyExpansionTile extends StatefulWidget {
   final bool isSelected;
   final Widget selectedProviderMessage;
   VoidCallback? walletAdditionComplete;
+  final FocusNode? mobileNumberFocusNode;
   bool disableUserNumberInputInteraction;
 
   @override
@@ -66,7 +65,13 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
               // ? HubtelColors.teal.shade100
               ? ThemeConfig.themeColor.withOpacity(0.3)
               : Colors.transparent,
-          onExpansionChanged: widget.onExpansionChanged,
+          onExpansionChanged: (expanded) {
+            // Use Future.microtask to avoid interrupting the current build cycle
+            // which can cause keyboard dismissal
+            if (widget.onExpansionChanged != null) {
+              Future.microtask(() => widget.onExpansionChanged!(expanded));
+            }
+          },
           title: Text(
             CheckoutStrings.mobileMoney,
             style: AppTextStyle.body2(),
@@ -132,6 +137,7 @@ class _MobileMoneyExpansionTileState extends State<MobileMoneyExpansionTile> {
               wallets: widget.wallets,
               hintText: CheckoutStrings.mobileNumber,
               isReadOnly: widget.disableUserNumberInputInteraction,
+              focusNode: widget.mobileNumberFocusNode,
               onWalletUpdateComplete: () {
                 widget.walletAdditionComplete?.call();
               },

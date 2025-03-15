@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:hubtel_merchant_checkout_sdk/src/custom_components/saved_bank_card_form.dart';
 
-import '/src/utils/custom_expansion_widget.dart'
-    as customExpansion;
-
+import '/src/utils/custom_expansion_widget.dart' as customExpansion;
 import '../core_ui/core_ui.dart';
 import '../platform/models/models.dart';
 import '../resources/resources.dart';
@@ -14,8 +12,8 @@ import 'custom_components.dart';
 // import 'app_image_asset.dart';
 
 class BankCardExpansionTile extends StatefulWidget {
-  BankCardExpansionTile({
-    Key? key,
+  const BankCardExpansionTile({
+    super.key,
     required this.controller,
     required this.onExpansionChanged,
     required this.isSelected,
@@ -33,7 +31,10 @@ class BankCardExpansionTile extends StatefulWidget {
     required this.cardNumberInputController,
     required this.cardDateInputController,
     required this.cardCvvInputController,
-  }) : super(key: key);
+    this.cardNumberFocusNode,
+    this.cardDateFocusNode,
+    this.cardCvvFocusNode,
+  });
 
   final customExpansion.ExpansionTileController controller;
   final void Function(bool)? onExpansionChanged;
@@ -56,6 +57,10 @@ class BankCardExpansionTile extends StatefulWidget {
   final TextEditingController cardNumberInputController;
   final TextEditingController cardDateInputController;
   final TextEditingController cardCvvInputController;
+
+  final FocusNode? cardNumberFocusNode;
+  final FocusNode? cardDateFocusNode;
+  final FocusNode? cardCvvFocusNode;
 
   @override
   State<BankCardExpansionTile> createState() => _BankCardExpansionTileState();
@@ -151,6 +156,9 @@ class _BankCardExpansionTileState extends State<BankCardExpansionTile> {
                 cardNumberInputController: widget.cardNumberInputController,
                 cardDateInputController: widget.cardDateInputController,
                 cardCvvInputController: widget.cardCvvInputController,
+                cardNumberFocusNode: widget.cardNumberFocusNode,
+                cardDateFocusNode: widget.cardDateFocusNode,
+                cardCvvFocusNode: widget.cardCvvFocusNode,
               )
             : SavedBankCardForm(
                 cardNumberFieldController:

@@ -28,6 +28,7 @@ class InputField extends StatefulWidget {
       this.inputFormatters,
       this.focusedBorder,
       this.focusBorderColor,
+      this.focusNode,
       this.isPassword = false});
 
   final String hintText;
@@ -52,6 +53,7 @@ class InputField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final InputBorder? focusedBorder;
   final Color? focusBorderColor;
+  final FocusNode? focusNode;
   final bool? isPassword;
 
   @override
@@ -157,13 +159,14 @@ class _InputFieldState extends State<InputField> {
       enabled: widget.enabled,
       autofocus: widget.autofocus,
       controller: widget.controller,
+      focusNode: widget.focusNode,
       onTap: widget.onTap,
       readOnly: widget.readOnly,
       inputFormatters: widget.inputFormatters,
       obscureText: widget.isPassword ?? false,
-      onFieldSubmitted: (_) {},
-      textInputAction: TextInputAction.none,
-      onEditingComplete: () {},
+      textInputAction: TextInputAction.next,
+      onEditingComplete: null,
+      onFieldSubmitted: null,
       decoration: _cachedDecoration,
     );
   }

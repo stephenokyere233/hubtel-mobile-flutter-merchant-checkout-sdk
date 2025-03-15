@@ -18,6 +18,9 @@ class NewBankCardForm extends StatefulWidget {
     required this.cardNumberInputController,
     required this.cardDateInputController,
     required this.cardCvvInputController,
+    this.cardNumberFocusNode,
+    this.cardDateFocusNode,
+    this.cardCvvFocusNode,
   });
 
   final TextEditingController cardNumberInputController;
@@ -29,6 +32,10 @@ class NewBankCardForm extends StatefulWidget {
   final void Function(String)? onNewCardDateChanged;
   final void Function(String)? onNewCardCvvChanged;
   final GlobalKey<FormState> formKey;
+
+  final FocusNode? cardNumberFocusNode;
+  final FocusNode? cardDateFocusNode;
+  final FocusNode? cardCvvFocusNode;
 
   @override
   State<NewBankCardForm> createState() => _NewBankCardFormState();
@@ -51,6 +58,7 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
         children: [
           InputField(
             controller: widget.cardNumberInputController,
+            focusNode: widget.cardNumberFocusNode,
             hasFill: true,
             validator: (value) {
               if (value == null || value.isEmpty || value.length < 16) {
@@ -111,6 +119,7 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
               Expanded(
                 child: InputField(
                   controller: widget.cardDateInputController,
+                  focusNode: widget.cardDateFocusNode,
                   hasFill: true,
                   hintText: CheckoutStrings.monthAndYearBankHint,
                   inputType: TextInputType.number,
@@ -140,6 +149,7 @@ class _NewBankCardFormState extends State<NewBankCardForm> {
                   isPassword: true,
                   maxLines: 1,
                   controller: widget.cardCvvInputController,
+                  focusNode: widget.cardCvvFocusNode,
                   hasFill: true,
                   hintText: CheckoutStrings.cvv,
                   inputFormatters: [

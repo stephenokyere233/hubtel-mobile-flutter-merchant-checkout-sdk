@@ -66,6 +66,12 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
   TextEditingController anotherMomoSelectorController = TextEditingController();
 
+  // Add focus nodes to maintain focus when typing
+  final FocusNode mobileNumberFocusNode = FocusNode();
+  final FocusNode cardNumberFocusNode = FocusNode();
+  final FocusNode cardDateFocusNode = FocusNode();
+  final FocusNode cardCvvFocusNode = FocusNode();
+
   late customExpansion.ExpansionTileController mobileMoneyExpansionController;
 
   late customExpansion.ExpansionTileController bankCardExpansionController;
@@ -185,10 +191,20 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           }
         },
       );
-    cardNumberInputController.addListener(onNewCardInputComplete);
-    cardDateInputController.addListener(onNewCardInputComplete);
-    cardCvvInputController.addListener(onNewCardInputComplete);
-    mobileNumberController.addListener(onMobileNumberKeyed);
+
+    // Add listeners that don't interfere with keyboard focus
+    cardNumberInputController.addListener(() {
+      onNewCardInputComplete();
+    });
+    cardDateInputController.addListener(() {
+      onNewCardInputComplete();
+    });
+    cardCvvInputController.addListener(() {
+      onNewCardInputComplete();
+    });
+    mobileNumberController.addListener(() {
+      onMobileNumberKeyed();
+    });
   }
 
   @override
@@ -268,11 +284,22 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            FocusScope.of(context).unfocus();
+                            // Only unfocus when tapping outside of input fields
+                            // Don't unfocus on every tap as it dismisses the keyboard
+                            // when users try to interact with input fields
+                            final currentFocus = FocusScope.of(context);
+                            if (!currentFocus.hasPrimaryFocus) {
+                              currentFocus.unfocus();
+                            }
                           },
                           child: Form(
                             key: _formKey,
+                            // Don't auto-validate as it can cause keyboard dismissal
                             autovalidateMode: AutovalidateMode.disabled,
+                            // Prevent the form from unfocusing fields during validation
+                            onChanged: () {
+                              // Empty implementation to prevent default behavior
+                            },
                             child: SingleChildScrollView(
                               physics: const ClampingScrollPhysics(),
                               child: Column(
@@ -401,6 +428,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                                     ?.isHubtelInternalMerchant ??
                                                                 false) ??
                                                             true,
+                                                    mobileNumberFocusNode:
+                                                        mobileNumberFocusNode,
                                                   ),
                                                 ),
 
@@ -532,6 +561,12 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
                                                         cardDateInputController,
                                                     cardCvvInputController:
                                                         cardCvvInputController,
+                                                    cardNumberFocusNode:
+                                                        cardNumberFocusNode,
+                                                    cardDateFocusNode:
+                                                        cardDateFocusNode,
+                                                    cardCvvFocusNode:
+                                                        cardCvvFocusNode,
                                                   ),
                                                 ),
                                                 Container(
@@ -824,6 +859,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   fetchFees({String? cardNumber}) async {
+    // Don't access FocusScope here as it can cause keyboard dismissal
+
     // Set loading state only once at the beginning
     checkoutHomeScreenState.isLoadingFees.value = true;
 
@@ -866,10 +903,14 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
           feesFetched = true;
         }
 
-        _handleButtonActivation();
+        // Use Future.microtask to avoid interrupting the current build cycle
+        // which can cause keyboard dismissal
+        Future.microtask(() => _handleButtonActivation());
       }
     } else {
-      widget.showErrorDialog(context: context, message: response.message);
+      // Show error dialog after a microtask to avoid keyboard dismissal
+      Future.microtask(() =>
+          widget.showErrorDialog(context: context, message: response.message));
     }
   }
 
@@ -888,8 +929,11 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   void checkout() async {
-    // Unfocus any active input field to prevent form submission
-    FocusScope.of(context).unfocus();
+    // Only unfocus if we're actually proceeding with checkout
+    // This prevents keyboard dismissal during normal form interaction
+    if (checkoutHomeScreenState.isButtonEnabled.value) {
+      FocusScope.of(context).unfocus();
+    }
 
     if (!(CheckoutViewModel.channelFetch?.isHubtelInternalMerchant ?? false) &&
         walletType == WalletType.Momo) {
@@ -1362,6 +1406,8 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
   }
 
   void onNewCardInputComplete() {
+    // Don't access FocusScope here as it can cause keyboard dismissal
+
     final isCardNumberInputComplete =
         cardNumberInputController.text.trim().isNotEmpty &&
             cardNumberInputController.text.characters.length == 22;
@@ -1380,15 +1426,16 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
 
     // Only fetch fees if the form just became valid and wasn't valid before
     if (isCurrentlyValid && !_previousCardFormValid) {
-      fetchFees();
+      // Use Future.microtask to avoid interrupting the current build cycle
+      // which can cause keyboard dismissal
+      Future.microtask(() => fetchFees());
     }
 
     _previousCardFormValid = isCurrentlyValid;
   }
 
   void onMobileNumberKeyed() {
-    // Avoid logging in methods that are called frequently
-    // log(mobileNumberController.text, name: '$runtimeType');
+    // Don't access FocusScope here as it can cause keyboard dismissal
 
     final isValid = mobileNumberController.text.trim().length >= 9;
     final currentButtonState = checkoutHomeScreenState.isButtonEnabled.value;
@@ -1396,11 +1443,37 @@ class _CheckoutHomeScreenState2 extends State<CheckoutHomeScreen> {
     // Only update state if there's an actual change in the button state
     if (isValid != currentButtonState) {
       if (isValid) {
-        _handleButtonActivation();
+        // Use Future.microtask to avoid interrupting the current build cycle
+        // which can cause keyboard dismissal
+        Future.microtask(() => _handleButtonActivation());
       } else {
         checkoutHomeScreenState.isButtonEnabled.value = false;
       }
     }
+  }
+
+  @override
+  void dispose() {
+    cardNumberInputController.removeListener(() {
+      onNewCardInputComplete();
+    });
+    cardDateInputController.removeListener(() {
+      onNewCardInputComplete();
+    });
+    cardCvvInputController.removeListener(() {
+      onNewCardInputComplete();
+    });
+    mobileNumberController.removeListener(() {
+      onMobileNumberKeyed();
+    });
+
+    // Dispose of focus nodes
+    mobileNumberFocusNode.dispose();
+    cardNumberFocusNode.dispose();
+    cardDateFocusNode.dispose();
+    cardCvvFocusNode.dispose();
+
+    super.dispose();
   }
 }
 

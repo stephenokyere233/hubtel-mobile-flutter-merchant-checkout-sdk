@@ -9,7 +9,7 @@ import '../ux/wallet/add_wallet_screen.dart';
 
 class MobileMoneyTileField extends StatefulWidget {
   MobileMoneyTileField(
-      {Key? key,
+      {super.key,
       required this.fieldController,
       this.wallets,
       this.providers,
@@ -18,8 +18,8 @@ class MobileMoneyTileField extends StatefulWidget {
       required this.hintText,
       this.onWalletUpdateComplete,
       this.showWalletAdditionTile,
-      this.isReadOnly = true})
-      : super(key: key);
+      this.focusNode,
+      this.isReadOnly = true});
 
   final TextEditingController fieldController;
   final List<Wallet>? wallets;
@@ -30,6 +30,7 @@ class MobileMoneyTileField extends StatefulWidget {
   VoidCallback? onWalletUpdateComplete;
   bool? showWalletAdditionTile = true;
   bool isReadOnly = true;
+  final FocusNode? focusNode;
 
   @override
   State<MobileMoneyTileField> createState() => _MobileMoneyTileFieldState();
@@ -48,8 +49,12 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
           hintText: widget.hintText,
           controller: widget.fieldController,
           readOnly: widget.isReadOnly,
-          onChanged: (_) {
-            // No-op to prevent form submission
+          focusNode: widget.focusNode,
+          onChanged: (value) {
+            // Allow text changes when not in read-only mode
+            if (!widget.isReadOnly) {
+              // Let the parent know about changes if needed
+            }
           },
           suffixWidget: widget.isReadOnly
               ? Padding(
@@ -64,11 +69,13 @@ class _MobileMoneyTileFieldState extends State<MobileMoneyTileField> {
                 )
               : null,
           onTap: () {
-            setState(() {
-              if (widget.isReadOnly) {
+            // Only toggle dropdown when in read-only mode
+            // This prevents keyboard dismissal when trying to type
+            if (widget.isReadOnly) {
+              setState(() {
                 expandOptions = !expandOptions;
-              }
-            });
+              });
+            }
           },
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide.none,
